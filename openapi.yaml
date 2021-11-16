@@ -1,0 +1,562 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Mincuru Cars App",
+    "version": "0.0.1",
+    "contact": {
+      "name": "Wataru Sato",
+      "url": "https://awwa500.blogger.com",
+      "email": "awwa500@gmail.com"
+    },
+    "description": "Mincuru Cars App API仕様",
+    "summary": "fuga"
+  },
+  "servers": [
+    {
+      "url": "http://localhost/api/v1"
+    }
+  ],
+  "paths": {
+    "/users/login": {
+      "post": {
+        "description": "ログイン",
+        "operationId": "post-users-login",
+        "requestBody": {
+          "description": "認証情報",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthRequest"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponse"
+                },
+                "example": {
+                  "token": "access_token"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "summary": "users-login"
+      },
+      "parameters": []
+    },
+    "/users/logout": {
+      "post": {
+        "summary": "users-logout",
+        "operationId": "post-users-logout",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "description": "ログアウト"
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "description": "指定したIDの'AdminResponse'オブジェクト",
+        "operationId": "get-user",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "対象AdminのID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                },
+                "example": {
+                  "id": 666,
+                  "name": "ほげ 太郎",
+                  "email": "hoge_taro@example.com",
+                  "role": "user"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "エラー",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Admin取得エラー"
+                }
+              }
+            }
+          }
+        },
+        "x-swagger-router-controller": "admins"
+      },
+      "delete": {
+        "description": "Adminの削除",
+        "operationId": "delete_admin",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "対象AdminのID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "成功",
+            "content": {}
+          },
+          "default": {
+            "description": "エラー",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Admin削除エラー"
+                }
+              }
+            }
+          }
+        },
+        "x-swagger-router-controller": "admins"
+      },
+      "patch": {
+        "description": "Adminの更新",
+        "operationId": "patch_admi",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "対象AdminのID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "更新するAdmin情報",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRequest"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                },
+                "example": {
+                  "id": 666,
+                  "name": "ほげ 太郎",
+                  "email": "hoge_taro@example.com",
+                  "role": "user"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "エラー",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Admin更新エラー"
+                }
+              }
+            }
+          }
+        },
+        "x-swagger-router-controller": "admins",
+        "x-codegen-request-body-name": "body"
+      },
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/users/{id}/password": {
+      "put": {
+        "description": "パスワードの更新",
+        "operationId": "put-user-password",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "対象AdminのID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "ハッシュ済みのパスワード",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PasswordRequest"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "204": {
+            "description": "成功"
+          },
+          "default": {
+            "description": "エラー",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "パスワード更新エラー"
+                }
+              }
+            }
+          }
+        },
+        "x-swagger-router-controller": "admins",
+        "x-codegen-request-body-name": "body"
+      },
+      "parameters": [
+        {
+          "schema": {
+            "type": "number"
+          },
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ]
+    },
+    "/users": {
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [],
+        "operationId": "get-users",
+        "parameters": [
+          {
+            "schema": {
+              "type": "number"
+            },
+            "in": "query",
+            "name": "id",
+            "description": "ユーザID"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "email",
+              "example": "hoge@example.com"
+            },
+            "in": "query",
+            "name": "email",
+            "description": "メールアドレス"
+          }
+        ],
+        "description": "条件にマッチしたユーザの一覧取得",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Users"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": [],
+      "post": {
+        "summary": "",
+        "operationId": "post-users",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          }
+        },
+        "description": "ユーザの追加"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "UserRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "ほげ 太郎"
+          },
+          "email": {
+            "type": "string",
+            "example": "hoge@example.com",
+            "format": "email"
+          },
+          "role": {
+            "type": "string",
+            "example": "user",
+            "enum": [
+              "user",
+              "admin"
+            ]
+          },
+          "password": {
+            "type": "string",
+            "format": "password"
+          }
+        },
+        "required": [
+          "name",
+          "email",
+          "role"
+        ],
+        "title": "UserRequest",
+        "examples": [
+          {
+            "name": "ほげ 太郎",
+            "email": "hoge@example.com",
+            "role": "user",
+            "password": "pa$$word"
+          }
+        ]
+      },
+      "UserResponse": {
+        "type": "object",
+        "example": {
+          "name": "",
+          "id": 0,
+          "email": "hoge@example.com",
+          "role": "user"
+        },
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 123
+          },
+          "name": {
+            "type": "string",
+            "example": "ほげ 太郎"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "hoge@example.com"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "user",
+              "admin"
+            ],
+            "example": "user"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "email",
+          "role"
+        ],
+        "examples": [
+          {
+            "name": "ほげ 太郎",
+            "id": 0,
+            "email": "email",
+            "role": "user"
+          }
+        ]
+      },
+      "PasswordRequest": {
+        "required": [
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "AuthRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ],
+        "examples": [
+          {
+            "email": "hoge@example.com",
+            "password": "password"
+          }
+        ]
+      },
+      "AuthResponse": {
+        "type": "object",
+        "example": {
+          "token": "token"
+        },
+        "examples": [
+          {
+            "token": "token"
+          },
+          {
+            "token": "tokentokentokentokentokentoken"
+          }
+        ],
+        "properties": {
+          "token": {
+            "type": "string",
+            "example": "tokentokentokentokentokentoken"
+          }
+        },
+        "required": [
+          "token"
+        ]
+      },
+      "Error": {
+        "required": [
+          "message"
+        ],
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "Users": {
+        "title": "Users",
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/UserResponse"
+        }
+      }
+    },
+    "responses": {},
+    "securitySchemes": {
+      "apikey": {
+        "type": "oauth2",
+        "flows": {
+          "password": {
+            "tokenUrl": "",
+            "refreshUrl": "",
+            "scopes": {}
+          }
+        }
+      }
+    },
+    "requestBodies": {},
+    "examples": {},
+    "parameters": {}
+  },
+  "security": [
+    {
+      "API Key - 1": []
+    }
+  ],
+  "x-extension-1": "hoge"
+}
