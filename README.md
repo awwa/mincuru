@@ -28,6 +28,5 @@ prism mock openapi.yaml
 - 生成
 
 ```
-cd .
-docker run --rm -v ${PWD}:/local openapitools/openapi-generator-cli generate -g typescript-fetch -i /local/openapi.yaml -o /local/mincuru-api-client --additional-properties=modelPropertyNaming=camelCase,supportsES6=true,withInterfaces=true,typescriptThreePlus=true
+npm run buildcl
 ```

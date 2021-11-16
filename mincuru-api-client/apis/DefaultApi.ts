@@ -53,6 +53,10 @@ export interface PatchUserRequest {
     userRequest?: UserRequest;
 }
 
+export interface PostUsersRequest {
+    userRequest?: UserRequest;
+}
+
 export interface PostUsersLoginRequest {
     authRequest?: AuthRequest;
 }
@@ -129,16 +133,17 @@ export interface DefaultApiInterface {
 
     /**
      * ユーザの追加
+     * @param {UserRequest} [userRequest] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
      */
-    postUsersRaw(initOverrides?: RequestInit): Promise<runtime.ApiResponse<UserResponse>>;
+    postUsersRaw(requestParameters: PostUsersRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<UserResponse>>;
 
     /**
      * ユーザの追加
      */
-    postUsers(initOverrides?: RequestInit): Promise<UserResponse>;
+    postUsers(requestParameters: PostUsersRequest, initOverrides?: RequestInit): Promise<UserResponse>;
 
     /**
      * ログイン
@@ -201,6 +206,10 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["token"] = this.configuration.apiKey("token"); // Access-Token authentication
+        }
+
         const response = await this.request({
             path: `/users/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'DELETE',
@@ -229,6 +238,10 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["token"] = this.configuration.apiKey("token"); // Access-Token authentication
+        }
 
         const response = await this.request({
             path: `/users/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
@@ -264,6 +277,10 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["token"] = this.configuration.apiKey("token"); // Access-Token authentication
+        }
+
         const response = await this.request({
             path: `/users`,
             method: 'GET',
@@ -296,6 +313,10 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
 
         headerParameters['Content-Type'] = 'application/json';
 
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["token"] = this.configuration.apiKey("token"); // Access-Token authentication
+        }
+
         const response = await this.request({
             path: `/users/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'PATCH',
@@ -318,16 +339,23 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     /**
      * ユーザの追加
      */
-    async postUsersRaw(initOverrides?: RequestInit): Promise<runtime.ApiResponse<UserResponse>> {
+    async postUsersRaw(requestParameters: PostUsersRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<UserResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["token"] = this.configuration.apiKey("token"); // Access-Token authentication
+        }
 
         const response = await this.request({
             path: `/users`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
+            body: UserRequestToJSON(requestParameters.userRequest),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => UserResponseFromJSON(jsonValue));
@@ -336,8 +364,8 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     /**
      * ユーザの追加
      */
-    async postUsers(initOverrides?: RequestInit): Promise<UserResponse> {
-        const response = await this.postUsersRaw(initOverrides);
+    async postUsers(requestParameters: PostUsersRequest, initOverrides?: RequestInit): Promise<UserResponse> {
+        const response = await this.postUsersRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -378,6 +406,10 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["token"] = this.configuration.apiKey("token"); // Access-Token authentication
+        }
+
         const response = await this.request({
             path: `/users/logout`,
             method: 'POST',
@@ -408,6 +440,10 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
         const headerParameters: runtime.HTTPHeaders = {};
 
         headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["token"] = this.configuration.apiKey("token"); // Access-Token authentication
+        }
 
         const response = await this.request({
             path: `/users/{id}/password`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
