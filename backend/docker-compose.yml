@@ -1,0 +1,13 @@
+version: "3.1"
+services:
+  mysql:
+    container_name: mysql-cars
+    hostname: mysql-cars
+    build: ./docker/mysql/    #Dockerfileからビルドすることを示す
+    volumes:
+      - ./docker/mysql/db:/docker-entrypoint-initdb.d  #初期データをマウントする場所
+    image: mysql:cars # イメージの名前
+    ports:
+        - "3306:3306"
+    environment:
+        MYSQL_ROOT_PASSWORD: password   #コンテナ内のMySQLを起動する際のパスワードを設定
