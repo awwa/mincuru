@@ -1,8 +1,8 @@
 package main
 
 import (
-	"bytes"
 	"context"
+	"io/ioutil"
 	"net/http"
 
 	// "net/http/httptest"
@@ -110,10 +110,10 @@ func TestGetUser(t *testing.T) {
 	if err4 != nil {
 		panic(err4)
 	}
-	// httpRes, err6 := http.DefaultClient.Do(httpReq)
-	// if err6 != nil {
-	// 	panic(err6)
-	// }
+	httpRes, err6 := http.DefaultClient.Do(httpReq)
+	if err6 != nil {
+		panic(err6)
+	}
 	// fmt.Println("httpRes:", httpRes)
 	// fmt.Println("httpRes.StatusCode:", httpRes.StatusCode)
 	// fmt.Println("httpRes.Header:", httpRes.Header)
@@ -138,9 +138,9 @@ func TestGetUser(t *testing.T) {
 	// // }
 
 	var (
-		respStatus      = 200
-		respContentType = "application/json"
-		respBody        = bytes.NewBufferString(`{"id": 1, "name": "hoge fuga", "email": "hoge1@example.com", "role": "user"}`)
+		respStatus      = httpRes.StatusCode
+		respContentType = httpRes.Header.Get("Content-Type")
+		respBody        = httpRes.Body
 	)
 
 	responseValidationInput := &openapi3filter.ResponseValidationInput{
@@ -148,9 +148,9 @@ func TestGetUser(t *testing.T) {
 		Status:                 respStatus,
 		Header:                 http.Header{"Content-Type": []string{respContentType}},
 	}
-	if respBody != nil {
-		data := respBody.Bytes()
-		responseValidationInput.SetBodyBytes(data)
+	body, _ := ioutil.ReadAll(respBody)
+	if body != nil {
+		responseValidationInput.SetBodyBytes(body)
 	}
 
 	// Validate response
