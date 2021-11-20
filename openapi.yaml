@@ -9,6 +9,12 @@ info:
   description: Mincuru Cars App API仕様
 servers:
   - url: 'http://localhost/api/v1'
+  - url: 'http://localhost:8080'
+    description: Dev Server
+  - url: 'http://localhost:3100'
+    description: Stoplight Studio
+  - url: 'http://localhost:4010'
+    description: Stoplight Prism
 paths:
   /users/login:
     post:
@@ -274,7 +280,35 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Users'
+                type: array
+                description: ''
+                minItems: 1
+                uniqueItems: true
+                items:
+                  type: object
+                  required:
+                    - id
+                    - name
+                    - email
+                    - role
+                  properties:
+                    id:
+                      type: number
+                    name:
+                      type: string
+                      minLength: 1
+                    email:
+                      type: string
+                      minLength: 1
+                    role:
+                      type: string
+                      minLength: 1
+                x-examples:
+                  example-1:
+                    - id: 123
+                      name: hoge fuga
+                      email: hoge@example.com
+                      role: user
               examples:
                 example-1:
                   value:

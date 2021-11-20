@@ -17,12 +17,19 @@ func main() {
 	if err != nil {
 		panic("failed to connect database")
 	}
-
-	router := gin.Default()
-	router.GET("/users", GetUsers)
-	router.GET("/hoge", hogeFunc)
+	router := Routing()
+	// router := gin.Default()
+	// router.GET("/users", GetUsers)
+	// router.GET("/hoge", hogeFunc)
 
 	router.Run("localhost:8080")
+}
+
+func Routing() (router *gin.Engine) {
+	router = gin.Default()
+	router.GET("/users", GetUsers)
+	router.GET("/hoge", hogeFunc)
+	return
 }
 
 // 処理
