@@ -13,21 +13,21 @@ var db *gorm.DB
 
 func main() {
 	// DB初期化
-	err := initDb("127.0.0.1", 3306)
+	_, err := initDb("127.0.0.1", 3306)
 	if err != nil {
 		panic("failed to connect database")
 	}
-	router := Routing()
+	router := Router()
 	// router := gin.Default()
 	// router.GET("/users", GetUsers)
 	// router.GET("/hoge", hogeFunc)
-
 	router.Run("localhost:8080")
 }
 
-func Routing() (router *gin.Engine) {
+func Router() (router *gin.Engine) {
 	router = gin.Default()
 	router.GET("/users", GetUsers)
+	router.GET("/users/:id", GetUser)
 	router.GET("/hoge", hogeFunc)
 	return
 }
@@ -35,7 +35,7 @@ func Routing() (router *gin.Engine) {
 // 処理
 //   DB初期化
 // 詳細は https://github.com/go-sql-driver/mysql#dsn-data-source-name を参照
-func initDb(host string, port uint) (err error) {
+func initDb(host string, port uint) (db *gorm.DB, err error) {
 	dsn := fmt.Sprintf("root:password@tcp(%s:%d)/cars_dev?charset=utf8mb4&parseTime=True&loc=Local", host, port)
 	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	// Migrate the schema
