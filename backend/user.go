@@ -1,8 +1,6 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -31,18 +29,16 @@ func GetUsers(c *gin.Context) {
 		Name:  c.Query("name"),
 		Role:  c.Query("role"),
 	}
-	db.Where(&query).Find(&users)
+	DB.Where(&query).Find(&users)
 	c.IndentedJSON(http.StatusOK, users)
 }
 
 func GetUser(c *gin.Context) {
-	// var user User
-	// db.First(&user, c.Param("id"))
-	fmt.Println("GetUser")
-	u := &User{Name: "hoge taro", Email: "hoge@example", Role: "User"}
-	v, _ := json.Marshal(u)
-	fmt.Println(string(v))
-	// fmt.Println(u)
-
-	c.IndentedJSON(http.StatusOK, User{Name: "hoge taro", Email: "hoge@example", Role: "user"} /*user*/)
+	var user User
+	result := DB.First(&user, c.Param("id"))
+	if result.RowsAffected == 1 {
+		c.IndentedJSON(http.StatusOK, user)
+	} else {
+		c.IndentedJSON(http.StatusNotFound, &ErrorResponse{Message: result.Error.Error()})
+	}
 }

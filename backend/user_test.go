@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 
@@ -14,26 +13,12 @@ import (
 	"gorm.io/gorm"
 )
 
-func TestGetUser2(t *testing.T) {
-	router := Router()
-
-	w := httptest.NewRecorder()
-	httpReq, err4 := http.NewRequest(http.MethodGet, "/users/123", nil)
-	httpReq.Header.Set("Authorization", "Bearer tokentokentoken")
-	if err4 != nil {
-		panic(err4)
-	}
-	router.ServeHTTP(w, httpReq)
-
-	fmt.Println(w.Body.String())
-}
-
-func Setup(t *testing.T) (db *gorm.DB) {
-	db, err := initDb("127.0.0.1", 3306)
+func Setup(t *testing.T) {
+	err := initDb("127.0.0.1", 3306)
 	if err != nil {
 		panic(err)
 	}
-	db.Exec("TRUNCATE TABLE users")
+	DB.Exec("TRUNCATE TABLE users")
 	return
 }
 
@@ -85,18 +70,42 @@ func Assert(t *testing.T, httpReq *http.Request) (db *gorm.DB) {
 	return
 }
 
-func TestGetUser3(t *testing.T) {
-	var err error
+// func TestGetUser2(t *testing.T) {
+// 	router := Router()
+
+// 	w := httptest.NewRecorder()
+// 	httpReq, err4 := http.NewRequest(http.MethodGet, "/users/123", nil)
+// 	httpReq.Header.Set("Authorization", "Bearer tokentokentoken")
+// 	if err4 != nil {
+// 		panic(err4)
+// 	}
+// 	router.ServeHTTP(w, httpReq)
+
+// 	fmt.Println(w.Body.String())
+// }
+
+func TestGetUser(t *testing.T) {
 	// テストの初期化（主にDBのクリア）
-	db := Setup(t)
+	Setup(t)
 	// テスト固有のレコードの準備
-	db.Create(&User{Name: "hoge taro", Email: "hoge@example.com", Role: "user"})
+	DB.Create(&User{Name: "hoge taro", Email: "hoge@example.com", Role: "user"})
 	// HTTPリクエストの生成
-	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users/123", nil)
+	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users/1", nil)
 	httpReq.Header.Add("Authorization", "Bearer tokentokentoken")
 	if err != nil {
 		panic(err)
 	}
 	// Test用サーバにリクエストを送信して、レスポンスをOpenAPI仕様に照らし合わせる
 	Assert(t, httpReq)
+
+	// HTTPリクエストの生成
+	// 存在しないIDを指定
+	httpReq2, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users/123", nil)
+	httpReq2.Header.Add("Authorization", "Bearer tokentokentoken")
+	if err != nil {
+		panic(err)
+	}
+	// Test用サーバにリクエストを送信して、レスポンスをOpenAPI仕様に照らし合わせる
+	Assert(t, httpReq2)
+
 }
