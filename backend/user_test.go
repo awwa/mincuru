@@ -2,27 +2,32 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"os"
 
 	"testing"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/getkin/kin-openapi/openapi3filter"
 	"github.com/getkin/kin-openapi/routers/legacy"
-	"gorm.io/gorm"
+	"github.com/stretchr/testify/assert"
 )
 
-func Setup(t *testing.T) {
+func TestMain(m *testing.M) {
+	// call flag.Parse() here if TestMain uses flags
 	err := initDb("127.0.0.1", 3306)
 	if err != nil {
 		panic(err)
 	}
-	DB.Exec("TRUNCATE TABLE users")
-	return
+	// Test
+	code := m.Run()
+
+	os.Exit(code)
 }
 
-func Assert(t *testing.T, httpReq *http.Request) (db *gorm.DB) {
+func ServeAndRequest(httpReq *http.Request) (recorder *httptest.ResponseRecorder) {
 	ctx := context.Background()
 	loader := &openapi3.Loader{Context: ctx}
 	doc, err := loader.LoadFromFile("../openapi.yaml")
@@ -37,10 +42,8 @@ func Assert(t *testing.T, httpReq *http.Request) (db *gorm.DB) {
 	if err != nil {
 		panic(err)
 	}
-	gin := Router()
-	recorder := httptest.NewRecorder()
-
-	gin.ServeHTTP(recorder, httpReq)
+	recorder = httptest.NewRecorder()
+	Router().ServeHTTP(recorder, httpReq)
 
 	// Find route
 	route, pathParams, err := router.FindRoute(httpReq)
@@ -54,6 +57,9 @@ func Assert(t *testing.T, httpReq *http.Request) (db *gorm.DB) {
 		PathParams: pathParams,
 		Route:      route,
 	}
+	if err := openapi3filter.ValidateRequest(ctx, requestValidationInput); err != nil {
+		panic(err)
+	}
 
 	responseValidationInput := &openapi3filter.ResponseValidationInput{
 		RequestValidationInput: requestValidationInput,
@@ -66,46 +72,166 @@ func Assert(t *testing.T, httpReq *http.Request) (db *gorm.DB) {
 	if err := openapi3filter.ValidateResponse(ctx, responseValidationInput); err != nil {
 		panic(err)
 	}
-
 	return
 }
 
-// func TestGetUser2(t *testing.T) {
-// 	router := Router()
-
-// 	w := httptest.NewRecorder()
-// 	httpReq, err4 := http.NewRequest(http.MethodGet, "/users/123", nil)
-// 	httpReq.Header.Set("Authorization", "Bearer tokentokentoken")
-// 	if err4 != nil {
-// 		panic(err4)
-// 	}
-// 	router.ServeHTTP(w, httpReq)
-
-// 	fmt.Println(w.Body.String())
-// }
-
-func TestGetUser(t *testing.T) {
-	// テストの初期化（主にDBのクリア）
-	Setup(t)
+func TestGetUsersExistRecord(t *testing.T) {
 	// テスト固有のレコードの準備
+	DB.Exec("TRUNCATE TABLE users")
+	DB.Create(&User{Name: "hoge taro", Email: "hoge@example.com", Role: "user"})
+	DB.Create(&User{Name: "fuga 太郎", Email: "fuga@example.com", Role: "admin"})
+	// HTTPリクエストの生成
+	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users", nil)
+	// httpReq.Header.Add("Authorization", "Bearer tokentokentoken")
+	httpReq.Header.Add("Content-Type", "application/json")
+	httpReq.Header.Add("Authorization", "bearer tokentokentoken")
+	if err != nil {
+		panic(err)
+	}
+	// Test用サーバにリクエストを送信して、レスポンスをOpenAPI仕様に照らし合わせる
+	recorder := ServeAndRequest(httpReq)
+	// テストケース固有のチェック
+	assert.Equal(t, 200, recorder.Result().StatusCode)
+	// var body []User
+	// json.Unmarshal(recorder.Body.Bytes(), &body)
+	// assert.Equal(t, 2, len(body))
+}
+
+func TestGetUsersByName(t *testing.T) {
+	// テスト固有のレコードの準備
+	DB.Exec("TRUNCATE TABLE users")
+	DB.Create(&User{Name: "hoge taro", Email: "hoge@example.com", Role: "user"})
+	DB.Create(&User{Name: "fuga 太郎", Email: "fuga@example.com", Role: "admin"})
+	// HTTPリクエストの生成
+	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users?name=hoge taro", nil)
+	httpReq.Header.Add("Content-Type", "application/json")
+	httpReq.Header.Add("Authorization", "bearer tokentokentoken")
+	if err != nil {
+		panic(err)
+	}
+	// Test用サーバにリクエストを送信して、レスポンスをOpenAPI仕様に照らし合わせる
+	recorder := ServeAndRequest(httpReq)
+	// テストケース固有のチェック
+	assert.Equal(t, 200, recorder.Result().StatusCode)
+	var body []User
+	json.Unmarshal(recorder.Body.Bytes(), &body)
+	assert.Equal(t, 1, len(body))
+}
+
+func TestGetUsersByEmail(t *testing.T) {
+	// テスト固有のレコードの準備
+	DB.Exec("TRUNCATE TABLE users")
+	DB.Create(&User{Name: "hoge taro", Email: "hoge@example.com", Role: "user"})
+	DB.Create(&User{Name: "fuga 太郎", Email: "fuga@example.com", Role: "admin"})
+	// HTTPリクエストの生成
+	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users?email=hoge@example.com", nil)
+	httpReq.Header.Add("Content-Type", "application/json")
+	httpReq.Header.Add("Authorization", "bearer tokentokentoken")
+	if err != nil {
+		panic(err)
+	}
+	// Test用サーバにリクエストを送信して、レスポンスをOpenAPI仕様に照らし合わせる
+	recorder := ServeAndRequest(httpReq)
+	// テストケース固有のチェック
+	assert.Equal(t, 200, recorder.Result().StatusCode)
+	var body []User
+	json.Unmarshal(recorder.Body.Bytes(), &body)
+	assert.Equal(t, 1, len(body))
+}
+
+func TestGetUsersByRole(t *testing.T) {
+	// テスト固有のレコードの準備
+	DB.Exec("TRUNCATE TABLE users")
+	DB.Create(&User{Name: "hoge taro", Email: "hoge@example.com", Role: "user"})
+	DB.Create(&User{Name: "fuga 太郎", Email: "fuga@example.com", Role: "admin"})
+	// HTTPリクエストの生成
+	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users?role=user", nil)
+	httpReq.Header.Add("Content-Type", "application/json")
+	httpReq.Header.Add("Authorization", "bearer tokentokentoken")
+	if err != nil {
+		panic(err)
+	}
+	// Test用サーバにリクエストを送信して、レスポンスをOpenAPI仕様に照らし合わせる
+	recorder := ServeAndRequest(httpReq)
+	// テストケース固有のチェック
+	assert.Equal(t, 200, recorder.Result().StatusCode)
+	var body []User
+	json.Unmarshal(recorder.Body.Bytes(), &body)
+	assert.Equal(t, 1, len(body))
+}
+
+func TestGetUsersByNameAndEmail(t *testing.T) {
+	// テスト固有のレコードの準備
+	DB.Exec("TRUNCATE TABLE users")
+	DB.Create(&User{Name: "hoge taro", Email: "hoge@example.com", Role: "user"})
+	DB.Create(&User{Name: "fuga 太郎", Email: "fuga@example.com", Role: "admin"})
+	// HTTPリクエストの生成
+	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users?name=hoge taro&email=hoge@example.com", nil)
+	httpReq.Header.Add("Content-Type", "application/json")
+	httpReq.Header.Add("Authorization", "bearer tokentokentoken")
+	if err != nil {
+		panic(err)
+	}
+	// Test用サーバにリクエストを送信して、レスポンスをOpenAPI仕様に照らし合わせる
+	recorder := ServeAndRequest(httpReq)
+	// テストケース固有のチェック
+	assert.Equal(t, 200, recorder.Result().StatusCode)
+	var body []User
+	json.Unmarshal(recorder.Body.Bytes(), &body)
+	assert.Equal(t, 1, len(body))
+}
+
+func TestGetUsersNoRecord(t *testing.T) {
+	// テスト固有のレコードの準備
+	DB.Exec("TRUNCATE TABLE users")
+	// HTTPリクエストの生成
+	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users", nil)
+	httpReq.Header.Add("Content-Type", "application/json")
+	httpReq.Header.Add("Authorization", "bearer tokentokentoken")
+	if err != nil {
+		panic(err)
+	}
+	// Test用サーバにリクエストを送信して、レスポンスをOpenAPI仕様に照らし合わせる
+	recorder := ServeAndRequest(httpReq)
+	// テストケース固有のチェック
+	assert.Equal(t, 200, recorder.Result().StatusCode)
+	var body []User
+	json.Unmarshal(recorder.Body.Bytes(), &body)
+	assert.Equal(t, 0, len(body))
+}
+
+func TestGetUserExistRecord(t *testing.T) {
+	// テスト固有のレコードの準備
+	DB.Exec("TRUNCATE TABLE users")
 	DB.Create(&User{Name: "hoge taro", Email: "hoge@example.com", Role: "user"})
 	// HTTPリクエストの生成
 	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users/1", nil)
-	httpReq.Header.Add("Authorization", "Bearer tokentokentoken")
+	httpReq.Header.Add("Content-Type", "application/json")
+	httpReq.Header.Add("Authorization", "bearer tokentokentoken")
 	if err != nil {
 		panic(err)
 	}
 	// Test用サーバにリクエストを送信して、レスポンスをOpenAPI仕様に照らし合わせる
-	Assert(t, httpReq)
+	recorder := ServeAndRequest(httpReq)
+	// テストケース固有のチェック
+	assert.Equal(t, 200, recorder.Result().StatusCode)
+}
 
+func TestGetUserNoRecord(t *testing.T) {
+	// テスト固有のレコードの準備
+	DB.Exec("TRUNCATE TABLE users")
+	DB.Create(&User{Name: "hoge taro", Email: "hoge@example.com", Role: "user"})
 	// HTTPリクエストの生成
 	// 存在しないIDを指定
-	httpReq2, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users/123", nil)
-	httpReq2.Header.Add("Authorization", "Bearer tokentokentoken")
+	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users/123", nil)
+	httpReq.Header.Add("Content-Type", "application/json")
+	httpReq.Header.Add("Authorization", "bearer tokentokentoken")
 	if err != nil {
 		panic(err)
 	}
 	// Test用サーバにリクエストを送信して、レスポンスをOpenAPI仕様に照らし合わせる
-	Assert(t, httpReq2)
+	recorder := ServeAndRequest(httpReq)
+	// テストケース固有のチェック
+	assert.Equal(t, 404, recorder.Result().StatusCode)
 
 }

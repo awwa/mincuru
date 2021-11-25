@@ -26,8 +26,10 @@ func main() {
 
 func Router() (router *gin.Engine) {
 	router = gin.Default()
+	// router.Use(errorMiddleware())
 	router.GET("/users", GetUsers)
 	router.GET("/users/:id", GetUser)
+	router.POST("/users", PostUser)
 	router.GET("/hoge", hogeFunc)
 	return
 }
@@ -42,6 +44,21 @@ func initDb(host string, port uint) (err error) {
 	DB.AutoMigrate(&User{})
 	return
 }
+
+// func errorMiddleware() gin.HandlerFunc {
+// 	return func(c *gin.Context) {
+// 		c.Next()
+
+// 		err := c.Errors.ByType(gin.ErrorTypePublic).Last()
+// 		if err != nil {
+// 			log.Print(err.Err)
+
+// 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+// 				"Error": err.Error(),
+// 			})
+// 		}
+// 	}
+// }
 
 type ErrorResponse struct {
 	Message string `json:"message"`
