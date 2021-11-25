@@ -84,6 +84,10 @@ paths:
           description: No Content
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '500':
           description: Internal Server Error
           content:
@@ -92,8 +96,6 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
       description: ログアウト
       parameters: []
-      security:
-        - ApiKeyAuth: []
   '/users/{id}':
     get:
       description: 指定したIDの'UserResponse'取得
@@ -127,16 +129,22 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-      security:
-        - ApiKeyAuth: []
     delete:
       description: ユーザの削除
       operationId: delete-user
@@ -160,14 +168,22 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-      security:
-        - ApiKeyAuth: []
     patch:
       description: ユーザの更新
       operationId: patch-user
@@ -228,14 +244,22 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-      security:
-        - ApiKeyAuth: []
     parameters:
       - schema:
           type: string
@@ -309,14 +333,17 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-      security:
-        - ApiKeyAuth: []
+      security: []
     parameters: []
     post:
       summary: ''
@@ -336,6 +363,10 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '500':
           description: Internal Server Error
           content:
@@ -343,8 +374,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       description: ユーザの追加
-      security:
-        - ApiKeyAuth: []
       requestBody:
         content:
           application/json:
@@ -425,8 +454,4 @@ components:
       items:
         $ref: '#/components/schemas/UserResponse'
   responses: {}
-  securitySchemes:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
+  securitySchemes: {}
