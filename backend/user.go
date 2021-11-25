@@ -35,7 +35,6 @@ func GetUsers(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, users)
 }
 
-// TODO add error middleware
 func GetUser(c *gin.Context) {
 	var user User
 	result := DB.First(&user, c.Param("id"))
@@ -56,13 +55,14 @@ func PostUser(c *gin.Context) {
 			http.StatusBadRequest,
 			&ErrorResponse{Message: err.Error()},
 		)
+		return
 	}
 	params := User{
-		Email:    c.Param("email"),
-		Name:     c.Param("name"),
-		Role:     c.Param("role"),
+		Name:     "hoge fuga",        /*c.Param("name")*/
+		Email:    "fuga@example.com", /*c.Param("email")*/
+		Role:     "user",             /*c.Param("role")*/
 		Password: string(hashed),
 	}
 	DB.Create(&params)
-	c.IndentedJSON(http.StatusOK, &params)
+	c.IndentedJSON(http.StatusCreated, &params)
 }

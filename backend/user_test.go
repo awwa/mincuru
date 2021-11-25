@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"net/http"
@@ -233,5 +234,28 @@ func TestGetUserNoRecord(t *testing.T) {
 	recorder := ServeAndRequest(httpReq)
 	// テストケース固有のチェック
 	assert.Equal(t, 404, recorder.Result().StatusCode)
+}
 
+func TestPostUser(t *testing.T) {
+	// テスト固有のレコードの準備
+	DB.Exec("TRUNCATE TABLE users")
+	// HTTPリクエストの生成
+	data := User{
+		Name:     "hoge taro",
+		Email:    "hoge@example.com",
+		Role:     "admin",
+		Password: "password",
+	}
+	body, _ := json.Marshal(data)
+	httpReq, err := http.NewRequest(http.MethodPost, "http://localhost:8080/users", bytes.NewBuffer(body))
+	httpReq.Header.Add("Content-Type", "application/json")
+	httpReq.Header.Add("Authorization", "bearer tokentokentoken")
+	// fmt.Println(httpReq)
+	if err != nil {
+		panic(err)
+	}
+	// Test用サーバにリクエストを送信して、レスポンスをOpenAPI仕様に照らし合わせる
+	recorder := ServeAndRequest(httpReq)
+	// テストケース固有のチェック
+	assert.Equal(t, 201, recorder.Result().StatusCode)
 }

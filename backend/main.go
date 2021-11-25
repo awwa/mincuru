@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/getkin/kin-openapi/openapi3filter"
+	"github.com/getkin/kin-openapi/routers/legacy"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -18,15 +21,13 @@ func main() {
 		panic("failed to connect database")
 	}
 	router := Router()
-	// router := gin.Default()
-	// router.GET("/users", GetUsers)
-	// router.GET("/hoge", hogeFunc)
 	router.Run("localhost:8080")
 }
 
 func Router() (router *gin.Engine) {
 	router = gin.Default()
 	// router.Use(errorMiddleware())
+	router.Use(validateRequestMiddleware())
 	router.GET("/users", GetUsers)
 	router.GET("/users/:id", GetUser)
 	router.POST("/users", PostUser)
@@ -43,6 +44,59 @@ func initDb(host string, port uint) (err error) {
 	// Migrate the schema
 	DB.AutoMigrate(&User{})
 	return
+}
+
+func validateRequestMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		//
+		ctx := c.Request.Context()
+		loader := &openapi3.Loader{Context: ctx}
+		doc, err := loader.LoadFromFile("../openapi.yaml")
+		if err != nil {
+			c.IndentedJSON(
+				http.StatusInternalServerError,
+				&ErrorResponse{Message: err.Error()},
+			)
+			c.Abort()
+		}
+		err = doc.Validate(ctx)
+		if err != nil {
+			c.IndentedJSON(
+				http.StatusInternalServerError,
+				&ErrorResponse{Message: err.Error()},
+			)
+			c.Abort()
+		}
+		router, err := legacy.NewRouter(doc)
+		if err != nil {
+			c.IndentedJSON(
+				http.StatusInternalServerError,
+				&ErrorResponse{Message: err.Error()},
+			)
+			c.Abort()
+		}
+		route, pathParams, err := router.FindRoute(c.Request)
+		if err != nil {
+			c.IndentedJSON(
+				http.StatusInternalServerError,
+				&ErrorResponse{Message: err.Error()},
+			)
+			c.Abort()
+		}
+		requestValidationInput := &openapi3filter.RequestValidationInput{
+			Request:    c.Request,
+			PathParams: pathParams,
+			Route:      route,
+		}
+		if err := openapi3filter.ValidateRequest(ctx, requestValidationInput); err != nil {
+			c.IndentedJSON(
+				http.StatusBadRequest,
+				&ErrorResponse{Message: err.Error()},
+			)
+			c.Abort()
+		}
+		c.Next()
+	}
 }
 
 // func errorMiddleware() gin.HandlerFunc {
