@@ -15,7 +15,8 @@ servers:
     description: Stoplight Studio
   - url: 'http://localhost:4010'
     description: Stoplight Prism
-  - url: '/'
+  - url: /
+    description: Unit test
 paths:
   /users/login:
     post:
@@ -231,7 +232,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserResponse'
+                $ref: '#/components/schemas/Id'
               example:
                 id: 666
                 name: ほげ 太郎
@@ -355,7 +356,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserResponse'
+                $ref: '#/components/schemas/Id'
+            application/xml:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                required:
+                  - id
         '400':
           description: Bad Request
           content:
@@ -419,6 +428,7 @@ components:
         id: 0
         email: hoge@example.com
         role: user
+      additionalProperties: false
       properties:
         id:
           type: integer
@@ -436,11 +446,19 @@ components:
             - user
             - admin
           example: user
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
       required:
         - id
         - name
         - email
         - role
+        - created_at
+        - updated_at
     ErrorResponse:
       required:
         - message
@@ -454,5 +472,14 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/UserResponse'
+    Id:
+      type: object
+      title: Id
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+      required:
+        - id
   responses: {}
   securitySchemes: {}
