@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -52,28 +54,92 @@ func GetUser(c *gin.Context) {
 }
 
 func PatchUser(c *gin.Context) {
-	hashed, err := bcrypt.GenerateFromPassword([]byte(c.Param("password")), 5)
+	// HTTPリクエストのペイロードを取得
+	var httpPayload User
+	c.BindJSON(&httpPayload)
+	// HTTPリクエストでpasswordが指定されていたら、PasswordのHashを生成してDB保存用オブジェクトの値を更新
+	if c.Param("password") != "" {
+		hashed, err := bcrypt.GenerateFromPassword([]byte(c.Param("password")), 5)
+		if err != nil {
+			c.IndentedJSON(
+				http.StatusBadRequest,
+				&ErrorResponse{Message: err.Error()},
+			)
+			c.Abort()
+			return
+		}
+		httpPayload.Password = string(hashed)
+	}
+	// 更新対象のIDを取得
+	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.IndentedJSON(
 			http.StatusBadRequest,
 			&ErrorResponse{Message: err.Error()},
 		)
 		c.Abort()
+		return
 	}
-	var payload User
-	c.BindJSON(&payload)
-	payload.Password = string(hashed)
-
-	// var userResponse UserResponse
-	if err := DB.Table("users").Updates(payload).Error; err != nil {
+	httpPayload.ID = (uint)(id)
+	// DBのレコードを更新
+	result := DB.Model(&httpPayload).Updates(httpPayload)
+	if err := result.Error; err != nil {
 		c.IndentedJSON(
 			http.StatusBadRequest,
 			&ErrorResponse{Message: err.Error()},
 		)
 		c.Abort()
-	} else {
-		c.IndentedJSON(http.StatusOK, payload)
+		return
 	}
+	// 更新されたレコード数が0はエラー
+	if result.RowsAffected == 0 {
+		c.IndentedJSON(
+			http.StatusNotFound,
+			&ErrorResponse{Message: "no record for update"},
+		)
+		c.Abort()
+		return
+	}
+	// 成功
+	idResponse := Id{ID: httpPayload.ID}
+	c.IndentedJSON(http.StatusOK, &idResponse)
+}
+
+func DeleteUser(c *gin.Context) {
+	// 削除対象のIDを取得
+	var user User
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.IndentedJSON(
+			http.StatusBadRequest,
+			&ErrorResponse{Message: err.Error()},
+		)
+		c.Abort()
+		return
+	}
+	user.ID = (uint)(id)
+	// DBのレコードを削除
+	result := DB.Delete(&user)
+	if err := result.Error; err != nil {
+		c.IndentedJSON(
+			http.StatusBadRequest,
+			&ErrorResponse{Message: err.Error()},
+		)
+		c.Abort()
+		return
+	}
+	// 削除されたレコード数が0はエラー
+	fmt.Println(result.RowsAffected)
+	if result.RowsAffected == 0 {
+		c.IndentedJSON(
+			http.StatusNotFound,
+			&ErrorResponse{Message: "no record for delete"},
+		)
+		c.Abort()
+		return
+	}
+	// 成功
+	c.IndentedJSON(http.StatusNoContent, nil)
 }
 
 func PostUser(c *gin.Context) {
@@ -100,6 +166,6 @@ func PostUser(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	id := Id{ID: httpPayload.ID}
-	c.IndentedJSON(http.StatusCreated, &id)
+	idResponse := Id{ID: httpPayload.ID}
+	c.IndentedJSON(http.StatusCreated, &idResponse)
 }

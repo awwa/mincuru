@@ -31,6 +31,7 @@ func Router() (router *gin.Engine) {
 	router.GET("/users", GetUsers)
 	router.GET("/users/:id", GetUser)
 	router.PATCH("/users/:id", PatchUser)
+	router.DELETE("/users/:id", DeleteUser)
 	router.POST("/users", PostUser)
 	router.GET("/hoge", hogeFunc)
 	return
