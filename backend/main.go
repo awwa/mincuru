@@ -30,6 +30,7 @@ func Router() (router *gin.Engine) {
 	router.Use(validateRequestMiddleware())
 	router.GET("/users", GetUsers)
 	router.GET("/users/:id", GetUser)
+	router.PATCH("/users/:id", PatchUser)
 	router.POST("/users", PostUser)
 	router.GET("/hoge", hogeFunc)
 	return

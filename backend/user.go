@@ -9,37 +9,40 @@ import (
 	"gorm.io/gorm"
 )
 
-type Model struct {
-	ID        uint           `json:"id", gorm:"primarykey"`
-	CreatedAt time.Time      `json:"created_at"`
-	UpdatedAt time.Time      `json:"updated_at"`
-	DeletedAt gorm.DeletedAt `json:"deleted_at", gorm:"index"`
+type Id struct {
+	ID uint `json:"id", gorm:"primarykey"`
+}
+
+type UserResponse struct {
+	Id
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+	Name      string    `json:"name", gorm:"not null"`
+	Email     string    `json:"email", gorm:"unique"`
+	Role      string    `json:"role"`
 }
 
 type User struct {
-	Model           /* Model  `gorm:"embedded"`*/
-	Name     string `json:"name", gorm:"not null"`
-	Email    string `json:"email", gorm:"unique"`
-	Role     string `json:"role"`
-	Password string `json:"password"`
+	UserResponse                // `gorm:"embedded"`
+	DeletedAt    gorm.DeletedAt `json:"deleted_at", gorm:"index"`
+	Password     string         `json:"password"`
 }
 
 func GetUsers(c *gin.Context) {
-	var users []User
-	query := User{
-		Email: c.Query("email"),
-		Name:  c.Query("name"),
-		Role:  c.Query("role"),
-	}
-	DB.Where(&query).Find(&users)
-	c.IndentedJSON(http.StatusOK, users)
+	var userResponses []UserResponse
+	query := User{}
+	query.Name = c.Query("name")
+	query.Email = c.Query("email")
+	query.Role = c.Query("role")
+	DB.Table("users").Where(&query).Find(&userResponses)
+	c.IndentedJSON(http.StatusOK, userResponses)
 }
 
 func GetUser(c *gin.Context) {
-	var user User
-	result := DB.First(&user, c.Param("id"))
+	var userResponse UserResponse
+	result := DB.Table("users").First(&userResponse, c.Param("id"))
 	if result.RowsAffected == 1 {
-		c.IndentedJSON(http.StatusOK, user)
+		c.IndentedJSON(http.StatusOK, userResponse)
 	} else {
 		c.IndentedJSON(
 			http.StatusNotFound,
@@ -48,21 +51,55 @@ func GetUser(c *gin.Context) {
 	}
 }
 
-func PostUser(c *gin.Context) {
+func PatchUser(c *gin.Context) {
 	hashed, err := bcrypt.GenerateFromPassword([]byte(c.Param("password")), 5)
 	if err != nil {
 		c.IndentedJSON(
 			http.StatusBadRequest,
 			&ErrorResponse{Message: err.Error()},
 		)
+		c.Abort()
+	}
+	var payload User
+	c.BindJSON(&payload)
+	payload.Password = string(hashed)
+
+	// var userResponse UserResponse
+	if err := DB.Table("users").Updates(payload).Error; err != nil {
+		c.IndentedJSON(
+			http.StatusBadRequest,
+			&ErrorResponse{Message: err.Error()},
+		)
+		c.Abort()
+	} else {
+		c.IndentedJSON(http.StatusOK, payload)
+	}
+}
+
+func PostUser(c *gin.Context) {
+	// HTTPリクエストのペイロードを取得
+	var httpPayload User
+	c.BindJSON(&httpPayload)
+	// PasswordのHashを生成してDB保存用オブジェクトの値を更新
+	hashed, err := bcrypt.GenerateFromPassword([]byte(c.Param("password")), 5)
+	if err != nil {
+		c.IndentedJSON(
+			http.StatusBadRequest,
+			&ErrorResponse{Message: err.Error()},
+		)
+		c.Abort()
 		return
 	}
-	params := User{
-		Name:     "hoge fuga",        /*c.Param("name")*/
-		Email:    "fuga@example.com", /*c.Param("email")*/
-		Role:     "user",             /*c.Param("role")*/
-		Password: string(hashed),
+	httpPayload.Password = string(hashed)
+	// DBにレコード追加
+	if err := DB.Table("users").Create(&httpPayload).Error; err != nil {
+		c.IndentedJSON(
+			http.StatusBadRequest,
+			&ErrorResponse{Message: err.Error()},
+		)
+		c.Abort()
+		return
 	}
-	DB.Create(&params)
-	c.IndentedJSON(http.StatusCreated, &params)
+	id := Id{ID: httpPayload.ID}
+	c.IndentedJSON(http.StatusCreated, &id)
 }

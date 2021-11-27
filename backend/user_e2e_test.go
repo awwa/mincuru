@@ -1,12 +1,12 @@
 package main
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"strings"
 
 	"testing"
 
@@ -58,9 +58,9 @@ func ServeAndRequest(httpReq *http.Request) (recorder *httptest.ResponseRecorder
 		PathParams: pathParams,
 		Route:      route,
 	}
-	if err := openapi3filter.ValidateRequest(ctx, requestValidationInput); err != nil {
-		panic(err)
-	}
+	// if err := openapi3filter.ValidateRequest(ctx, requestValidationInput); err != nil {
+	// 	panic(err)
+	// }
 
 	responseValidationInput := &openapi3filter.ResponseValidationInput{
 		RequestValidationInput: requestValidationInput,
@@ -79,8 +79,12 @@ func ServeAndRequest(httpReq *http.Request) (recorder *httptest.ResponseRecorder
 func TestGetUsersExistRecord(t *testing.T) {
 	// テスト固有のレコードの準備
 	DB.Exec("TRUNCATE TABLE users")
-	DB.Create(&User{Name: "hoge taro", Email: "hoge@example.com", Role: "user"})
-	DB.Create(&User{Name: "fuga 太郎", Email: "fuga@example.com", Role: "admin"})
+	user := User{}
+	user.Name = "hoge taro"
+	user.Email = "hoge@example.com"
+	user.Role = "user"
+	DB.Create(&User{UserResponse: UserResponse{Name: "hoge taro", Email: "hoge@example.com", Role: "user"}})
+	DB.Create(&User{UserResponse: UserResponse{Name: "fuga 太郎", Email: "fuga@example.com", Role: "admin"}})
 	// HTTPリクエストの生成
 	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users", nil)
 	// httpReq.Header.Add("Authorization", "Bearer tokentokentoken")
@@ -101,8 +105,8 @@ func TestGetUsersExistRecord(t *testing.T) {
 func TestGetUsersByName(t *testing.T) {
 	// テスト固有のレコードの準備
 	DB.Exec("TRUNCATE TABLE users")
-	DB.Create(&User{Name: "hoge taro", Email: "hoge@example.com", Role: "user"})
-	DB.Create(&User{Name: "fuga 太郎", Email: "fuga@example.com", Role: "admin"})
+	DB.Create(&User{UserResponse: UserResponse{Name: "hoge taro", Email: "hoge@example.com", Role: "user"}})
+	DB.Create(&User{UserResponse: UserResponse{Name: "fuga 太郎", Email: "fuga@example.com", Role: "admin"}})
 	// HTTPリクエストの生成
 	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users?name=hoge taro", nil)
 	httpReq.Header.Add("Content-Type", "application/json")
@@ -122,8 +126,8 @@ func TestGetUsersByName(t *testing.T) {
 func TestGetUsersByEmail(t *testing.T) {
 	// テスト固有のレコードの準備
 	DB.Exec("TRUNCATE TABLE users")
-	DB.Create(&User{Name: "hoge taro", Email: "hoge@example.com", Role: "user"})
-	DB.Create(&User{Name: "fuga 太郎", Email: "fuga@example.com", Role: "admin"})
+	DB.Create(&User{UserResponse: UserResponse{Name: "hoge taro", Email: "hoge@example.com", Role: "user"}})
+	DB.Create(&User{UserResponse: UserResponse{Name: "fuga 太郎", Email: "fuga@example.com", Role: "admin"}})
 	// HTTPリクエストの生成
 	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users?email=hoge@example.com", nil)
 	httpReq.Header.Add("Content-Type", "application/json")
@@ -143,8 +147,8 @@ func TestGetUsersByEmail(t *testing.T) {
 func TestGetUsersByRole(t *testing.T) {
 	// テスト固有のレコードの準備
 	DB.Exec("TRUNCATE TABLE users")
-	DB.Create(&User{Name: "hoge taro", Email: "hoge@example.com", Role: "user"})
-	DB.Create(&User{Name: "fuga 太郎", Email: "fuga@example.com", Role: "admin"})
+	DB.Create(&User{UserResponse: UserResponse{Name: "hoge taro", Email: "hoge@example.com", Role: "user"}})
+	DB.Create(&User{UserResponse: UserResponse{Name: "fuga 太郎", Email: "fuga@example.com", Role: "admin"}})
 	// HTTPリクエストの生成
 	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users?role=user", nil)
 	httpReq.Header.Add("Content-Type", "application/json")
@@ -164,8 +168,8 @@ func TestGetUsersByRole(t *testing.T) {
 func TestGetUsersByNameAndEmail(t *testing.T) {
 	// テスト固有のレコードの準備
 	DB.Exec("TRUNCATE TABLE users")
-	DB.Create(&User{Name: "hoge taro", Email: "hoge@example.com", Role: "user"})
-	DB.Create(&User{Name: "fuga 太郎", Email: "fuga@example.com", Role: "admin"})
+	DB.Create(&User{UserResponse: UserResponse{Name: "hoge taro", Email: "hoge@example.com", Role: "user"}})
+	DB.Create(&User{UserResponse: UserResponse{Name: "fuga 太郎", Email: "fuga@example.com", Role: "admin"}})
 	// HTTPリクエストの生成
 	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users?name=hoge taro&email=hoge@example.com", nil)
 	httpReq.Header.Add("Content-Type", "application/json")
@@ -204,7 +208,7 @@ func TestGetUsersNoRecord(t *testing.T) {
 func TestGetUserExistRecord(t *testing.T) {
 	// テスト固有のレコードの準備
 	DB.Exec("TRUNCATE TABLE users")
-	DB.Create(&User{Name: "hoge taro", Email: "hoge@example.com", Role: "user"})
+	DB.Create(&User{UserResponse: UserResponse{Name: "hoge taro", Email: "hoge@example.com", Role: "user"}})
 	// HTTPリクエストの生成
 	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users/1", nil)
 	httpReq.Header.Add("Content-Type", "application/json")
@@ -221,7 +225,7 @@ func TestGetUserExistRecord(t *testing.T) {
 func TestGetUserNoRecord(t *testing.T) {
 	// テスト固有のレコードの準備
 	DB.Exec("TRUNCATE TABLE users")
-	DB.Create(&User{Name: "hoge taro", Email: "hoge@example.com", Role: "user"})
+	DB.Create(&User{UserResponse: UserResponse{Name: "hoge taro", Email: "hoge@example.com", Role: "user"}})
 	// HTTPリクエストの生成
 	// 存在しないIDを指定
 	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users/123", nil)
@@ -236,18 +240,17 @@ func TestGetUserNoRecord(t *testing.T) {
 	assert.Equal(t, 404, recorder.Result().StatusCode)
 }
 
-func TestPostUser(t *testing.T) {
+func TestPostUserSuccess(t *testing.T) {
 	// テスト固有のレコードの準備
 	DB.Exec("TRUNCATE TABLE users")
 	// HTTPリクエストの生成
-	data := User{
-		Name:     "hoge taro",
-		Email:    "hoge@example.com",
-		Role:     "admin",
-		Password: "password",
-	}
-	body, _ := json.Marshal(data)
-	httpReq, err := http.NewRequest(http.MethodPost, "http://localhost:8080/users", bytes.NewBuffer(body))
+	body := `{
+		"name": "hoge taro",
+		"email": "hoge@example.com",
+		"role": "user",
+		"password": "password"
+	}`
+	httpReq, err := http.NewRequest(http.MethodPost, "http://localhost:8080/users", strings.NewReader(body))
 	httpReq.Header.Add("Content-Type", "application/json")
 	httpReq.Header.Add("Authorization", "bearer tokentokentoken")
 	// fmt.Println(httpReq)
@@ -258,4 +261,50 @@ func TestPostUser(t *testing.T) {
 	recorder := ServeAndRequest(httpReq)
 	// テストケース固有のチェック
 	assert.Equal(t, 201, recorder.Result().StatusCode)
+}
+
+func TestPostUserInvalidRequest(t *testing.T) {
+	// テスト固有のレコードの準備
+	DB.Exec("TRUNCATE TABLE users")
+	// HTTPリクエストの生成
+	body := `{
+		"name": "hoge taro",
+		"email": "hoge@example.com",
+		"role": "user"
+	}`
+	httpReq, err := http.NewRequest(http.MethodPost, "http://localhost:8080/users", strings.NewReader(body))
+	httpReq.Header.Add("Content-Type", "application/json")
+	httpReq.Header.Add("Authorization", "bearer tokentokentoken")
+	// fmt.Println(httpReq)
+	if err != nil {
+		panic(err)
+	}
+	// Test用サーバにリクエストを送信して、レスポンスをOpenAPI仕様に照らし合わせる
+	recorder := ServeAndRequest(httpReq)
+	// テストケース固有のチェック
+	assert.Equal(t, 400, recorder.Result().StatusCode)
+}
+
+func TestPostUserDupKey(t *testing.T) {
+	// テスト固有のレコードの準備
+	DB.Exec("TRUNCATE TABLE users")
+	DB.Create(&User{UserResponse: UserResponse{Name: "hoge taro", Email: "hoge@example.com", Role: "user"}})
+	// HTTPリクエストの生成
+	body := `{
+		"name": "hoge taro",
+		"email": "hoge@example.com",
+		"role": "user",
+		"password": "password"
+	}`
+	httpReq, err := http.NewRequest(http.MethodPost, "http://localhost:8080/users", strings.NewReader(body))
+	httpReq.Header.Add("Content-Type", "application/json")
+	httpReq.Header.Add("Authorization", "bearer tokentokentoken")
+	// fmt.Println(httpReq)
+	if err != nil {
+		panic(err)
+	}
+	// Test用サーバにリクエストを送信して、レスポンスをOpenAPI仕様に照らし合わせる
+	recorder := ServeAndRequest(httpReq)
+	// テストケース固有のチェック
+	assert.Equal(t, 400, recorder.Result().StatusCode)
 }
