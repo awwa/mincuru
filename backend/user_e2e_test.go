@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -15,17 +16,16 @@ import (
 	"github.com/getkin/kin-openapi/openapi3filter"
 	"github.com/getkin/kin-openapi/routers/legacy"
 	"github.com/stretchr/testify/assert"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func TestMain(m *testing.M) {
-	// call flag.Parse() here if TestMain uses flags
-	err := initDb("127.0.0.1", 3306)
-	if err != nil {
-		panic(err)
-	}
-	// Test
+	// 環境変数
+	Loadenv()
+	// DB初期化
+	initDb()
+	// テスト実行
 	code := m.Run()
-
 	os.Exit(code)
 }
 
@@ -502,4 +502,91 @@ func TestDeleteUserNoRecord(t *testing.T) {
 	recorder := ServeAndRequest(httpReq)
 	// テストケース固有のチェック
 	assert.Equal(t, 404, recorder.Result().StatusCode)
+}
+
+func TestLoginSuccess(t *testing.T) {
+	// テスト固有のレコードの準備
+	DB.Exec("TRUNCATE TABLE users")
+	bcCost, err := strconv.Atoi(os.Getenv("BC_COST"))
+	if err != nil {
+		panic(err)
+	}
+	hashed, err := bcrypt.GenerateFromPassword([]byte("password"), bcCost)
+	if err != nil {
+		panic(err)
+	}
+	DB.Create(&User{UserResp: UserResp{Name: "hoge taro", Email: "hoge@example.com", Role: "user"}, Password: string(hashed)})
+	// HTTPリクエストの生成
+	body := `{
+		"email": "hoge@example.com",
+    "password": "password"
+	}`
+	httpReq, err := http.NewRequest(http.MethodPost, "http://localhost:8080/users/login", strings.NewReader(body))
+	httpReq.Header.Add("Content-Type", "application/json")
+	fmt.Println(httpReq)
+	if err != nil {
+		panic(err)
+	}
+	// Test用サーバにリクエストを送信して、レスポンスをOpenAPI仕様に照らし合わせる
+	recorder := ServeAndRequest(httpReq)
+	// テストケース固有のチェック
+	assert.Equal(t, 200, recorder.Result().StatusCode)
+}
+
+func TestLoginInvalidPassword(t *testing.T) {
+	// テスト固有のレコードの準備
+	DB.Exec("TRUNCATE TABLE users")
+	bcCost, err := strconv.Atoi(os.Getenv("BC_COST"))
+	if err != nil {
+		panic(err)
+	}
+	hashed, err := bcrypt.GenerateFromPassword([]byte("password"), bcCost)
+	if err != nil {
+		panic(err)
+	}
+	DB.Create(&User{UserResp: UserResp{Name: "hoge taro", Email: "hoge@example.com", Role: "user"}, Password: string(hashed)})
+	// HTTPリクエストの生成
+	body := `{
+		"email": "hoge@example.com",
+    "password": "invalid_password"
+	}`
+	httpReq, err := http.NewRequest(http.MethodPost, "http://localhost:8080/users/login", strings.NewReader(body))
+	httpReq.Header.Add("Content-Type", "application/json")
+	// fmt.Println(httpReq)
+	if err != nil {
+		panic(err)
+	}
+	// Test用サーバにリクエストを送信して、レスポンスをOpenAPI仕様に照らし合わせる
+	recorder := ServeAndRequest(httpReq)
+	// テストケース固有のチェック
+	assert.Equal(t, 403, recorder.Result().StatusCode)
+}
+
+func TestLoginInvalidEmail(t *testing.T) {
+	// テスト固有のレコードの準備
+	DB.Exec("TRUNCATE TABLE users")
+	bcCost, err := strconv.Atoi(os.Getenv("BC_COST"))
+	if err != nil {
+		panic(err)
+	}
+	hashed, err := bcrypt.GenerateFromPassword([]byte("password"), bcCost)
+	if err != nil {
+		panic(err)
+	}
+	DB.Create(&User{UserResp: UserResp{Name: "hoge taro", Email: "hoge@example.com", Role: "user"}, Password: string(hashed)})
+	// HTTPリクエストの生成
+	body := `{
+		"email": "invalid@example.com",
+    "password": "password"
+	}`
+	httpReq, err := http.NewRequest(http.MethodPost, "http://localhost:8080/users/login", strings.NewReader(body))
+	httpReq.Header.Add("Content-Type", "application/json")
+	// fmt.Println(httpReq)
+	if err != nil {
+		panic(err)
+	}
+	// Test用サーバにリクエストを送信して、レスポンスをOpenAPI仕様に照らし合わせる
+	recorder := ServeAndRequest(httpReq)
+	// テストケース固有のチェック
+	assert.Equal(t, 403, recorder.Result().StatusCode)
 }

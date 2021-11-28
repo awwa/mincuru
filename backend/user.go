@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"os"
 	"strconv"
 	"time"
 
@@ -29,8 +30,8 @@ type User struct {
 	Password  string         `json:"password"`
 }
 
-type Token struct {
-	Token string `json:token`
+type TokenResp struct {
+	Token string `json:"token"`
 }
 
 func GetUsers(c *gin.Context) {
@@ -46,14 +47,15 @@ func GetUsers(c *gin.Context) {
 func GetUser(c *gin.Context) {
 	var userResp UserResp
 	result := DB.Table("users").First(&userResp, c.Param("id"))
-	if result.RowsAffected == 1 {
-		c.IndentedJSON(http.StatusOK, userResp)
-	} else {
+	if result.RowsAffected != 1 {
 		c.IndentedJSON(
 			http.StatusNotFound,
 			&ErrorResp{Message: result.Error.Error()},
 		)
+		c.Abort()
+		return
 	}
+	c.IndentedJSON(http.StatusOK, userResp)
 }
 
 func PatchUser(c *gin.Context) {
@@ -149,7 +151,8 @@ func PostUser(c *gin.Context) {
 	var httpPayload User
 	c.BindJSON(&httpPayload)
 	// PasswordのHashを生成してDB保存用オブジェクトの値を更新
-	hashed, err := bcrypt.GenerateFromPassword([]byte(c.Param("password")), 5)
+	bcCost, _ := strconv.Atoi(os.Getenv("BC_COST"))
+	hashed, err := bcrypt.GenerateFromPassword([]byte(c.Param("password")), bcCost)
 	if err != nil {
 		c.IndentedJSON(
 			http.StatusBadRequest,
@@ -176,11 +179,11 @@ func Login(c *gin.Context) {
 	// HTTPリクエストのペイロードを取得
 	var httpPayload User
 	c.BindJSON(&httpPayload)
+	query := User{}
+	query.Email = httpPayload.Email
 	// DBからuserレコード取得
-	dbUser := User{}
-	if err := DB.Table("users").Where(
-		&User{UserResp: UserResp{Email: httpPayload.Email}},
-	).First(&dbUser).Error; err != nil {
+	var dbUsers []User
+	if err := DB.Table("users").Where(&query).Find(&dbUsers).Error; err != nil {
 		c.IndentedJSON(
 			http.StatusInternalServerError,
 			&ErrorResp{Message: err.Error()},
@@ -188,10 +191,19 @@ func Login(c *gin.Context) {
 		c.Abort()
 		return
 	}
+	// 該当レコードなし。認証エラー
+	if len(dbUsers) != 1 {
+		c.IndentedJSON(
+			http.StatusForbidden,
+			&ErrorResp{Message: "no user found"},
+		)
+		c.Abort()
+		return
+	}
 	// ハッシュ化したパスワードの比較
 	if err := bcrypt.CompareHashAndPassword(
+		([]byte)(dbUsers[0].Password),
 		([]byte)(httpPayload.Password),
-		([]byte)(dbUser.Password),
 	); err != nil {
 		c.IndentedJSON(
 			http.StatusForbidden,
@@ -200,9 +212,15 @@ func Login(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	// 認証成功
-	c.IndentedJSON(
-		http.StatusOK,
-		&Token{Token: "hoge"},
-	)
+	// 認証成功。JWTを返却
+	token, err := Sign(dbUsers[0].ID, dbUsers[0].Email, dbUsers[0].Role)
+	if err != nil {
+		c.IndentedJSON(
+			http.StatusInternalServerError,
+			&ErrorResp{Message: err.Error()},
+		)
+		c.Abort()
+		return
+	}
+	c.IndentedJSON(http.StatusOK, &TokenResp{Token: token})
 }

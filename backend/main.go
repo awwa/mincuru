@@ -3,11 +3,14 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os"
+	"strconv"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/getkin/kin-openapi/openapi3filter"
 	"github.com/getkin/kin-openapi/routers/legacy"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -15,13 +18,20 @@ import (
 var DB *gorm.DB
 
 func main() {
+	// 環境変数
+	Loadenv()
 	// DB初期化
-	err := initDb("127.0.0.1", 3306)
-	if err != nil {
-		panic("failed to connect database")
-	}
+	initDb()
+	// ルーティングを設定
 	router := Router()
 	router.Run("localhost:8080")
+}
+
+func Loadenv() {
+	err := godotenv.Load()
+	if err != nil {
+		panic(err)
+	}
 }
 
 func Router() (router *gin.Engine) {
@@ -41,12 +51,27 @@ func Router() (router *gin.Engine) {
 // 処理
 //   DB初期化
 // 詳細は https://github.com/go-sql-driver/mysql#dsn-data-source-name を参照
-func initDb(host string, port uint) (err error) {
-	dsn := fmt.Sprintf("root:password@tcp(%s:%d)/cars_dev?charset=utf8mb4&parseTime=True&loc=Local", host, port)
+func initDb() {
+	dbPort, err := strconv.Atoi(os.Getenv("DB_PORT"))
+	if err != nil {
+		panic(err)
+	}
+	dsn := fmt.Sprintf(
+		"%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+		os.Getenv("DB_USER"),
+		os.Getenv("DB_PASS"),
+		os.Getenv("DB_HOST"),
+		dbPort,
+		os.Getenv("DB_NAME"),
+	)
 	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	if err != nil {
+		panic(err)
+	}
 	// Migrate the schema
-	DB.AutoMigrate(&User{})
-	return
+	if err := DB.AutoMigrate(&User{}); err != nil {
+		panic(err)
+	}
 }
 
 func validateRequestMiddleware() gin.HandlerFunc {
