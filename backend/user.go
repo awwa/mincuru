@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -15,7 +14,7 @@ type Id struct {
 	ID uint `json:"id", gorm:"primarykey"`
 }
 
-type UserResponse struct {
+type UserResp struct {
 	Id
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
@@ -25,30 +24,34 @@ type UserResponse struct {
 }
 
 type User struct {
-	UserResponse                // `gorm:"embedded"`
-	DeletedAt    gorm.DeletedAt `json:"deleted_at", gorm:"index"`
-	Password     string         `json:"password"`
+	UserResp                 // `gorm:"embedded"`
+	DeletedAt gorm.DeletedAt `json:"deleted_at", gorm:"index"`
+	Password  string         `json:"password"`
+}
+
+type Token struct {
+	Token string `json:token`
 }
 
 func GetUsers(c *gin.Context) {
-	var userResponses []UserResponse
+	var userResps []UserResp
 	query := User{}
 	query.Name = c.Query("name")
 	query.Email = c.Query("email")
 	query.Role = c.Query("role")
-	DB.Table("users").Where(&query).Find(&userResponses)
-	c.IndentedJSON(http.StatusOK, userResponses)
+	DB.Table("users").Where(&query).Find(&userResps)
+	c.IndentedJSON(http.StatusOK, userResps)
 }
 
 func GetUser(c *gin.Context) {
-	var userResponse UserResponse
-	result := DB.Table("users").First(&userResponse, c.Param("id"))
+	var userResp UserResp
+	result := DB.Table("users").First(&userResp, c.Param("id"))
 	if result.RowsAffected == 1 {
-		c.IndentedJSON(http.StatusOK, userResponse)
+		c.IndentedJSON(http.StatusOK, userResp)
 	} else {
 		c.IndentedJSON(
 			http.StatusNotFound,
-			&ErrorResponse{Message: result.Error.Error()},
+			&ErrorResp{Message: result.Error.Error()},
 		)
 	}
 }
@@ -63,7 +66,7 @@ func PatchUser(c *gin.Context) {
 		if err != nil {
 			c.IndentedJSON(
 				http.StatusBadRequest,
-				&ErrorResponse{Message: err.Error()},
+				&ErrorResp{Message: err.Error()},
 			)
 			c.Abort()
 			return
@@ -75,7 +78,7 @@ func PatchUser(c *gin.Context) {
 	if err != nil {
 		c.IndentedJSON(
 			http.StatusBadRequest,
-			&ErrorResponse{Message: err.Error()},
+			&ErrorResp{Message: err.Error()},
 		)
 		c.Abort()
 		return
@@ -86,7 +89,7 @@ func PatchUser(c *gin.Context) {
 	if err := result.Error; err != nil {
 		c.IndentedJSON(
 			http.StatusBadRequest,
-			&ErrorResponse{Message: err.Error()},
+			&ErrorResp{Message: err.Error()},
 		)
 		c.Abort()
 		return
@@ -95,7 +98,7 @@ func PatchUser(c *gin.Context) {
 	if result.RowsAffected == 0 {
 		c.IndentedJSON(
 			http.StatusNotFound,
-			&ErrorResponse{Message: "no record for update"},
+			&ErrorResp{Message: "no record for update"},
 		)
 		c.Abort()
 		return
@@ -112,7 +115,7 @@ func DeleteUser(c *gin.Context) {
 	if err != nil {
 		c.IndentedJSON(
 			http.StatusBadRequest,
-			&ErrorResponse{Message: err.Error()},
+			&ErrorResp{Message: err.Error()},
 		)
 		c.Abort()
 		return
@@ -123,17 +126,16 @@ func DeleteUser(c *gin.Context) {
 	if err := result.Error; err != nil {
 		c.IndentedJSON(
 			http.StatusBadRequest,
-			&ErrorResponse{Message: err.Error()},
+			&ErrorResp{Message: err.Error()},
 		)
 		c.Abort()
 		return
 	}
 	// 削除されたレコード数が0はエラー
-	fmt.Println(result.RowsAffected)
 	if result.RowsAffected == 0 {
 		c.IndentedJSON(
 			http.StatusNotFound,
-			&ErrorResponse{Message: "no record for delete"},
+			&ErrorResp{Message: "no record for delete"},
 		)
 		c.Abort()
 		return
@@ -151,7 +153,7 @@ func PostUser(c *gin.Context) {
 	if err != nil {
 		c.IndentedJSON(
 			http.StatusBadRequest,
-			&ErrorResponse{Message: err.Error()},
+			&ErrorResp{Message: err.Error()},
 		)
 		c.Abort()
 		return
@@ -161,11 +163,46 @@ func PostUser(c *gin.Context) {
 	if err := DB.Table("users").Create(&httpPayload).Error; err != nil {
 		c.IndentedJSON(
 			http.StatusBadRequest,
-			&ErrorResponse{Message: err.Error()},
+			&ErrorResp{Message: err.Error()},
 		)
 		c.Abort()
 		return
 	}
 	idResponse := Id{ID: httpPayload.ID}
 	c.IndentedJSON(http.StatusCreated, &idResponse)
+}
+
+func Login(c *gin.Context) {
+	// HTTPリクエストのペイロードを取得
+	var httpPayload User
+	c.BindJSON(&httpPayload)
+	// DBからuserレコード取得
+	dbUser := User{}
+	if err := DB.Table("users").Where(
+		&User{UserResp: UserResp{Email: httpPayload.Email}},
+	).First(&dbUser).Error; err != nil {
+		c.IndentedJSON(
+			http.StatusInternalServerError,
+			&ErrorResp{Message: err.Error()},
+		)
+		c.Abort()
+		return
+	}
+	// ハッシュ化したパスワードの比較
+	if err := bcrypt.CompareHashAndPassword(
+		([]byte)(httpPayload.Password),
+		([]byte)(dbUser.Password),
+	); err != nil {
+		c.IndentedJSON(
+			http.StatusForbidden,
+			&ErrorResp{Message: err.Error()},
+		)
+		c.Abort()
+		return
+	}
+	// 認証成功
+	c.IndentedJSON(
+		http.StatusOK,
+		&Token{Token: "hoge"},
+	)
 }

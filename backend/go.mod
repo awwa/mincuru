@@ -4,6 +4,7 @@ go 1.17
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/form3tech-oss/jwt-go v3.2.5+incompatible // indirect
 	github.com/getkin/kin-openapi v0.82.0 // indirect
 	github.com/ghodss/yaml v1.0.0 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect

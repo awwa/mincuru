@@ -33,6 +33,7 @@ func Router() (router *gin.Engine) {
 	router.PATCH("/users/:id", PatchUser)
 	router.DELETE("/users/:id", DeleteUser)
 	router.POST("/users", PostUser)
+	router.POST("/users/login", Login)
 	router.GET("/hoge", hogeFunc)
 	return
 }
@@ -57,7 +58,7 @@ func validateRequestMiddleware() gin.HandlerFunc {
 		if err != nil {
 			c.IndentedJSON(
 				http.StatusInternalServerError,
-				&ErrorResponse{Message: err.Error()},
+				&ErrorResp{Message: err.Error()},
 			)
 			c.Abort()
 		}
@@ -65,7 +66,7 @@ func validateRequestMiddleware() gin.HandlerFunc {
 		if err != nil {
 			c.IndentedJSON(
 				http.StatusInternalServerError,
-				&ErrorResponse{Message: err.Error()},
+				&ErrorResp{Message: err.Error()},
 			)
 			c.Abort()
 		}
@@ -73,7 +74,7 @@ func validateRequestMiddleware() gin.HandlerFunc {
 		if err != nil {
 			c.IndentedJSON(
 				http.StatusInternalServerError,
-				&ErrorResponse{Message: err.Error()},
+				&ErrorResp{Message: err.Error()},
 			)
 			c.Abort()
 		}
@@ -81,7 +82,7 @@ func validateRequestMiddleware() gin.HandlerFunc {
 		if err != nil {
 			c.IndentedJSON(
 				http.StatusInternalServerError,
-				&ErrorResponse{Message: err.Error()},
+				&ErrorResp{Message: err.Error()},
 			)
 			c.Abort()
 		}
@@ -93,7 +94,7 @@ func validateRequestMiddleware() gin.HandlerFunc {
 		if err := openapi3filter.ValidateRequest(ctx, requestValidationInput); err != nil {
 			c.IndentedJSON(
 				http.StatusBadRequest,
-				&ErrorResponse{Message: err.Error()},
+				&ErrorResp{Message: err.Error()},
 			)
 			c.Abort()
 		}
@@ -116,7 +117,7 @@ func validateRequestMiddleware() gin.HandlerFunc {
 // 	}
 // }
 
-type ErrorResponse struct {
+type ErrorResp struct {
 	Message string `json:"message"`
 }
 
