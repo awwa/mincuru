@@ -11,8 +11,8 @@ func Sign(id uint, email string, role string) (string, error) {
 	token := jwt.New(jwt.SigningMethodHS256)
 	// claimsのセット
 	claims := token.Claims.(jwt.MapClaims)
-	claims["id"] = id
-	claims["email"] = email
+	claims["sub"] = id      // ユーザの一意識別子
+	claims["email"] = email // メールアドレス
 	claims["role"] = role
 	claims["iat"] = time.Now()
 	claims["exp"] = time.Now().Add(time.Hour * 24).Unix()

@@ -9,6 +9,8 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/getkin/kin-openapi/openapi3filter"
 	"github.com/getkin/kin-openapi/routers/legacy"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
@@ -37,14 +39,24 @@ func Loadenv() {
 func Router() (router *gin.Engine) {
 	router = gin.Default()
 	// router.Use(errorMiddleware())
+	// セッションの有効化
+	store := cookie.NewStore([]byte(os.Getenv("SESSION_KEY")))
+	router.Use(sessions.Sessions("auth", store))
+	// OpenApiによるリクエストのチェック
 	router.Use(validateRequestMiddleware())
-	router.GET("/users", GetUsers)
-	router.GET("/users/:id", GetUser)
-	router.PATCH("/users/:id", PatchUser)
-	router.DELETE("/users/:id", DeleteUser)
-	router.POST("/users", PostUser)
+	// 認証不要
 	router.POST("/users/login", Login)
-	router.GET("/hoge", hogeFunc)
+	// 認証必要
+	authGroup := router.Group("/")
+	authGroup.Use(authMiddleware())
+	{
+		authGroup.GET("/users", GetUsers)
+		authGroup.GET("/users/:id", GetUser)
+		authGroup.PATCH("/users/:id", PatchUser)
+		authGroup.DELETE("/users/:id", DeleteUser)
+		authGroup.POST("/users", PostUser)
+		authGroup.GET("/hoge", hogeFunc)
+	}
 	return
 }
 
@@ -86,6 +98,7 @@ func validateRequestMiddleware() gin.HandlerFunc {
 				&ErrorResp{Message: err.Error()},
 			)
 			c.Abort()
+			return
 		}
 		err = doc.Validate(ctx)
 		if err != nil {
@@ -94,6 +107,7 @@ func validateRequestMiddleware() gin.HandlerFunc {
 				&ErrorResp{Message: err.Error()},
 			)
 			c.Abort()
+			return
 		}
 		router, err := legacy.NewRouter(doc)
 		if err != nil {
@@ -102,6 +116,7 @@ func validateRequestMiddleware() gin.HandlerFunc {
 				&ErrorResp{Message: err.Error()},
 			)
 			c.Abort()
+			return
 		}
 		route, pathParams, err := router.FindRoute(c.Request)
 		if err != nil {
@@ -110,6 +125,7 @@ func validateRequestMiddleware() gin.HandlerFunc {
 				&ErrorResp{Message: err.Error()},
 			)
 			c.Abort()
+			return
 		}
 		requestValidationInput := &openapi3filter.RequestValidationInput{
 			Request:    c.Request,
@@ -122,8 +138,41 @@ func validateRequestMiddleware() gin.HandlerFunc {
 				&ErrorResp{Message: err.Error()},
 			)
 			c.Abort()
+			return
 		}
 		c.Next()
+	}
+}
+
+func authMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		// session := sessions.Default(c)
+		// jwt, err := dproxy.New(session.Get("auth")).String()
+		// fmt.Println(jwt)
+		// if err != nil {
+		// 	c.IndentedJSON(
+		// 		http.StatusUnauthorized,
+		// 		&ErrorResp{Message: "unauthorized"},
+		// 	)
+		// 	c.Abort()
+		// 	return
+		// }
+		// var user User
+		// if err := json.Unmarshal([]byte(jwt), &user); err != nil {
+		// 	c.IndentedJSON(
+		// 		http.StatusForbidden,
+		// 		&ErrorResp{Message: err.Error()},
+		// 	)
+		// 	c.Abort()
+		// 	return
+		// }
+		c.Next()
+		// c.IndentedJSON(
+		// 	http.StatusUnauthorized,
+		// 	&ErrorResp{Message: "hoge"},
+		// )
+		// c.Abort()
+		// return
 	}
 }
 

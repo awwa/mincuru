@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
@@ -222,5 +223,11 @@ func Login(c *gin.Context) {
 		c.Abort()
 		return
 	}
+	// セッションにJWTを格納
+	session := sessions.Default(c)
+	session.Set("auth", token)
+	session.Save()
+	// JWTをセッションに格納するようにしたので、レスポンスで返す必要はない
+	// TODO 後で削除するか
 	c.IndentedJSON(http.StatusOK, &TokenResp{Token: token})
 }

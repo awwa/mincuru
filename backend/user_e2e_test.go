@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -519,11 +518,11 @@ func TestLoginSuccess(t *testing.T) {
 	// HTTPリクエストの生成
 	body := `{
 		"email": "hoge@example.com",
-    "password": "password"
+    	"password": "password"
 	}`
 	httpReq, err := http.NewRequest(http.MethodPost, "http://localhost:8080/users/login", strings.NewReader(body))
 	httpReq.Header.Add("Content-Type", "application/json")
-	fmt.Println(httpReq)
+	// fmt.Println(httpReq)
 	if err != nil {
 		panic(err)
 	}
