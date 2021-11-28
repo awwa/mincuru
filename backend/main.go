@@ -9,8 +9,6 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/getkin/kin-openapi/openapi3filter"
 	"github.com/getkin/kin-openapi/routers/legacy"
-	"github.com/gin-contrib/sessions"
-	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
@@ -18,12 +16,14 @@ import (
 )
 
 var DB *gorm.DB
+var identityKey = "email"
 
 func main() {
 	// 環境変数
 	Loadenv()
 	// DB初期化
 	initDb()
+
 	// ルーティングを設定
 	router := Router()
 	router.Run("localhost:8080")
@@ -39,23 +39,23 @@ func Loadenv() {
 func Router() (router *gin.Engine) {
 	router = gin.Default()
 	// router.Use(errorMiddleware())
-	// セッションの有効化
-	store := cookie.NewStore([]byte(os.Getenv("SESSION_KEY")))
-	router.Use(sessions.Sessions("auth", store))
+	// authMiddleware := authMiddleware()
 	// OpenApiによるリクエストのチェック
 	router.Use(validateRequestMiddleware())
 	// 認証不要
+	// router.POST("/users/login", authMiddleware.LoginHandler)
 	router.POST("/users/login", Login)
 	// 認証必要
-	authGroup := router.Group("/")
-	authGroup.Use(authMiddleware())
+	auth := router.Group("/")
+	// auth.GET("/refresh_token", authMiddleware.RefreshHandler)
+	// auth.Use(authMiddleware.MiddlewareFunc())
+	auth.Use(authMiddleware2())
 	{
-		authGroup.GET("/users", GetUsers)
-		authGroup.GET("/users/:id", GetUser)
-		authGroup.PATCH("/users/:id", PatchUser)
-		authGroup.DELETE("/users/:id", DeleteUser)
-		authGroup.POST("/users", PostUser)
-		authGroup.GET("/hoge", hogeFunc)
+		auth.GET("/users", GetUsers)
+		auth.GET("/users/:id", GetUser)
+		auth.PATCH("/users/:id", PatchUser)
+		auth.DELETE("/users/:id", DeleteUser)
+		auth.POST("/users", PostUser)
 	}
 	return
 }
@@ -144,7 +144,7 @@ func validateRequestMiddleware() gin.HandlerFunc {
 	}
 }
 
-func authMiddleware() gin.HandlerFunc {
+func authMiddleware2() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// session := sessions.Default(c)
 		// jwt, err := dproxy.New(session.Get("auth")).String()
@@ -168,8 +168,8 @@ func authMiddleware() gin.HandlerFunc {
 		// }
 		c.Next()
 		// c.IndentedJSON(
-		// 	http.StatusUnauthorized,
-		// 	&ErrorResp{Message: "hoge"},
+		//      http.StatusUnauthorized,
+		//      &ErrorResp{Message: "hoge"},
 		// )
 		// c.Abort()
 		// return
@@ -179,11 +179,9 @@ func authMiddleware() gin.HandlerFunc {
 // func errorMiddleware() gin.HandlerFunc {
 // 	return func(c *gin.Context) {
 // 		c.Next()
-
 // 		err := c.Errors.ByType(gin.ErrorTypePublic).Last()
 // 		if err != nil {
 // 			log.Print(err.Err)
-
 // 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
 // 				"Error": err.Error(),
 // 			})
@@ -193,15 +191,4 @@ func authMiddleware() gin.HandlerFunc {
 
 type ErrorResp struct {
 	Message string `json:"message"`
-}
-
-type Hoge struct {
-	Title string `json:"title"`
-}
-
-var hogeVar = Hoge{Title: "hoge"}
-
-func hogeFunc(c *gin.Context) {
-
-	c.IndentedJSON(http.StatusOK, hogeVar)
 }
