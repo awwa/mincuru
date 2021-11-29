@@ -69,8 +69,8 @@ func ServeAndRequest(httpReq *http.Request) (recorder *httptest.ResponseRecorder
 		Header:                 recorder.Result().Header,
 	}
 	responseValidationInput.SetBodyBytes(recorder.Body.Bytes())
+	// fmt.Println(recorder.Result())
 
-	fmt.Println(recorder.Result())
 	// Validate response
 	if err := openapi3filter.ValidateResponse(ctx, responseValidationInput); err != nil {
 		panic(err)
@@ -481,7 +481,6 @@ func TestDeleteUserSuccess(t *testing.T) {
 	httpReq, err := http.NewRequest(http.MethodDelete, "http://localhost:8080/users/1", nil)
 	httpReq.Header.Add("Content-Type", "application/json")
 	httpReq.Header.Add("Authorization", fmt.Sprintf("Bearer %s", token))
-	// fmt.Println(httpReq)
 	if err != nil {
 		panic(err)
 	}
@@ -498,7 +497,6 @@ func TestDeleteUserNoRecord(t *testing.T) {
 	httpReq, err := http.NewRequest(http.MethodDelete, "http://localhost:8080/users/123", nil)
 	httpReq.Header.Add("Content-Type", "application/json")
 	httpReq.Header.Add("Authorization", fmt.Sprintf("Bearer %s", token))
-	// fmt.Println(httpReq)
 	if err != nil {
 		panic(err)
 	}

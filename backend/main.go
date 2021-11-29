@@ -23,7 +23,6 @@ func main() {
 	Loadenv()
 	// DB初期化
 	initDb()
-
 	// ルーティングを設定
 	router := Router()
 	router.Run("localhost:8080")
@@ -38,18 +37,15 @@ func Loadenv() {
 
 func Router() (router *gin.Engine) {
 	router = gin.Default()
-	// router.Use(errorMiddleware())
 	authMiddleware := authMiddleware()
 	// OpenApiによるリクエストのチェック
 	router.Use(validateRequestMiddleware())
 	// 認証不要
 	router.POST("/users/login", authMiddleware.LoginHandler)
-	// router.POST("/users/login", Login)
 	// 認証必要
 	auth := router.Group("/")
 	// auth.GET("/refresh_token", authMiddleware.RefreshHandler)
 	auth.Use(authMiddleware.MiddlewareFunc())
-	// auth.Use(authMiddleware2())
 	{
 		auth.GET("/users", GetUsers)
 		auth.GET("/users/:id", GetUser)
@@ -143,51 +139,6 @@ func validateRequestMiddleware() gin.HandlerFunc {
 		c.Next()
 	}
 }
-
-func authMiddleware2() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		// session := sessions.Default(c)
-		// jwt, err := dproxy.New(session.Get("auth")).String()
-		// fmt.Println(jwt)
-		// if err != nil {
-		// 	c.IndentedJSON(
-		// 		http.StatusUnauthorized,
-		// 		&ErrorResp{Message: "unauthorized"},
-		// 	)
-		// 	c.Abort()
-		// 	return
-		// }
-		// var user User
-		// if err := json.Unmarshal([]byte(jwt), &user); err != nil {
-		// 	c.IndentedJSON(
-		// 		http.StatusForbidden,
-		// 		&ErrorResp{Message: err.Error()},
-		// 	)
-		// 	c.Abort()
-		// 	return
-		// }
-		c.Next()
-		// c.IndentedJSON(
-		//      http.StatusUnauthorized,
-		//      &ErrorResp{Message: "hoge"},
-		// )
-		// c.Abort()
-		// return
-	}
-}
-
-// func errorMiddleware() gin.HandlerFunc {
-// 	return func(c *gin.Context) {
-// 		c.Next()
-// 		err := c.Errors.ByType(gin.ErrorTypePublic).Last()
-// 		if err != nil {
-// 			log.Print(err.Err)
-// 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
-// 				"Error": err.Error(),
-// 			})
-// 		}
-// 	}
-// }
 
 type ErrorResp struct {
 	Message string `json:"message"`
