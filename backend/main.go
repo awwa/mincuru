@@ -39,17 +39,17 @@ func Loadenv() {
 func Router() (router *gin.Engine) {
 	router = gin.Default()
 	// router.Use(errorMiddleware())
-	// authMiddleware := authMiddleware()
+	authMiddleware := authMiddleware()
 	// OpenApiによるリクエストのチェック
 	router.Use(validateRequestMiddleware())
 	// 認証不要
-	// router.POST("/users/login", authMiddleware.LoginHandler)
-	router.POST("/users/login", Login)
+	router.POST("/users/login", authMiddleware.LoginHandler)
+	// router.POST("/users/login", Login)
 	// 認証必要
 	auth := router.Group("/")
 	// auth.GET("/refresh_token", authMiddleware.RefreshHandler)
-	// auth.Use(authMiddleware.MiddlewareFunc())
-	auth.Use(authMiddleware2())
+	auth.Use(authMiddleware.MiddlewareFunc())
+	// auth.Use(authMiddleware2())
 	{
 		auth.GET("/users", GetUsers)
 		auth.GET("/users/:id", GetUser)

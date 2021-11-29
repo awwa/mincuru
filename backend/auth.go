@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"fmt"
 	"os"
 	"time"
 
@@ -35,7 +34,6 @@ func authMiddleware() (authMiddleware *jwt.GinJWTMiddleware) {
 		// 	}
 		// },
 		Authenticator: func(c *gin.Context) (interface{}, error) {
-			fmt.Println("*************")
 			var loginVals User
 			if err := c.ShouldBind(&loginVals); err != nil {
 				return "", jwt.ErrMissingLoginValues
