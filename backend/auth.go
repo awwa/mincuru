@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"time"
 
@@ -9,6 +10,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 )
+
+var identityKey = "id"
 
 func authMiddleware() (authMiddleware *jwt.GinJWTMiddleware) {
 	// the jwt middleware
@@ -19,20 +22,35 @@ func authMiddleware() (authMiddleware *jwt.GinJWTMiddleware) {
 		MaxRefresh:  time.Hour,
 		IdentityKey: identityKey,
 		// SendCookie:  true,
-		// PayloadFunc: func(data interface{}) jwt.MapClaims {
-		// 	if v, ok := data.(*User); ok {
-		// 		return jwt.MapClaims{
-		// 			identityKey: v.Email,
-		// 		}
-		// 	}
-		// 	return jwt.MapClaims{}
-		// },
-		// IdentityHandler: func(c *gin.Context) interface{} {
-		// 	claims := jwt.ExtractClaims(c)
-		// 	return &User{
-		// 		UserResp: UserResp{Id: Id{ID: claims[identityKey].(string)}},
-		// 	}
-		// },
+		PayloadFunc: func(data interface{}) jwt.MapClaims {
+			fmt.Println("*****1")
+			fmt.Println(data)
+			v, ok := data.(*UserResp)
+			fmt.Println(v)
+			fmt.Println(ok)
+			if v, ok := data.(*UserResp); ok {
+				// if v, ok := data.(*User); ok {
+				fmt.Println(v)
+				return jwt.MapClaims{
+					"email": v.Email,
+					"id":    v.ID,
+				}
+			}
+			fmt.Println("*****2")
+			return jwt.MapClaims{}
+		},
+		IdentityHandler: func(c *gin.Context) interface{} {
+			fmt.Println("######")
+			claims := jwt.ExtractClaims(c)
+			fmt.Println(claims)
+			fmt.Println(claims["exp"])
+			fmt.Println(claims["orig_iat"])
+			fmt.Println(claims[identityKey])
+			return &UserResp{
+				Id:    Id{ID: (uint)(1) /*claims["id"].(float64)*/},
+				Email: claims["email" /*identityKey*/].(string),
+			}
+		},
 		Authenticator: func(c *gin.Context) (interface{}, error) {
 			var loginVals User
 			if err := c.ShouldBind(&loginVals); err != nil {
@@ -56,13 +74,18 @@ func authMiddleware() (authMiddleware *jwt.GinJWTMiddleware) {
 			); err != nil {
 				return nil, jwt.ErrFailedAuthentication
 			}
-			return &UserResp{Email: loginVals.Email}, nil
+			//return &UserResp{Email: loginVals.Email}, nil
+			fmt.Println("$$$$$$ auth success")
+			fmt.Println(dbUsers[0].ID)
+			fmt.Println(loginVals.Email)
+			return &UserResp{Id: Id{ID: dbUsers[0].ID}, Email: loginVals.Email}, nil
 		},
 		// Authorizator: func(data interface{}, c *gin.Context) bool {
-		// 	if v, ok := data.(*User); ok && v.UserName == "admin" {
-		// 		return true
-		// 	}
-		// 	return false
+		// 	fmt.Println("&&&&&&")
+		// 	// 	if v, ok := data.(*User); ok && v.UserName == "admin" {
+		// 	return true
+		// 	// 	}
+		// 	// return false
 		// },
 		Unauthorized: func(c *gin.Context, code int, message string) {
 			c.IndentedJSON(code, &ErrorResp{Message: message})

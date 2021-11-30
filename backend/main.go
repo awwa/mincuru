@@ -16,7 +16,6 @@ import (
 )
 
 var DB *gorm.DB
-var identityKey = "email"
 
 func main() {
 	// 環境変数
@@ -44,9 +43,9 @@ func Router() (router *gin.Engine) {
 	router.POST("/users/login", authMiddleware.LoginHandler)
 	// 認証必要
 	auth := router.Group("/")
-	// auth.GET("/refresh_token", authMiddleware.RefreshHandler)
 	auth.Use(authMiddleware.MiddlewareFunc())
 	{
+		auth.GET("/users/refresh_token", authMiddleware.RefreshHandler)
 		auth.GET("/users", GetUsers)
 		auth.GET("/users/:id", GetUser)
 		auth.PATCH("/users/:id", PatchUser)

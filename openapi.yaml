@@ -77,6 +77,30 @@ paths:
       summary: ''
       security: []
     parameters: []
+  /users/refresh_token:
+    parameters: []
+    get:
+      summary: ''
+      operationId: get-users-refresh_token
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  token:
+                    type: string
+      description: トークン更新
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
   /users/logout:
     post:
       summary: ''
