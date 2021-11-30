@@ -20,7 +20,7 @@ func authMiddleware() (authMiddleware *jwt.GinJWTMiddleware) {
 		Timeout:     time.Hour, // トークン有効期限
 		MaxRefresh:  time.Hour,
 		IdentityKey: identityKey,
-		// SendCookie:  true,
+		SendCookie:  true,
 		PayloadFunc: func(data interface{}) jwt.MapClaims {
 			if v, ok := data.(*UserResp); ok {
 				return jwt.MapClaims{
@@ -78,6 +78,7 @@ func authMiddleware() (authMiddleware *jwt.GinJWTMiddleware) {
 		// - "cookie:<name>"
 		// - "param:<name>"
 		TokenLookup: "header: Authorization, query: token, cookie: jwt",
+		// TokenLookup: "cookie: jwt",
 		// TokenLookup: "query:token",
 		// TokenLookup: "cookie:token",
 

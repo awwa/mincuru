@@ -97,7 +97,7 @@ func login() string {
 	// HTTPリクエストの生成
 	body := `{
 		"email": "hoge@example.com",
-    "password": "password"
+    	"password": "password"
 	}`
 	httpReq, err := http.NewRequest(http.MethodPost, "http://localhost:8080/users/login", strings.NewReader(body))
 	httpReq.Header.Add("Content-Type", "application/json")
@@ -136,6 +136,20 @@ func TestGetUsersNoLogin(t *testing.T) {
 	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users", nil)
 	httpReq.Header.Add("Content-Type", "application/json")
 	httpReq.Header.Add("Authorization", fmt.Sprintf("Bearer %s", "token"))
+	if err != nil {
+		panic(err)
+	}
+	// Test用サーバにリクエストを送信して、レスポンスをOpenAPI仕様に照らし合わせる
+	recorder := ServeAndRequest(httpReq)
+	// テストケース固有のチェック
+	assert.Equal(t, 401, recorder.Result().StatusCode)
+}
+
+func TestGetUsersNoAuthorization(t *testing.T) {
+	createTestData() // テストデータの準備
+	// HTTPリクエストの生成
+	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users", nil)
+	httpReq.Header.Add("Content-Type", "application/json")
 	if err != nil {
 		panic(err)
 	}
@@ -272,6 +286,21 @@ func TestGetUserNoRecord(t *testing.T) {
 	assert.Equal(t, 404, recorder.Result().StatusCode)
 }
 
+func TestGetUserNoLogin(t *testing.T) {
+	createTestData() // テストデータの準備
+	// HTTPリクエストの生成
+	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users/1", nil)
+	httpReq.Header.Add("Content-Type", "application/json")
+	httpReq.Header.Add("Authorization", fmt.Sprintf("Bearer %s", "token"))
+	if err != nil {
+		panic(err)
+	}
+	// Test用サーバにリクエストを送信して、レスポンスをOpenAPI仕様に照らし合わせる
+	recorder := ServeAndRequest(httpReq)
+	// テストケース固有のチェック
+	assert.Equal(t, 401, recorder.Result().StatusCode)
+}
+
 func TestPostUserSuccess(t *testing.T) {
 	createTestData() // テストデータの準備
 	token := login() // 認証実行
@@ -335,6 +364,27 @@ func TestPostUserDupKey(t *testing.T) {
 	recorder := ServeAndRequest(httpReq)
 	// テストケース固有のチェック
 	assert.Equal(t, 400, recorder.Result().StatusCode)
+}
+
+func TestPostUserNoLogin(t *testing.T) {
+	createTestData() // テストデータの準備
+	// HTTPリクエストの生成
+	body := `{
+		"name": "new reocrd",
+		"email": "new@example.com",
+		"role": "user",
+		"password": "password"
+	}`
+	httpReq, err := http.NewRequest(http.MethodPost, "http://localhost:8080/users", strings.NewReader(body))
+	httpReq.Header.Add("Content-Type", "application/json")
+	httpReq.Header.Add("Authorization", fmt.Sprintf("Bearer %s", "token"))
+	if err != nil {
+		panic(err)
+	}
+	// Test用サーバにリクエストを送信して、レスポンスをOpenAPI仕様に照らし合わせる
+	recorder := ServeAndRequest(httpReq)
+	// テストケース固有のチェック
+	assert.Equal(t, 401, recorder.Result().StatusCode)
 }
 
 func TestPatchUserSuccessAllColumn(t *testing.T) {
@@ -474,6 +524,27 @@ func TestPatchUserNoRecord(t *testing.T) {
 	assert.Equal(t, 404, recorder.Result().StatusCode)
 }
 
+func TestPatchUserNoLogin(t *testing.T) {
+	createTestData() // テストデータの準備
+	// HTTPリクエストの生成
+	body := `{
+		"name": "hoge taro2",
+		"email": "hoge@example.com2",
+		"role": "user",
+		"password": "password2"
+	}`
+	httpReq, err := http.NewRequest(http.MethodPatch, "http://localhost:8080/users/1", strings.NewReader(body))
+	httpReq.Header.Add("Content-Type", "application/json")
+	httpReq.Header.Add("Authorization", fmt.Sprintf("Bearer %s", "token"))
+	if err != nil {
+		panic(err)
+	}
+	// Test用サーバにリクエストを送信して、レスポンスをOpenAPI仕様に照らし合わせる
+	recorder := ServeAndRequest(httpReq)
+	// テストケース固有のチェック
+	assert.Equal(t, 401, recorder.Result().StatusCode)
+}
+
 func TestDeleteUserSuccess(t *testing.T) {
 	createTestData() // テストデータの準備
 	token := login() // 認証実行
@@ -506,12 +577,27 @@ func TestDeleteUserNoRecord(t *testing.T) {
 	assert.Equal(t, 404, recorder.Result().StatusCode)
 }
 
+func TestDeleteUserNoLogin(t *testing.T) {
+	createTestData() // テストデータの準備
+	// HTTPリクエストの生成
+	httpReq, err := http.NewRequest(http.MethodDelete, "http://localhost:8080/users/1", nil)
+	httpReq.Header.Add("Content-Type", "application/json")
+	httpReq.Header.Add("Authorization", fmt.Sprintf("Bearer %s", "token"))
+	if err != nil {
+		panic(err)
+	}
+	// Test用サーバにリクエストを送信して、レスポンスをOpenAPI仕様に照らし合わせる
+	recorder := ServeAndRequest(httpReq)
+	// テストケース固有のチェック
+	assert.Equal(t, 401, recorder.Result().StatusCode)
+}
+
 func TestLoginSuccess(t *testing.T) {
 	createTestData() // テストデータの準備
 	// HTTPリクエストの生成
 	body := `{
 		"email": "hoge@example.com",
-    "password": "password"
+	    "password": "password"
 	}`
 	httpReq, err := http.NewRequest(http.MethodPost, "http://localhost:8080/users/login", strings.NewReader(body))
 	httpReq.Header.Add("Content-Type", "application/json")
@@ -558,4 +644,66 @@ func TestLoginInvalidEmail(t *testing.T) {
 	recorder := ServeAndRequest(httpReq)
 	// テストケース固有のチェック
 	assert.Equal(t, 401, recorder.Result().StatusCode)
+}
+
+func TestRefreshTokenSuccess(t *testing.T) {
+	createTestData() // テストデータの準備
+	token := login() // 認証実行
+	// HTTPリクエストの生成
+	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users/refresh_token", nil)
+	httpReq.Header.Add("Content-Type", "application/json")
+	httpReq.Header.Add("Authorization", fmt.Sprintf("Bearer %s", token))
+	if err != nil {
+		panic(err)
+	}
+	// Test用サーバにリクエストを送信して、レスポンスをOpenAPI仕様に照らし合わせる
+	recorder := ServeAndRequest(httpReq)
+	// テストケース固有のチェック
+	assert.Equal(t, 200, recorder.Result().StatusCode)
+}
+
+func TestRefreshTokenNoLogin(t *testing.T) {
+	createTestData() // テストデータの準備
+	// HTTPリクエストの生成
+	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users/refresh_token", nil)
+	httpReq.Header.Add("Content-Type", "application/json")
+	httpReq.Header.Add("Authorization", fmt.Sprintf("Bearer %s", "token"))
+	if err != nil {
+		panic(err)
+	}
+	// Test用サーバにリクエストを送信して、レスポンスをOpenAPI仕様に照らし合わせる
+	recorder := ServeAndRequest(httpReq)
+	// テストケース固有のチェック
+	assert.Equal(t, 401, recorder.Result().StatusCode)
+}
+
+func TestLogoutSuccess(t *testing.T) {
+	createTestData() // テストデータの準備
+	token := login() // 認証実行
+	// HTTPリクエストの生成
+	httpReq, err := http.NewRequest(http.MethodPost, "http://localhost:8080/users/logout", nil)
+	httpReq.Header.Add("Content-Type", "application/json")
+	httpReq.Header.Add("Authorization", fmt.Sprintf("Bearer %s", token))
+	if err != nil {
+		panic(err)
+	}
+	// Test用サーバにリクエストを送信して、レスポンスをOpenAPI仕様に照らし合わせる
+	recorder := ServeAndRequest(httpReq)
+	// テストケース固有のチェック
+	assert.Equal(t, 200, recorder.Result().StatusCode)
+}
+
+func TestLogoutNoLogin(t *testing.T) {
+	createTestData() // テストデータの準備
+	// HTTPリクエストの生成
+	httpReq, err := http.NewRequest(http.MethodPost, "http://localhost:8080/users/logout", nil)
+	httpReq.Header.Add("Content-Type", "application/json")
+	httpReq.Header.Add("Authorization", fmt.Sprintf("Bearer %s", "token"))
+	if err != nil {
+		panic(err)
+	}
+	// Test用サーバにリクエストを送信して、レスポンスをOpenAPI仕様に照らし合わせる
+	recorder := ServeAndRequest(httpReq)
+	// テストケース固有のチェック
+	assert.Equal(t, 200, recorder.Result().StatusCode)
 }

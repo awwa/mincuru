@@ -47,13 +47,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  token:
-                    type: string
-                    example: tokentokentoken
-                required:
-                  - token
+                $ref: '#/components/schemas/TokenResponse'
               example:
                 token: access_token
         '400':
@@ -62,8 +56,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-        '403':
-          description: Forbidden
+        '401':
+          description: Unauthorized
           content:
             application/json:
               schema:
@@ -88,12 +82,25 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  code:
-                    type: string
-                  token:
-                    type: string
+                $ref: '#/components/schemas/TokenResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       description: トークン更新
       requestBody:
         content:
@@ -106,8 +113,17 @@ paths:
       summary: ''
       operationId: post-users-logout
       responses:
-        '204':
-          description: No Content
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                required:
+                  - code
         '401':
           description: Unauthorized
           content:
@@ -505,5 +521,20 @@ components:
           type: integer
       required:
         - id
+    TokenResponse:
+      title: TokenResponse
+      type: object
+      properties:
+        code:
+          type: integer
+        expire:
+          type: string
+          format: date-time
+        token:
+          type: string
+      required:
+        - code
+        - expire
+        - token
   responses: {}
   securitySchemes: {}

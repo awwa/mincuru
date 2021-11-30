@@ -44,6 +44,7 @@ func Router() (router *gin.Engine) {
 	// 認証必要
 	auth := router.Group("/")
 	auth.GET("/users/refresh_token", authMiddleware.RefreshHandler)
+	auth.POST("/users/logout", authMiddleware.LogoutHandler)
 	auth.Use(authMiddleware.MiddlewareFunc())
 	{
 		auth.GET("/users", GetUsers)
