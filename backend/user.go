@@ -12,21 +12,21 @@ import (
 )
 
 type Id struct {
-	ID uint `json:"id", gorm:"primarykey"`
+	ID uint `json:"id" gorm:"primarykey"`
 }
 
 type UserResp struct {
-	Id
+	Id                  //`gorm:"embedded"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
-	Name      string    `json:"name", gorm:"not null"`
-	Email     string    `json:"email", gorm:"unique"`
+	Name      string    `json:"name" gorm:"not null"`
+	Email     string    `json:"email" gorm:"unique"`
 	Role      string    `json:"role"`
 }
 
 type User struct {
-	UserResp                 // `gorm:"embedded"`
-	DeletedAt gorm.DeletedAt `json:"deleted_at", gorm:"index"`
+	UserResp                 //`gorm:"embedded"`
+	DeletedAt gorm.DeletedAt `gorm:"index" json:"deleted_at"`
 	Password  string         `json:"password"`
 }
 

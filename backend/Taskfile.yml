@@ -3,16 +3,19 @@
 version: '3'
 
 vars:
-  GREETING: Hello, World!
+  # GREETING: Hello, World!
 
 tasks:
-  default:
-    cmds:
-      - echo "{{.GREETING}}"
-    silent: true
+  # default:
+  #   cmds:
+  #     - echo "{{.GREETING}}"
+  #   silent: true
   build:
     cmds:
       - go build -o ./dist/
   dbrecreate:
     cmds:
       - docker-compose up -d --force-recreate --build
+  dbdown:
+    cmds:
+      - docker-compose down
