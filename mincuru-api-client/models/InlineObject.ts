@@ -16,32 +16,39 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface PasswordRequest
+ * @interface InlineObject
  */
-export interface PasswordRequest {
+export interface InlineObject {
     /**
      * 
      * @type {string}
-     * @memberof PasswordRequest
+     * @memberof InlineObject
+     */
+    email: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof InlineObject
      */
     password: string;
 }
 
-export function PasswordRequestFromJSON(json: any): PasswordRequest {
-    return PasswordRequestFromJSONTyped(json, false);
+export function InlineObjectFromJSON(json: any): InlineObject {
+    return InlineObjectFromJSONTyped(json, false);
 }
 
-export function PasswordRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): PasswordRequest {
+export function InlineObjectFromJSONTyped(json: any, ignoreDiscriminator: boolean): InlineObject {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
+        'email': json['email'],
         'password': json['password'],
     };
 }
 
-export function PasswordRequestToJSON(value?: PasswordRequest | null): any {
+export function InlineObjectToJSON(value?: InlineObject | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -50,6 +57,7 @@ export function PasswordRequestToJSON(value?: PasswordRequest | null): any {
     }
     return {
         
+        'email': value.email,
         'password': value.password,
     };
 }

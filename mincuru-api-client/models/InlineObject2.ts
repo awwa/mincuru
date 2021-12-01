@@ -16,39 +16,62 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface AuthRequest
+ * @interface InlineObject2
  */
-export interface AuthRequest {
+export interface InlineObject2 {
     /**
      * 
      * @type {string}
-     * @memberof AuthRequest
+     * @memberof InlineObject2
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof InlineObject2
      */
     email: string;
     /**
      * 
      * @type {string}
-     * @memberof AuthRequest
+     * @memberof InlineObject2
+     */
+    role: InlineObject2RoleEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof InlineObject2
      */
     password: string;
 }
 
-export function AuthRequestFromJSON(json: any): AuthRequest {
-    return AuthRequestFromJSONTyped(json, false);
+/**
+* @export
+* @enum {string}
+*/
+export enum InlineObject2RoleEnum {
+    User = 'user',
+    Admin = 'admin'
 }
 
-export function AuthRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): AuthRequest {
+export function InlineObject2FromJSON(json: any): InlineObject2 {
+    return InlineObject2FromJSONTyped(json, false);
+}
+
+export function InlineObject2FromJSONTyped(json: any, ignoreDiscriminator: boolean): InlineObject2 {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
+        'name': json['name'],
         'email': json['email'],
+        'role': json['role'],
         'password': json['password'],
     };
 }
 
-export function AuthRequestToJSON(value?: AuthRequest | null): any {
+export function InlineObject2ToJSON(value?: InlineObject2 | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -57,7 +80,9 @@ export function AuthRequestToJSON(value?: AuthRequest | null): any {
     }
     return {
         
+        'name': value.name,
         'email': value.email,
+        'role': value.role,
         'password': value.password,
     };
 }

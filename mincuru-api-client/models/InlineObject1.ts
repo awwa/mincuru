@@ -16,31 +16,31 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface UserRequest
+ * @interface InlineObject1
  */
-export interface UserRequest {
+export interface InlineObject1 {
     /**
      * 
      * @type {string}
-     * @memberof UserRequest
+     * @memberof InlineObject1
      */
-    name: string;
+    name?: string;
     /**
      * 
      * @type {string}
-     * @memberof UserRequest
+     * @memberof InlineObject1
      */
-    email: string;
+    email?: string;
     /**
      * 
      * @type {string}
-     * @memberof UserRequest
+     * @memberof InlineObject1
      */
-    role: UserRequestRoleEnum;
+    role?: InlineObject1RoleEnum;
     /**
      * 
      * @type {string}
-     * @memberof UserRequest
+     * @memberof InlineObject1
      */
     password?: string;
 }
@@ -49,29 +49,29 @@ export interface UserRequest {
 * @export
 * @enum {string}
 */
-export enum UserRequestRoleEnum {
+export enum InlineObject1RoleEnum {
     User = 'user',
     Admin = 'admin'
 }
 
-export function UserRequestFromJSON(json: any): UserRequest {
-    return UserRequestFromJSONTyped(json, false);
+export function InlineObject1FromJSON(json: any): InlineObject1 {
+    return InlineObject1FromJSONTyped(json, false);
 }
 
-export function UserRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): UserRequest {
+export function InlineObject1FromJSONTyped(json: any, ignoreDiscriminator: boolean): InlineObject1 {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'name': json['name'],
-        'email': json['email'],
-        'role': json['role'],
+        'name': !exists(json, 'name') ? undefined : json['name'],
+        'email': !exists(json, 'email') ? undefined : json['email'],
+        'role': !exists(json, 'role') ? undefined : json['role'],
         'password': !exists(json, 'password') ? undefined : json['password'],
     };
 }
 
-export function UserRequestToJSON(value?: UserRequest | null): any {
+export function InlineObject1ToJSON(value?: InlineObject1 | null): any {
     if (value === undefined) {
         return undefined;
     }

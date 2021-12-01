@@ -16,32 +16,32 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface AuthResponse
+ * @interface InlineResponse200
  */
-export interface AuthResponse {
+export interface InlineResponse200 {
     /**
      * 
-     * @type {string}
-     * @memberof AuthResponse
+     * @type {number}
+     * @memberof InlineResponse200
      */
-    token: string;
+    code: number;
 }
 
-export function AuthResponseFromJSON(json: any): AuthResponse {
-    return AuthResponseFromJSONTyped(json, false);
+export function InlineResponse200FromJSON(json: any): InlineResponse200 {
+    return InlineResponse200FromJSONTyped(json, false);
 }
 
-export function AuthResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): AuthResponse {
+export function InlineResponse200FromJSONTyped(json: any, ignoreDiscriminator: boolean): InlineResponse200 {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'token': json['token'],
+        'code': json['code'],
     };
 }
 
-export function AuthResponseToJSON(value?: AuthResponse | null): any {
+export function InlineResponse200ToJSON(value?: InlineResponse200 | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -50,7 +50,7 @@ export function AuthResponseToJSON(value?: AuthResponse | null): any {
     }
     return {
         
-        'token': value.token,
+        'code': value.code,
     };
 }
 

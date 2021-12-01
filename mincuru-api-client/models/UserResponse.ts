@@ -43,6 +43,18 @@ export interface UserResponse {
      * @memberof UserResponse
      */
     role: UserResponseRoleEnum;
+    /**
+     * 
+     * @type {Date}
+     * @memberof UserResponse
+     */
+    createdAt: Date;
+    /**
+     * 
+     * @type {Date}
+     * @memberof UserResponse
+     */
+    updatedAt: Date;
 }
 
 /**
@@ -68,6 +80,8 @@ export function UserResponseFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'name': json['name'],
         'email': json['email'],
         'role': json['role'],
+        'createdAt': (new Date(json['created_at'])),
+        'updatedAt': (new Date(json['updated_at'])),
     };
 }
 
@@ -84,6 +98,8 @@ export function UserResponseToJSON(value?: UserResponse | null): any {
         'name': value.name,
         'email': value.email,
         'role': value.role,
+        'created_at': (value.createdAt.toISOString()),
+        'updated_at': (value.updatedAt.toISOString()),
     };
 }
 
