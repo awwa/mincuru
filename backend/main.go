@@ -9,6 +9,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/getkin/kin-openapi/openapi3filter"
 	"github.com/getkin/kin-openapi/routers/legacy"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
@@ -36,9 +37,12 @@ func Loadenv() {
 
 func Router() (router *gin.Engine) {
 	router = gin.Default()
-	authMiddleware := authMiddleware()
+	// CORS
+	router.Use(cors.Default())
 	// OpenApiによるリクエストのチェック
 	router.Use(validateRequestMiddleware())
+	// JWTによる認証有効化
+	authMiddleware := authMiddleware()
 	// 認証不要
 	router.POST("/users/login", authMiddleware.LoginHandler)
 	// 認証必要

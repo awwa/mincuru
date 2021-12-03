@@ -2,12 +2,12 @@
 apis/DefaultApi.ts
 apis/index.ts
 index.ts
+models/CodeResponse.ts
 models/ErrorResponse.ts
-models/Id.ts
-models/InlineObject.ts
-models/InlineObject1.ts
-models/InlineObject2.ts
-models/InlineResponse200.ts
+models/IdResponse.ts
+models/LoginRequest.ts
+models/PatchUserRequest.ts
+models/PostUserRequest.ts
 models/TokenResponse.ts
 models/UserResponse.ts
 models/index.ts

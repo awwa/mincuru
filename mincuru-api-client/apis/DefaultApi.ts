@@ -15,24 +15,24 @@
 
 import * as runtime from '../runtime';
 import {
+    CodeResponse,
+    CodeResponseFromJSON,
+    CodeResponseToJSON,
     ErrorResponse,
     ErrorResponseFromJSON,
     ErrorResponseToJSON,
-    Id,
-    IdFromJSON,
-    IdToJSON,
-    InlineObject,
-    InlineObjectFromJSON,
-    InlineObjectToJSON,
-    InlineObject1,
-    InlineObject1FromJSON,
-    InlineObject1ToJSON,
-    InlineObject2,
-    InlineObject2FromJSON,
-    InlineObject2ToJSON,
-    InlineResponse200,
-    InlineResponse200FromJSON,
-    InlineResponse200ToJSON,
+    IdResponse,
+    IdResponseFromJSON,
+    IdResponseToJSON,
+    LoginRequest,
+    LoginRequestFromJSON,
+    LoginRequestToJSON,
+    PatchUserRequest,
+    PatchUserRequestFromJSON,
+    PatchUserRequestToJSON,
+    PostUserRequest,
+    PostUserRequestFromJSON,
+    PostUserRequestToJSON,
     TokenResponse,
     TokenResponseFromJSON,
     TokenResponseToJSON,
@@ -55,21 +55,17 @@ export interface GetUsersRequest {
     role?: GetUsersRoleEnum;
 }
 
-export interface GetUsersRefreshTokenRequest {
-    body?: object;
-}
-
-export interface PatchUserRequest {
+export interface PatchUserOperationRequest {
     id: number;
-    inlineObject1?: InlineObject1;
+    patchUserRequest?: PatchUserRequest;
 }
 
 export interface PostUsersRequest {
-    inlineObject2?: InlineObject2;
+    postUserRequest?: PostUserRequest;
 }
 
 export interface PostUsersLoginRequest {
-    inlineObject?: InlineObject;
+    loginRequest?: LoginRequest;
 }
 
 /**
@@ -125,50 +121,49 @@ export interface DefaultApiInterface {
 
     /**
      * トークン更新
-     * @param {object} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
      */
-    getUsersRefreshTokenRaw(requestParameters: GetUsersRefreshTokenRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<TokenResponse>>;
+    getUsersRefreshTokenRaw(initOverrides?: RequestInit): Promise<runtime.ApiResponse<TokenResponse>>;
 
     /**
      * トークン更新
      */
-    getUsersRefreshToken(requestParameters: GetUsersRefreshTokenRequest, initOverrides?: RequestInit): Promise<TokenResponse>;
+    getUsersRefreshToken(initOverrides?: RequestInit): Promise<TokenResponse>;
 
     /**
      * ユーザの更新
      * @param {number} id 対象AdminのID
-     * @param {InlineObject1} [inlineObject1] 
+     * @param {PatchUserRequest} [patchUserRequest] 更新するAdmin情報
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
      */
-    patchUserRaw(requestParameters: PatchUserRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<Id>>;
+    patchUserRaw(requestParameters: PatchUserOperationRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<IdResponse>>;
 
     /**
      * ユーザの更新
      */
-    patchUser(requestParameters: PatchUserRequest, initOverrides?: RequestInit): Promise<Id>;
+    patchUser(requestParameters: PatchUserOperationRequest, initOverrides?: RequestInit): Promise<IdResponse>;
 
     /**
      * ユーザの追加
-     * @param {InlineObject2} [inlineObject2] 
+     * @param {PostUserRequest} [postUserRequest] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
      */
-    postUsersRaw(requestParameters: PostUsersRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<Id>>;
+    postUsersRaw(requestParameters: PostUsersRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<IdResponse>>;
 
     /**
      * ユーザの追加
      */
-    postUsers(requestParameters: PostUsersRequest, initOverrides?: RequestInit): Promise<Id>;
+    postUsers(requestParameters: PostUsersRequest, initOverrides?: RequestInit): Promise<IdResponse>;
 
     /**
      * ログイン
-     * @param {InlineObject} [inlineObject] 
+     * @param {LoginRequest} [loginRequest] 認証情報
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
@@ -186,12 +181,12 @@ export interface DefaultApiInterface {
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
      */
-    postUsersLogoutRaw(initOverrides?: RequestInit): Promise<runtime.ApiResponse<InlineResponse200>>;
+    postUsersLogoutRaw(initOverrides?: RequestInit): Promise<runtime.ApiResponse<CodeResponse>>;
 
     /**
      * ログアウト
      */
-    postUsersLogout(initOverrides?: RequestInit): Promise<InlineResponse200>;
+    postUsersLogout(initOverrides?: RequestInit): Promise<CodeResponse>;
 
 }
 
@@ -300,19 +295,16 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     /**
      * トークン更新
      */
-    async getUsersRefreshTokenRaw(requestParameters: GetUsersRefreshTokenRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<TokenResponse>> {
+    async getUsersRefreshTokenRaw(initOverrides?: RequestInit): Promise<runtime.ApiResponse<TokenResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
             path: `/users/refresh_token`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters.body as any,
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => TokenResponseFromJSON(jsonValue));
@@ -321,15 +313,15 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     /**
      * トークン更新
      */
-    async getUsersRefreshToken(requestParameters: GetUsersRefreshTokenRequest, initOverrides?: RequestInit): Promise<TokenResponse> {
-        const response = await this.getUsersRefreshTokenRaw(requestParameters, initOverrides);
+    async getUsersRefreshToken(initOverrides?: RequestInit): Promise<TokenResponse> {
+        const response = await this.getUsersRefreshTokenRaw(initOverrides);
         return await response.value();
     }
 
     /**
      * ユーザの更新
      */
-    async patchUserRaw(requestParameters: PatchUserRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<Id>> {
+    async patchUserRaw(requestParameters: PatchUserOperationRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<IdResponse>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling patchUser.');
         }
@@ -345,16 +337,16 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: InlineObject1ToJSON(requestParameters.inlineObject1),
+            body: PatchUserRequestToJSON(requestParameters.patchUserRequest),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IdFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => IdResponseFromJSON(jsonValue));
     }
 
     /**
      * ユーザの更新
      */
-    async patchUser(requestParameters: PatchUserRequest, initOverrides?: RequestInit): Promise<Id> {
+    async patchUser(requestParameters: PatchUserOperationRequest, initOverrides?: RequestInit): Promise<IdResponse> {
         const response = await this.patchUserRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -362,7 +354,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     /**
      * ユーザの追加
      */
-    async postUsersRaw(requestParameters: PostUsersRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<Id>> {
+    async postUsersRaw(requestParameters: PostUsersRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<IdResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -374,16 +366,16 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: InlineObject2ToJSON(requestParameters.inlineObject2),
+            body: PostUserRequestToJSON(requestParameters.postUserRequest),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IdFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => IdResponseFromJSON(jsonValue));
     }
 
     /**
      * ユーザの追加
      */
-    async postUsers(requestParameters: PostUsersRequest, initOverrides?: RequestInit): Promise<Id> {
+    async postUsers(requestParameters: PostUsersRequest, initOverrides?: RequestInit): Promise<IdResponse> {
         const response = await this.postUsersRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -403,7 +395,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: InlineObjectToJSON(requestParameters.inlineObject),
+            body: LoginRequestToJSON(requestParameters.loginRequest),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => TokenResponseFromJSON(jsonValue));
@@ -420,7 +412,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     /**
      * ログアウト
      */
-    async postUsersLogoutRaw(initOverrides?: RequestInit): Promise<runtime.ApiResponse<InlineResponse200>> {
+    async postUsersLogoutRaw(initOverrides?: RequestInit): Promise<runtime.ApiResponse<CodeResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -432,13 +424,13 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => InlineResponse200FromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CodeResponseFromJSON(jsonValue));
     }
 
     /**
      * ログアウト
      */
-    async postUsersLogout(initOverrides?: RequestInit): Promise<InlineResponse200> {
+    async postUsersLogout(initOverrides?: RequestInit): Promise<CodeResponse> {
         const response = await this.postUsersLogoutRaw(initOverrides);
         return await response.value();
     }

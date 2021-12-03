@@ -1,10 +1,10 @@
 /* tslint:disable */
 /* eslint-disable */
+export * from './CodeResponse';
 export * from './ErrorResponse';
-export * from './Id';
-export * from './InlineObject';
-export * from './InlineObject1';
-export * from './InlineObject2';
-export * from './InlineResponse200';
+export * from './IdResponse';
+export * from './LoginRequest';
+export * from './PatchUserRequest';
+export * from './PostUserRequest';
 export * from './TokenResponse';
 export * from './UserResponse';

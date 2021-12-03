@@ -27,19 +27,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                email:
-                  type: string
-                  example: hoge@example.com
-                  format: email
-                password:
-                  type: string
-                  format: password
-                  example: password
-              required:
-                - email
-                - password
+              $ref: '#/components/schemas/LoginRequest'
         required: false
       responses:
         '200':
@@ -102,12 +90,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       description: トークン更新
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties: {}
   /users/logout:
     post:
       summary: ''
@@ -118,12 +100,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                required:
-                  - code
+                $ref: '#/components/schemas/CodeResponse'
         '401':
           description: Unauthorized
           content:
@@ -243,28 +220,7 @@ paths:
         content:
           application/json:
             schema:
-              description: ''
-              type: object
-              x-examples:
-                example-1:
-                  name: ほげ 太郎
-              properties:
-                name:
-                  type: string
-                  minLength: 1
-                  example: ほげ 太郎
-                email:
-                  type: string
-                  format: email
-                  example: hoge@example.com
-                role:
-                  type: string
-                  enum:
-                    - user
-                    - admin
-                password:
-                  type: string
-                  format: password
+              $ref: '#/components/schemas/PatchUserRequest'
         required: false
       responses:
         '200':
@@ -272,7 +228,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Id'
+                $ref: '#/components/schemas/IdResponse'
               example:
                 id: 666
                 name: ほげ 太郎
@@ -396,7 +352,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Id'
+                $ref: '#/components/schemas/IdResponse'
             application/xml:
               schema:
                 type: object
@@ -428,35 +384,7 @@ paths:
         content:
           application/json:
             schema:
-              description: ''
-              type: object
-              x-examples:
-                example-1:
-                  hoge: fuga
-              properties:
-                name:
-                  type: string
-                  minLength: 1
-                  example: ほげ 太郎
-                email:
-                  type: string
-                  format: email
-                  example: hoge@example.com
-                role:
-                  type: string
-                  enum:
-                    - user
-                    - admin
-                  example: user
-                password:
-                  type: string
-                  format: password
-                  example: password
-              required:
-                - name
-                - email
-                - role
-                - password
+              $ref: '#/components/schemas/PostUserRequest'
             examples: {}
         description: ''
 components:
@@ -512,15 +440,16 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/UserResponse'
-    Id:
+    IdResponse:
       type: object
-      title: Id
+      title: IdResponse
       additionalProperties: false
       properties:
         id:
           type: integer
       required:
         - id
+      description: ''
     TokenResponse:
       title: TokenResponse
       type: object
@@ -536,5 +465,78 @@ components:
         - code
         - expire
         - token
+    LoginRequest:
+      title: LoginRequest
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          example: hoge@example.com
+        password:
+          type: string
+          format: password
+          example: password
+      required:
+        - email
+        - password
+      description: ''
+    CodeResponse:
+      type: object
+      title: CodeResponse
+      additionalProperties: false
+      properties:
+        code:
+          type: integer
+      required:
+        - code
+    PostUserRequest:
+      title: PostUserRequest
+      type: object
+      properties:
+        name:
+          type: string
+          example: ほげ 太郎
+        email:
+          type: string
+          format: email
+          example: hoge@example.com
+        role:
+          type: string
+          enum:
+            - user
+            - admin
+          example: user
+        password:
+          type: string
+          format: password
+          example: password
+      required:
+        - name
+        - email
+        - role
+        - password
+    PatchUserRequest:
+      title: PatchUserRequest
+      type: object
+      properties:
+        name:
+          type: string
+          example: ほげ 太郎
+        email:
+          type: string
+          format: email
+          example: hoge@example.com
+        role:
+          type: string
+          enum:
+            - user
+            - admin
+          example: user
+        password:
+          type: string
+          format: password
+          example: password
   responses: {}
   securitySchemes: {}
+  requestBodies: {}
