@@ -301,6 +301,37 @@ func TestGetUserNoLogin(t *testing.T) {
 	assert.Equal(t, 401, recorder.Result().StatusCode)
 }
 
+func TestGetUserMeSuccess(t *testing.T) {
+	createTestData() // テストデータの準備
+	token := login() // 認証実行
+	// HTTPリクエストの生成
+	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users/me", nil)
+	httpReq.Header.Add("Content-Type", "application/json")
+	httpReq.Header.Add("Authorization", fmt.Sprintf("Bearer %s", token))
+	if err != nil {
+		panic(err)
+	}
+	// Test用サーバにリクエストを送信して、レスポンスをOpenAPI仕様に照らし合わせる
+	recorder := ServeAndRequest(httpReq)
+	// テストケース固有のチェック
+	assert.Equal(t, 200, recorder.Result().StatusCode)
+}
+
+func TestGetUserMeNoLogin(t *testing.T) {
+	createTestData() // テストデータの準備
+	// HTTPリクエストの生成
+	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users/me", nil)
+	httpReq.Header.Add("Content-Type", "application/json")
+	httpReq.Header.Add("Authorization", fmt.Sprintf("Bearer %s", "token"))
+	if err != nil {
+		panic(err)
+	}
+	// Test用サーバにリクエストを送信して、レスポンスをOpenAPI仕様に照らし合わせる
+	recorder := ServeAndRequest(httpReq)
+	// テストケース固有のチェック
+	assert.Equal(t, 401, recorder.Result().StatusCode)
+}
+
 func TestPostUserSuccess(t *testing.T) {
 	createTestData() // テストデータの準備
 	token := login() // 認証実行

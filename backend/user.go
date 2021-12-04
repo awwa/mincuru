@@ -6,17 +6,18 @@ import (
 	"strconv"
 	"time"
 
+	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
-type Id struct {
-	ID uint `json:"id" gorm:"primarykey"`
+type IdResp struct {
+	Id uint `json:"id" gorm:"primarykey"`
 }
 
 type UserResp struct {
-	Id                  //`gorm:"embedded"`
+	Id        uint      `json:"id" gorm:"primarykey"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 	Name      string    `json:"name" gorm:"not null"`
@@ -58,6 +59,18 @@ func GetUser(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, userResp)
 }
 
+func GetUserMe(c *gin.Context) {
+	claims := jwt.ExtractClaims(c)
+	id, _ := claims["id"].(float64)
+	userResp := UserResp{
+		Id:    (uint)(id),
+		Name:  claims["name"].(string),
+		Email: claims["email"].(string),
+		Role:  claims["role"].(string),
+	}
+	c.IndentedJSON(http.StatusOK, &userResp)
+}
+
 func PatchUser(c *gin.Context) {
 	// HTTPリクエストのペイロードを取得
 	var httpPayload User
@@ -85,7 +98,7 @@ func PatchUser(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	httpPayload.ID = (uint)(id)
+	httpPayload.Id = (uint)(id)
 	// DBのレコードを更新
 	result := DB.Model(&httpPayload).Updates(httpPayload)
 	if err := result.Error; err != nil {
@@ -106,7 +119,7 @@ func PatchUser(c *gin.Context) {
 		return
 	}
 	// 成功
-	idResponse := Id{ID: httpPayload.ID}
+	idResponse := IdResp{Id: httpPayload.Id}
 	c.IndentedJSON(http.StatusOK, &idResponse)
 }
 
@@ -122,7 +135,7 @@ func DeleteUser(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	user.ID = (uint)(id)
+	user.Id = (uint)(id)
 	// DBのレコードを削除
 	result := DB.Delete(&user)
 	if err := result.Error; err != nil {
@@ -171,6 +184,6 @@ func PostUser(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	idResponse := Id{ID: httpPayload.ID}
+	idResponse := IdResp{Id: httpPayload.Id}
 	c.IndentedJSON(http.StatusCreated, &idResponse)
 }

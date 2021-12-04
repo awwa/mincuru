@@ -24,11 +24,29 @@ func authMiddleware() (authMiddleware *jwt.GinJWTMiddleware) {
 		PayloadFunc: func(data interface{}) jwt.MapClaims {
 			if v, ok := data.(*UserResp); ok {
 				return jwt.MapClaims{
+					"id":    v.Id,
+					"name":  v.Name,
 					"email": v.Email,
+					"role":  v.Role,
 				}
 			}
 			return jwt.MapClaims{}
 		},
+		// LoginResponse: func(c *gin.Context, code int, token string, expire time.Time) {
+		// 	hoge := authMiddleware.ParseToken(c)
+
+		// 	c.JSON(http.StatusOK, gin.H{
+		// 		"code":   http.StatusOK,
+		// 		"token":  token,
+		// 		"expire": expire.Format(time.RFC3339),
+		// 		"user": gin.H{
+		// 			"id":    1,
+		// 			"name":  "Hoge taro",
+		// 			"email": "hoge@example.com",
+		// 			"role":  "user",
+		// 		},
+		// 	})
+		// },
 		IdentityHandler: func(c *gin.Context) interface{} {
 			claims := jwt.ExtractClaims(c)
 			return &UserResp{
@@ -58,7 +76,12 @@ func authMiddleware() (authMiddleware *jwt.GinJWTMiddleware) {
 			); err != nil {
 				return nil, jwt.ErrFailedAuthentication
 			}
-			return &UserResp{Email: loginVals.Email}, nil
+			return &UserResp{
+				Id:    dbUsers[0].Id,
+				Name:  dbUsers[0].Name,
+				Email: loginVals.Email,
+				Role:  dbUsers[0].Role,
+			}, nil
 		},
 		// Authorizator: func(data interface{}, c *gin.Context) bool {
 		// 	if v, ok := data.(*User); ok && v.UserName == "admin" {

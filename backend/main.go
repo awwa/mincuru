@@ -9,7 +9,6 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/getkin/kin-openapi/openapi3filter"
 	"github.com/getkin/kin-openapi/routers/legacy"
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
@@ -38,7 +37,10 @@ func Loadenv() {
 func Router() (router *gin.Engine) {
 	router = gin.Default()
 	// CORS
-	router.Use(cors.Default())
+	// 以下の問題を回避
+	// https://github.com/gin-contrib/cors/issues/29
+	// router.Use(cors.Default())
+	router.Use(CORS())
 	// OpenApiによるリクエストのチェック
 	router.Use(validateRequestMiddleware())
 	// JWTによる認証有効化
@@ -53,6 +55,7 @@ func Router() (router *gin.Engine) {
 	{
 		auth.GET("/users", GetUsers)
 		auth.GET("/users/:id", GetUser)
+		auth.GET("/users/me", GetUserMe)
 		auth.PATCH("/users/:id", PatchUser)
 		auth.DELETE("/users/:id", DeleteUser)
 		auth.POST("/users", PostUser)
@@ -83,6 +86,23 @@ func initDb() {
 	// Migrate the schema
 	if err := DB.AutoMigrate(&User{}); err != nil {
 		panic(err)
+	}
+}
+
+func CORS() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		fmt.Println(c.Request.Header)
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE")
+
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204)
+			return
+		}
+
+		c.Next()
 	}
 }
 
