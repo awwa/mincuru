@@ -4,10 +4,13 @@
   "description": "https://blog.5thfloor.co.jp/2019/06/26/webapp-development-with-openapi-and-typescript/",
   "main": "index.js",
   "scripts": {
-    "buildcl": "rm -rf mincuru-api-client;docker run --rm -v ${PWD}:/local openapitools/openapi-generator-cli generate -g typescript-fetch -i /local/openapi.yaml -o /local/mincuru-api-client --additional-properties=modelPropertyNaming=camelCase,supportsES6=true,withInterfaces=true,typescriptThreePlus=true",
+    "generate-api-client": "rm -rf api-client;./node_modules/.bin/openapi-generator-cli generate -g typescript-axios -i openapi.yaml -o api-client",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@openapitools/openapi-generator-cli": "^2.4.18"
+  }
 }

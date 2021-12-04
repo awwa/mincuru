@@ -28,5 +28,5 @@ prism mock openapi.yaml
 - 生成
 
 ```
-npm run buildcl
+npm run generate-api-client
 ```

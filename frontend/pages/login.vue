@@ -47,7 +47,8 @@
 //     },
 //   },
 // })
-  import { DefaultApi, PostUsersLoginRequest, Configuration } from '../../mincuru-api-client'
+  //import { DefaultApi, PostUsersLoginRequest, Configuration } from '../../mincuru-api-client'
+  import { DefaultApi, LoginRequest, Configuration } from '../../api-client'
   const conf = new Configuration({basePath: "http://localhost:8080"})
   export default {
     data() {
@@ -61,11 +62,9 @@
     methods: {
       async userLogin() :Promise<void> {
         try {
-          // import { AuthResponse } from '../../mincuru-api-client'
-          const adminsApi = new DefaultApi(conf)
-          const requestParameters: PostUsersLoginRequest = {loginRequest: {email: "hoge@example.com", password: "password"}}
-          const response = await adminsApi.postUsersLogin(requestParameters)
-          // let response = await this.$axios.$post('/api/v1/admins/auth',{email: this.user.email, password: this.user.password})
+          const api = new DefaultApi(conf)
+          const loginRequest: LoginRequest = {email: "hoge@example.com", password: "password"}
+          const response = await api.postUsersLogin(loginRequest)
           console.log("weeeeiiiii")
           console.log(response)
         } catch (err) {
