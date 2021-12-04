@@ -40,7 +40,67 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
+    '@nuxtjs/axios',
+    '@nuxtjs/auth-next'
   ],
+
+  auth: {
+    // redirect: {
+    //   home: "/"
+    // },
+    strategies: {
+      // cookie: {
+      //   cookie: {
+      //     // (optional) If set, we check this cookie existence for loggedIn check
+      //     name: 'jwt',
+      //   },
+      //   token: {
+      //     property: 'token',
+      //     global: true,
+      //     // required: true,
+      //     type: 'Bearer'
+      //   },
+      //   user: {
+      //     // property: 'user',
+      //     property: false,
+      //     autoFetch: false
+      //   },        
+      //   endpoints: {
+      //     login: { url: '/users/login', method: 'post' },
+      //     logout: { url: '/users/logout', method: 'post' },
+      //     // user: { url: '/users', method: 'get' }
+      //     user: false
+      //   }
+      // },
+      local: {
+        token: {
+          property: 'token',
+          global: true,
+          // required: true,
+          type: 'Bearer'
+        },
+        user: {
+          // property: '.',
+          property: false,
+          // autoFetch: false
+        },        
+        endpoints: {
+          login: { url: '/users/login', method: 'post' },
+          logout: { url: '/users/logout', method: 'post' },
+          user: { url: '/users/me', method: 'get' }
+          // user: false
+        }
+      }
+    }
+  },
+
+  axios: {
+    baseURL: 'http://localhost:8080/',
+  },
+
+  router: {
+    middleware: ['auth']
+  },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
@@ -65,7 +125,4 @@ export default {
   build: {
   },
 
-  router: {
-    middlewale: 'auth'
-  }
 }

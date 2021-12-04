@@ -36,8 +36,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TokenResponse'
-              example:
-                token: access_token
         '400':
           description: Bad Request
           content:
@@ -135,11 +133,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserResponse'
-              example:
-                id: 666
-                name: ほげ 太郎
-                email: hoge_taro@example.com
-                role: user
         '400':
           description: Bad Request
           content:
@@ -229,11 +222,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/IdResponse'
-              example:
-                id: 666
-                name: ほげ 太郎
-                email: hoge_taro@example.com
-                role: user
         '400':
           description: Bad Request
           content:
@@ -312,17 +300,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/UserResponse'
-              examples:
-                example-1:
-                  value:
-                    - id: 1
-                      name: ほげ 太郎1
-                      email: hoge1@example.com
-                      role: user
-                    - id: 2
-                      name: ほげ 太郎2
-                      email: hoge2@example.com
-                      role: admin
         '400':
           description: Bad Request
           content:
@@ -387,15 +364,34 @@ paths:
               $ref: '#/components/schemas/PostUserRequest'
             examples: {}
         description: ''
+  /users/me:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: get-users-me
 components:
   schemas:
     UserResponse:
       type: object
-      example:
-        name: ''
-        id: 0
-        email: hoge@example.com
-        role: user
       additionalProperties: false
       properties:
         id:
