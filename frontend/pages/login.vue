@@ -27,9 +27,17 @@
 </div>
 </template>
 
-<script lang="ts">
-  import Vue from 'vue'
-  export default Vue.extend({
+<script>
+  // NuxtJS 2.8.xのTypeScriptサポートドキュメントによると
+  // https://develop365.gitlab.io/nuxtjs-2.8.X-doc/ja/guide/typescript/
+  // vue-property-decoratorや vue-class-componentを利用したサンプルの記載がある。
+  // これは、JavaScript版のVue.JSやNuxt.JSの実装と大きく異なるため、
+  // 今の段階では採用を見送る。
+  // Vue.JSやNuxt.JSでドキュメント含めTypeScriptが第一級のサポート言語となった段階で
+  // 本格的なTypeScript対応の検討を行う。
+  // 現段階では、最低限のTypeScript化を行い、基本的な実装スタイルはJavaScript版に沿う形にする
+  export default {
+    layout: 'top',
     data() {
       return {
         user: {
@@ -41,7 +49,7 @@
       }
     },
     methods: {
-      async userLogin(): Promise<void> {
+      async userLogin()/*: Promise<void>*/ {
         try {
           await this.$auth.loginWith("local", { data: this.user })
           // TODO 要調査
@@ -57,5 +65,5 @@
         }
       },
     }
-  })
+  }
 </script>
