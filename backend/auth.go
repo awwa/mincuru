@@ -33,8 +33,6 @@ func authMiddleware() (authMiddleware *jwt.GinJWTMiddleware) {
 			return jwt.MapClaims{}
 		},
 		// LoginResponse: func(c *gin.Context, code int, token string, expire time.Time) {
-		// 	hoge := authMiddleware.ParseToken(c)
-
 		// 	c.JSON(http.StatusOK, gin.H{
 		// 		"code":   http.StatusOK,
 		// 		"token":  token,

@@ -45,33 +45,7 @@ export default {
   ],
 
   auth: {
-    // redirect: {
-    //   home: "/"
-    // },
     strategies: {
-      // cookie: {
-      //   cookie: {
-      //     // (optional) If set, we check this cookie existence for loggedIn check
-      //     name: 'jwt',
-      //   },
-      //   token: {
-      //     property: 'token',
-      //     global: true,
-      //     // required: true,
-      //     type: 'Bearer'
-      //   },
-      //   user: {
-      //     // property: 'user',
-      //     property: false,
-      //     autoFetch: false
-      //   },        
-      //   endpoints: {
-      //     login: { url: '/users/login', method: 'post' },
-      //     logout: { url: '/users/logout', method: 'post' },
-      //     // user: { url: '/users', method: 'get' }
-      //     user: false
-      //   }
-      // },
       local: {
         token: {
           property: 'token',
@@ -80,15 +54,12 @@ export default {
           type: 'Bearer'
         },
         user: {
-          // property: '.',
           property: false,
-          // autoFetch: false
         },        
         endpoints: {
           login: { url: '/users/login', method: 'post' },
           logout: { url: '/users/logout', method: 'post' },
           user: { url: '/users/me', method: 'get' }
-          // user: false
         }
       }
     }
