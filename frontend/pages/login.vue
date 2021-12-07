@@ -49,7 +49,7 @@
       }
     },
     methods: {
-      async userLogin()/*: Promise<void>*/ {
+      async userLogin() {
         try {
           await this.$auth.loginWith("local", { data: this.user })
           // TODO 要調査

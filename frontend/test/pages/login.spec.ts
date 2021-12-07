@@ -14,7 +14,7 @@ describe('login', () => {
     expect(wrapper.find('#password').text()).toBe("")
   })
   test('is enable submit', () => {
-    expect(wrapper.find('#submit').attributes()).toHaveProperty("disabled")
+    expect(wrapper.find('#submit').attributes()).not.toHaveProperty("disabled")
   })
   test("is empty error", () => {
     expect(wrapper.find("#error").text()).toBe("")
