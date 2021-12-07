@@ -31,7 +31,7 @@ export default {
       miniVariant: true,
       right: true,
       rightDrawer: false,
-      title: 'みんクル'
+      title: this.$config.appTitle,
     }
   }
 }

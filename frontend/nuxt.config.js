@@ -1,12 +1,15 @@
 import colors from 'vuetify/es5/util/colors'
 
 export default {
+  publicRuntimeConfig: {
+    appTitle: "みんクル"
+  },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - mincuru-ui',
-    title: 'mincuru-ui',
+    titleTemplate: 'みんクル',
+    title: 'みんクル',
     htmlAttrs: {
-      lang: 'en'
+      lang: 'ja'
     },
     meta: [
       { charset: 'utf-8' },
@@ -44,6 +47,8 @@ export default {
     '@nuxtjs/auth-next'
   ],
 
+  // Nuxt/auth
+  // https://auth.nuxtjs.org/
   auth: {
     strategies: {
       local: {
@@ -65,12 +70,14 @@ export default {
     }
   },
 
-  axios: {
-    baseURL: 'http://localhost:8080/',
-  },
-
   router: {
     middleware: ['auth']
+  },
+
+  // Nuxt/axios
+  // https://axios.nuxtjs.org/
+  axios: {
+    baseURL: 'http://localhost:8080',
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify

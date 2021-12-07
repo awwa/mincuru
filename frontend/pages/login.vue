@@ -1,30 +1,28 @@
 <template>
-<div>
   <div>
-  <h1>ログインユーザ</h1>
-  <form @submit.prevent="userLogin">
-    <div class="form-group">
-      <label for="email">メールアドレス</label>
-      <input
-        id="email"
-        v-model="user.email"
-        v-bind:class="{ error: hasError }">
+    <h1>ログイン</h1>
+    <form @submit.prevent="userLogin">
+      <div class="form-group">
+        <label for="email">メールアドレス</label>
+        <input
+          id="email"
+          v-model="user.email"
+          v-bind:class="{ error: hasError }">
+      </div>
+      <div class="form-group">
+        <label for="password">パスワード</label>
+        <input
+          id="password"
+          type="password"
+          v-model="user.password"
+          v-bind:class="{ error: hasError }">
+      </div>
+      <button id="submit" type="submit">ログイン</button>
+    </form>
+    <div>
+      <label id="error" class="error">{{error}}</label>
     </div>
-    <div class="form-group">
-      <label for="password">パスワード</label>
-      <input
-        id="password"
-        type="password"
-        v-model="user.password"
-        v-bind:class="{ error: hasError }">
-    </div>
-    <button id="submit" type="submit">ログイン</button>
-  </form>
-  <div>
-    <label id="error" class="error">{{error}}</label>
   </div>
-  </div>
-</div>
 </template>
 
 <script>

@@ -69,6 +69,7 @@
     </v-app-bar>
     <!-- メインコンテンツ -->
     <v-main>
+      <Breadcrumbs :path="this.$route.path" />
       <v-container>
         <Nuxt />
       </v-container>
@@ -85,6 +86,7 @@
 
 <script>
 export default {
+  name: "LauoutDefault",
   data () {
     return {
       clipped: true,
@@ -105,7 +107,7 @@ export default {
       miniVariant: true,
       right: true,
       rightDrawer: false,
-      title: 'Vuetify.js'
+      title: this.$config.appTitle,
     }
   },
   methods: {

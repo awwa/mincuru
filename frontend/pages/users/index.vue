@@ -1,0 +1,24 @@
+<template>
+  <div>
+    <h1>ユーザー</h1>
+    <v-row>
+      <v-spacer />
+      <v-btn>追加</v-btn>
+    </v-row>
+    <UserList :users="users" />
+  </div>
+</template>
+
+<script>
+import { DefaultApi, Configuration } from '../../../api-client'
+export default {
+  async asyncData({$axios}) {
+    const conf = new Configuration()
+    const api = new DefaultApi(conf, $axios.defaults.baseURL, $axios)
+    const resp = await api.getUsers()
+    return {
+      users: resp.data
+    }
+  }
+}
+</script>
