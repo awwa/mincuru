@@ -1,16 +1,29 @@
 <template>
-  <v-data-table
-    :headers="headers"
-    :items="users"
-    :items-per-page="5"
-  >
-  </v-data-table>
+  <div>
+    <v-text-field
+      v-model="search"
+      append-icon="mdi-magnify"
+      label="検索"
+      single-line
+      hide-details
+    ></v-text-field>
+    <v-data-table
+      :headers="headers"
+      :items="users"
+      :items-per-page="5"
+      :search="search"
+      @click:row="editItem"
+    >
+    </v-data-table>
+  </div>
 </template>
 
 <script>
 export default {
+  props: ["users"],
   data() {
     return {
+      search: '',
       headers: [
         {
           text: 'ID',
@@ -29,9 +42,14 @@ export default {
           text: 'ロール',
           value: 'role',
         },
+        { text: 'Actions', value: 'actions', sortable: false },
       ],
     }
   },
-  props: ["users"],
+  methods: {
+    editItem(item) {
+      this.$router.push(`/users/${item.id}`)
+    }
+  }
 }
 </script>

@@ -1,28 +1,26 @@
 <template>
-  <div>
+  <v-container>
     <h1>ログイン</h1>
-    <form @submit.prevent="userLogin">
-      <div class="form-group">
-        <label for="email">メールアドレス</label>
-        <input
-          id="email"
-          v-model="user.email"
-          v-bind:class="{ error: hasError }">
-      </div>
-      <div class="form-group">
-        <label for="password">パスワード</label>
-        <input
-          id="password"
-          type="password"
-          v-model="user.password"
-          v-bind:class="{ error: hasError }">
-      </div>
-      <button id="submit" type="submit">ログイン</button>
-    </form>
+    <v-form @submit.prevent="userLogin">
+      <v-text-field
+        id="email"
+        label="メールアドレス"
+        v-model="user.email"
+        v-bind:class="{ error: hasError }"
+      />
+      <v-text-field
+        id="password"
+        type="password"
+        label="パスワード"
+        v-model="user.password"
+        v-bind:class="{ error: hasError }"
+      />
+      <v-btn id="submit" type="submit">ログイン</v-btn>
+    </v-form>
     <div>
       <label id="error" class="error">{{error}}</label>
     </div>
-  </div>
+  </v-container>
 </template>
 
 <script>
@@ -55,7 +53,7 @@
           // loginWith()で正常応答が返った後、
           // 自動的に"/"にリダイレクトするはずだが、
           // 自動リダイレクトしないので明示的にリダイレクトする
-          window.location.href = "/"
+          this.$router.push("/")
         } catch (err) {
           // TODO 画面上にエラーメッセージ
           this.error = "ログインできませんでした。ユーザ名またはパスワードが間違っています。"
