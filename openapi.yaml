@@ -416,6 +416,8 @@ components:
         updated_at:
           type: string
           format: date-time
+        is_del:
+          type: integer
       required:
         - id
         - name
@@ -423,6 +425,7 @@ components:
         - role
         - created_at
         - updated_at
+        - is_del
     ErrorResponse:
       required:
         - message

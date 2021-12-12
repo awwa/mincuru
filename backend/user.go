@@ -9,7 +9,7 @@ import (
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
-	"gorm.io/gorm"
+	"gorm.io/plugin/soft_delete"
 )
 
 type IdResp struct {
@@ -17,18 +17,18 @@ type IdResp struct {
 }
 
 type UserResp struct {
-	Id        uint      `json:"id" gorm:"primarykey"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
-	Name      string    `json:"name" gorm:"not null"`
-	Email     string    `json:"email" gorm:"unique"`
-	Role      string    `json:"role"`
+	Id        uint                  `json:"id" gorm:"primarykey"`
+	IsDel     soft_delete.DeletedAt `json:"is_del" gorm:"softDelete:flag"`
+	CreatedAt time.Time             `json:"created_at"`
+	UpdatedAt time.Time             `json:"updated_at"`
+	Name      string                `json:"name" gorm:"not null"`
+	Email     string                `json:"email" gorm:"unique"`
+	Role      string                `json:"role"`
 }
 
 type User struct {
-	UserResp                 //`gorm:"embedded"`
-	DeletedAt gorm.DeletedAt `gorm:"index" json:"deleted_at"`
-	Password  string         `json:"password"`
+	UserResp        //`gorm:"embedded"`
+	Password string `json:"password"`
 }
 
 type TokenResp struct {

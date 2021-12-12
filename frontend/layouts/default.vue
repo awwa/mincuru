@@ -56,6 +56,13 @@
           </v-btn>
         </template>
         <v-list dense>
+          <v-list-item link href="/account">
+            <v-list-item-content>
+              <v-list-item-title>
+                アカウント設定
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
           <v-list-item link>
             <v-list-item-content>
               <v-list-item-title
@@ -92,28 +99,39 @@ export default {
       clipped: true,
       drawer: false,
       fixed: true,
-      items: [
-        {
-          icon: 'mdi-apps',
-          title: 'ホーム',
-          to: '/'
-        },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'ユーザー',
-          to: '/users'
-        },
-      ],
       miniVariant: true,
       right: true,
       rightDrawer: false,
       title: this.$config.appTitle,
     }
   },
+  computed: {
+    items() {
+      // 全ユーザ向けメニュー
+      let items = [
+        {
+          icon: 'mdi-apps',
+          title: 'ホーム',
+          to: '/'
+        }
+      ]
+      // adminロール限定メニュー
+      if (this.$auth.user.role == "admin") {
+        items.push(
+          {
+            icon: 'mdi-chart-bubble',
+            title: 'ユーザー',
+            to: '/users'
+          }
+        )
+      }
+      return items
+    }
+  },
   methods: {
     async userLogout() {
       await this.$auth.logout("local")
-      window.location.href = "/login"
+      this.$router.go("/login")
     }
   }
 }

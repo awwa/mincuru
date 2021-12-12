@@ -3,7 +3,7 @@
     <h1>ユーザー</h1>
     <v-row>
       <v-spacer />
-      <v-btn>追加</v-btn>
+      <v-btn @click="add">追加</v-btn>
     </v-row>
     <UserList :users="users" />
   </div>
@@ -18,6 +18,11 @@ export default {
     const resp = await api.getUsers()
     return {
       users: resp.data
+    }
+  },
+  methods: {
+    add() {
+      this.$router.push("/users/add")
     }
   }
 }

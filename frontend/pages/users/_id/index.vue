@@ -36,10 +36,9 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-btn
-            @click="edit">編集</v-btn>
+          <v-btn @click="edit">編集</v-btn>
           <v-spacer />
-          <v-btn>削除</v-btn>
+          <v-btn @click="del" :disabled="isMe">削除</v-btn>
         </v-row>
       </v-container>
     </v-form>
@@ -58,9 +57,30 @@ export default {
     }
 
   },
+  data() {
+    // return {
+      // isMe: (this.$auth.user.id == this.params.id)
+    // }
+  },
+  computed: {
+    isMe() {
+      return this.$auth.user.id == this.user.id
+    },
+  },
   methods: {
     edit() {
       this.$router.push(`/users/${this.user.id}/edit`)
+    },
+    async del() {
+      try {
+        const conf = new Configuration()
+        const api = new DefaultApi(conf, this.$axios.defaults.baseURL, this.$axios)
+        const resp = await api.deleteUser(this.$route.params.id)
+        this.$router.go(-1)
+      } catch (err) {
+        this.error = "削除に失敗しました"
+        this.hasError = true
+      }
     }
   }
 }

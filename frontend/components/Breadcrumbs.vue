@@ -8,6 +8,7 @@
 <script>
 const dictionary = {
   home: 'ホーム',
+  account: 'アカウント設定',
   users: 'ユーザー',
   grades: 'グレード',
   edit: '編集',

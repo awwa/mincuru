@@ -590,6 +590,20 @@ func TestDeleteUserSuccess(t *testing.T) {
 	recorder := ServeAndRequest(httpReq)
 	// テストケース固有のチェック
 	assert.Equal(t, 204, recorder.Result().StatusCode)
+	//
+	httpReq2, err2 := http.NewRequest(http.MethodGet, "http://localhost:8080/users", nil)
+	httpReq2.Header.Add("Content-Type", "application/json")
+	httpReq2.Header.Add("Authorization", fmt.Sprintf("Bearer %s", token))
+	if err2 != nil {
+		panic(err)
+	}
+	recorder2 := ServeAndRequest(httpReq2)
+	// テストケース固有のチェック
+	assert.Equal(t, 200, recorder2.Result().StatusCode)
+	var body []User
+	json.Unmarshal(recorder2.Body.Bytes(), &body)
+	assert.Equal(t, 1, len(body))
+
 }
 
 func TestDeleteUserNoRecord(t *testing.T) {

@@ -42,7 +42,6 @@ export default {
           text: 'ロール',
           value: 'role',
         },
-        { text: 'Actions', value: 'actions', sortable: false },
       ],
     }
   },
