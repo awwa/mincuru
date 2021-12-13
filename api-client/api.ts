@@ -82,6 +82,31 @@ export interface LoginRequest {
 /**
  * 
  * @export
+ * @interface PatchUserMeRequest
+ */
+export interface PatchUserMeRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof PatchUserMeRequest
+     */
+    'name'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PatchUserMeRequest
+     */
+    'email'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PatchUserMeRequest
+     */
+    'password'?: string;
+}
+/**
+ * 
+ * @export
  * @interface PatchUserRequest
  */
 export interface PatchUserRequest {
@@ -228,6 +253,12 @@ export interface UserResponse {
      * @memberof UserResponse
      */
     'updated_at': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof UserResponse
+     */
+    'is_del': number;
 }
 
 /**
@@ -357,6 +388,36 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
+         * 
+         * @summary Your GET endpoint
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getUsersMe: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/users/me`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * トークン更新
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -416,6 +477,39 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(patchUserRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {PatchUserMeRequest} [patchUserMeRequest] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        patchUsersMe: async (patchUserMeRequest?: PatchUserMeRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/users/me`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(patchUserMeRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -560,6 +654,16 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
+         * 
+         * @summary Your GET endpoint
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getUsersMe(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getUsersMe(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
          * トークン更新
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -577,6 +681,16 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          */
         async patchUser(id: number, patchUserRequest?: PatchUserRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<IdResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.patchUser(id, patchUserRequest, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {PatchUserMeRequest} [patchUserMeRequest] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async patchUsersMe(patchUserMeRequest?: PatchUserMeRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<IdResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.patchUsersMe(patchUserMeRequest, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -648,6 +762,15 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.getUsers(email, name, role, options).then((request) => request(axios, basePath));
         },
         /**
+         * 
+         * @summary Your GET endpoint
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getUsersMe(options?: any): AxiosPromise<UserResponse> {
+            return localVarFp.getUsersMe(options).then((request) => request(axios, basePath));
+        },
+        /**
          * トークン更新
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -664,6 +787,15 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          */
         patchUser(id: number, patchUserRequest?: PatchUserRequest, options?: any): AxiosPromise<IdResponse> {
             return localVarFp.patchUser(id, patchUserRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {PatchUserMeRequest} [patchUserMeRequest] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        patchUsersMe(patchUserMeRequest?: PatchUserMeRequest, options?: any): AxiosPromise<IdResponse> {
+            return localVarFp.patchUsersMe(patchUserMeRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * ユーザの追加
@@ -737,6 +869,17 @@ export class DefaultApi extends BaseAPI {
     }
 
     /**
+     * 
+     * @summary Your GET endpoint
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public getUsersMe(options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).getUsersMe(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * トークン更新
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -756,6 +899,17 @@ export class DefaultApi extends BaseAPI {
      */
     public patchUser(id: number, patchUserRequest?: PatchUserRequest, options?: AxiosRequestConfig) {
         return DefaultApiFp(this.configuration).patchUser(id, patchUserRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {PatchUserMeRequest} [patchUserMeRequest] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public patchUsersMe(patchUserMeRequest?: PatchUserMeRequest, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).patchUsersMe(patchUserMeRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

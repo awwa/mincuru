@@ -388,6 +388,39 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       operationId: get-users-me
+    patch:
+      summary: ''
+      operationId: patch-users-me
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchUserMeRequest'
 components:
   schemas:
     UserResponse:
@@ -532,6 +565,22 @@ components:
             - user
             - admin
           example: user
+        password:
+          type: string
+          format: password
+          example: password
+    PatchUserMeRequest:
+      type: object
+      title: PatchUserMeRequest
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          example: ほげ 太郎
+        email:
+          type: string
+          format: email
+          example: hoge@example.com
         password:
           type: string
           format: password

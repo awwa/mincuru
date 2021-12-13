@@ -62,22 +62,36 @@ func GetUser(c *gin.Context) {
 func GetUserMe(c *gin.Context) {
 	claims := jwt.ExtractClaims(c)
 	id, _ := claims["id"].(float64)
-	userResp := UserResp{
-		Id:    (uint)(id),
-		Name:  claims["name"].(string),
-		Email: claims["email"].(string),
-		Role:  claims["role"].(string),
+	var userResp UserResp
+	result := DB.Table("users").First(&userResp, id)
+	if result.RowsAffected != 1 {
+		c.IndentedJSON(
+			http.StatusNotFound,
+			&ErrorResp{Message: result.Error.Error()},
+		)
+		c.Abort()
+		return
 	}
+
+	// userResp := UserResp{
+	// 	Id:    (uint)(id),
+	// 	Name:  claims["name"].(string),
+	// 	Email: claims["email"].(string),
+	// 	Role:  claims["role"].(string),
+	// }
 	c.IndentedJSON(http.StatusOK, &userResp)
 }
 
-func PatchUser(c *gin.Context) {
+func PatchUserMe(c *gin.Context) {
+	// 更新対象レコードのidは改ざんされないようjwtから取得
+	claims := jwt.ExtractClaims(c)
+	id, _ := claims["id"].(float64)
 	// HTTPリクエストのペイロードを取得
 	var httpPayload User
 	c.BindJSON(&httpPayload)
 	// HTTPリクエストでpasswordが指定されていたら、PasswordのHashを生成してDB保存用オブジェクトの値を更新
-	if c.Param("password") != "" {
-		hashed, err := bcrypt.GenerateFromPassword([]byte(c.Param("password")), 5)
+	if httpPayload.Password != "" {
+		hashed, err := hash(httpPayload.Password)
 		if err != nil {
 			c.IndentedJSON(
 				http.StatusBadRequest,
@@ -86,7 +100,50 @@ func PatchUser(c *gin.Context) {
 			c.Abort()
 			return
 		}
-		httpPayload.Password = string(hashed)
+		httpPayload.Password = hashed
+	}
+	// 更新対象のIDを取得
+	httpPayload.Id = (uint)(id)
+	// DBのレコードを更新
+	result := DB.Model(&httpPayload).Updates(httpPayload)
+	if err := result.Error; err != nil {
+		c.IndentedJSON(
+			http.StatusBadRequest,
+			&ErrorResp{Message: err.Error()},
+		)
+		c.Abort()
+		return
+	}
+	// 更新されたレコード数が0はエラー
+	if result.RowsAffected == 0 {
+		c.IndentedJSON(
+			http.StatusNotFound,
+			&ErrorResp{Message: "no record for update"},
+		)
+		c.Abort()
+		return
+	}
+	// 成功
+	idResponse := IdResp{Id: httpPayload.Id}
+	c.IndentedJSON(http.StatusOK, &idResponse)
+}
+
+func PatchUser(c *gin.Context) {
+	// HTTPリクエストのペイロードを取得
+	var httpPayload User
+	c.BindJSON(&httpPayload)
+	// HTTPリクエストでpasswordが指定されていたら、PasswordのHashを生成してDB保存用オブジェクトの値を更新
+	if httpPayload.Password != "" {
+		hashed, err := hash(httpPayload.Password)
+		if err != nil {
+			c.IndentedJSON(
+				http.StatusBadRequest,
+				&ErrorResp{Message: err.Error()},
+			)
+			c.Abort()
+			return
+		}
+		httpPayload.Password = hashed
 	}
 	// 更新対象のIDを取得
 	id, err := strconv.Atoi(c.Param("id"))
@@ -164,8 +221,7 @@ func PostUser(c *gin.Context) {
 	var httpPayload User
 	c.BindJSON(&httpPayload)
 	// PasswordのHashを生成してDB保存用オブジェクトの値を更新
-	bcCost, _ := strconv.Atoi(os.Getenv("BC_COST"))
-	hashed, err := bcrypt.GenerateFromPassword([]byte(c.Param("password")), bcCost)
+	hashed, err := hash(c.Param("password"))
 	if err != nil {
 		c.IndentedJSON(
 			http.StatusBadRequest,
@@ -174,7 +230,7 @@ func PostUser(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	httpPayload.Password = string(hashed)
+	httpPayload.Password = hashed
 	// DBにレコード追加
 	if err := DB.Table("users").Create(&httpPayload).Error; err != nil {
 		c.IndentedJSON(
@@ -186,4 +242,11 @@ func PostUser(c *gin.Context) {
 	}
 	idResponse := IdResp{Id: httpPayload.Id}
 	c.IndentedJSON(http.StatusCreated, &idResponse)
+}
+
+func hash(plain string) (hashed string, err error) {
+	bcCost, _ := strconv.Atoi(os.Getenv("BC_COST"))
+	h, err := bcrypt.GenerateFromPassword([]byte(plain), bcCost)
+	hashed = string(h)
+	return
 }

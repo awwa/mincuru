@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>アカウント設定</h1>
+    <h1>アカウント編集</h1>
     <v-form>
       <v-container>
         <v-row>
@@ -8,7 +8,7 @@
             <label><strong>ID</strong></label>
           </v-col>
           <v-col>
-            <label>{{ this.$auth.user.id }}</label>
+            <label>{{ user.id }}</label>
           </v-col>
         </v-row>
         <v-row>
@@ -64,7 +64,7 @@
           </v-col>
         </v-row>
         <v-row>
-          <!-- <v-btn @click="edit">編集</v-btn> -->
+          <v-btn @click="save">保存</v-btn>
         </v-row>
       </v-container>
     </v-form>
@@ -72,20 +72,24 @@
 </template>
 
 <script>
-// import { DefaultApi, Configuration } from '../../../../api-client'
+import { DefaultApi, Configuration } from '../../../api-client'
 export default {
-  // async asyncData({$axios, params}) {
-  //   const conf = new Configuration()
-  //   const api = new DefaultApi(conf, $axios.defaults.baseURL, $axios)
-  //   const resp = await api.getUserMe()
-  //   return {
-  //     user: resp.data
-  //   }
-  // },
+  async asyncData({$axios, params}) {
+    const conf = new Configuration()
+    const api = new DefaultApi(conf, $axios.defaults.baseURL, $axios)
+    const resp = await api.getUsersMe()
+    return {
+      user: resp.data
+    }
+  },
   data() {
     return {
-      user: this.$auth.user,
-      password_confirm: ""
+  //     user: {
+  //       id: this.$auth.user.id,
+  //       name: this.$auth.user.name,
+  //       email: this.$auth.user.email,
+  //     },
+      password_confirm: ""  // TODO 入力中に比較チェック
     }
   },
   computed: {
@@ -94,20 +98,18 @@ export default {
     // }
   },
   methods: {
-    edit() {
-      this.$router.push(`/account/edit`)
+    async save() {
+      const conf = new Configuration()
+      const api = new DefaultApi(conf, this.$axios.defaults.baseURL, this.$axios)
+      const params = {
+        email: this.user.email,
+        name: this.user.name,
+        password: this.user.password,
+      }
+      console.log(params)
+      const resp = await api.patchUsersMe(params)
+      this.$router.push(`/account`)
     },
-  //   async del() {
-  //     try {
-  //       const conf = new Configuration()
-  //       const api = new DefaultApi(conf, this.$axios.defaults.baseURL, this.$axios)
-  //       const resp = await api.deleteUser(this.$route.params.id)
-  //       this.$router.go(-1)
-  //     } catch (err) {
-  //       this.error = "削除に失敗しました"
-  //       this.hasError = true
-  //     }
-  //   }
   }
 }
 </script>

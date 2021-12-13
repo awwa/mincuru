@@ -8,7 +8,7 @@
             <label><strong>ID</strong></label>
           </v-col>
           <v-col>
-            <label>{{ this.$auth.user.id }}</label>
+            <label>{{ this.user.id }}</label>
           </v-col>
         </v-row>
         <v-row>
@@ -16,7 +16,7 @@
             <label><strong>名前</strong></label>
           </v-col>
           <v-col>
-            <label>{{ this.$auth.user.name }}</label>
+            <label>{{ this.user.name }}</label>
           </v-col>
         </v-row>
         <v-row>
@@ -24,7 +24,7 @@
             <label><strong>メールアドレス</strong></label>
           </v-col>
           <v-col>
-            <label>{{ this.$auth.user.email }}</label>
+            <label>{{ this.user.email }}</label>
           </v-col>
         </v-row>
         <v-row v-if="$isAdmin()">
@@ -32,7 +32,7 @@
             <label><strong>ロール</strong></label>
           </v-col>
           <v-col>
-            <label>{{ this.$auth.user.role }}</label>
+            <label>{{ this.user.role }}</label>
           </v-col>
         </v-row>
         <v-row>
@@ -44,42 +44,28 @@
 </template>
 
 <script>
-// import { DefaultApi, Configuration } from '../../../../api-client'
+import { DefaultApi, Configuration } from '../../../api-client'
 export default {
-  // async asyncData({$axios, params}) {
-  //   const conf = new Configuration()
-  //   const api = new DefaultApi(conf, $axios.defaults.baseURL, $axios)
-  //   const resp = await api.getUserMe()
-  //   return {
-  //     user: resp.data
-  //   }
-
-  // },
+  async asyncData({$axios}) {
+    const conf = new Configuration()
+    const api = new DefaultApi(conf, $axios.defaults.baseURL, $axios)
+    const resp = await api.getUsersMe()
+    return {
+      user: resp.data
+    }
+  },
   // data() {
   //   return {
-  //     isMe: true
   //   }
   // },
   // computed() {
   //   return {
-  //     isMe: true
   //   }
   // },
   methods: {
     edit() {
       this.$router.push(`/account/edit`)
     },
-  //   async del() {
-  //     try {
-  //       const conf = new Configuration()
-  //       const api = new DefaultApi(conf, this.$axios.defaults.baseURL, this.$axios)
-  //       const resp = await api.deleteUser(this.$route.params.id)
-  //       this.$router.go(-1)
-  //     } catch (err) {
-  //       this.error = "削除に失敗しました"
-  //       this.hasError = true
-  //     }
-  //   }
   }
 }
 </script>

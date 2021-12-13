@@ -10,7 +10,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-var identityKey = "email"
+var identityKey = "id"
 
 func authMiddleware() (authMiddleware *jwt.GinJWTMiddleware) {
 	// the jwt middleware
@@ -24,10 +24,7 @@ func authMiddleware() (authMiddleware *jwt.GinJWTMiddleware) {
 		PayloadFunc: func(data interface{}) jwt.MapClaims {
 			if v, ok := data.(*UserResp); ok {
 				return jwt.MapClaims{
-					"id":    v.Id,
-					"name":  v.Name,
-					"email": v.Email,
-					"role":  v.Role,
+					"id": v.Id,
 				}
 			}
 			return jwt.MapClaims{}
@@ -48,7 +45,7 @@ func authMiddleware() (authMiddleware *jwt.GinJWTMiddleware) {
 		IdentityHandler: func(c *gin.Context) interface{} {
 			claims := jwt.ExtractClaims(c)
 			return &UserResp{
-				Email: claims[identityKey].(string),
+				Id: uint(claims[identityKey].(float64)),
 			}
 		},
 		Authenticator: func(c *gin.Context) (interface{}, error) {
@@ -56,29 +53,24 @@ func authMiddleware() (authMiddleware *jwt.GinJWTMiddleware) {
 			if err := c.ShouldBind(&loginVals); err != nil {
 				return "", jwt.ErrMissingLoginValues
 			}
+			var users []User
 			query := User{}
 			query.Email = loginVals.Email
 			// DBからuserレコード取得
-			var dbUsers []User
-			if err := DB.Table("users").Where(&query).Find(&dbUsers).Error; err != nil {
-				return nil, err
-			}
+			result := DB.Table("users").Where(&query).Find(&users)
 			// 該当レコードなし。認証エラー
-			if len(dbUsers) != 1 {
+			if result.RowsAffected /*(userResp)*/ != 1 {
 				return nil, errors.New("no user found")
 			}
 			// ハッシュ化したパスワードの比較
 			if err := bcrypt.CompareHashAndPassword(
-				([]byte)(dbUsers[0].Password),
+				([]byte)(users[0].Password),
 				([]byte)(loginVals.Password),
 			); err != nil {
 				return nil, jwt.ErrFailedAuthentication
 			}
 			return &UserResp{
-				Id:    dbUsers[0].Id,
-				Name:  dbUsers[0].Name,
-				Email: loginVals.Email,
-				Role:  dbUsers[0].Role,
+				Id: users[0].Id,
 			}, nil
 		},
 		// Authorizator: func(data interface{}, c *gin.Context) bool {

@@ -56,6 +56,7 @@ func Router() (router *gin.Engine) {
 		auth.GET("/users", GetUsers)
 		auth.GET("/users/:id", GetUser)
 		auth.GET("/users/me", GetUserMe)
+		auth.PATCH("/users/me", PatchUserMe)
 		auth.PATCH("/users/:id", PatchUser)
 		auth.DELETE("/users/:id", DeleteUser)
 		auth.POST("/users", PostUser)
