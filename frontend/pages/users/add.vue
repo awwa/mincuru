@@ -1,55 +1,55 @@
 <template>
   <div>
     <h1>ユーザー追加</h1>
-    <v-form>
+    <v-form
+      @submit.prevent="add"
+      ref="form"
+    >
       <v-container>
         <v-row>
-          <v-col col="12" sm="2">
-            <label><strong>名前</strong></label>
-          </v-col>
-          <v-col>
-            <v-text-field
-              v-model="user.name"
-              required
-            />
-          </v-col>
+          <v-text-field
+            label="名前"
+            v-model="user.name"
+            :rules="nameRules"
+            required
+          />
         </v-row>
         <v-row>
-          <v-col cols="12" sm="2">
-            <label><strong>メールアドレス</strong></label>
-          </v-col>
-          <v-col>
-            <v-text-field
-              v-model="user.email"
-              required
-            />
-          </v-col>
+          <v-text-field
+            label="メールアドレス"
+            v-model="user.email"
+            :rules="emailRules"
+            required
+          />
         </v-row>
         <v-row>
-          <v-col cols="12" sm="2">
-            <label><strong>パスワード</strong></label>
-          </v-col>
-          <v-col>
-            <v-text-field
-              v-model="user.password"
-              required
-              type="password"
-            />
-          </v-col>
+          <v-text-field
+            label="パスワード"
+            v-model="user.password"
+            :rules="passwordRules"
+            required
+            type="password"
+          />
+          <v-text-field
+            label="パスワード確認"
+            v-model="password_confirm"
+            :rules="passwordConfirmRules"
+            required
+            type="password"
+          />
         </v-row>
         <v-row>
-          <v-col cols="12" sm="2">
-            <label><strong>ロール</strong></label>
-          </v-col>
-          <v-col>
-            <v-select
-              :items="roles"
-              v-model="user.role"
-            ></v-select>
-          </v-col>
+          <v-select
+            label="ロール"
+            :items="$roles"
+            item-text="label"
+            item-value="value"
+            v-model="user.role"
+            :rules="roleRules"
+          />
         </v-row>
         <v-row>
-          <v-btn @click="add">追加</v-btn>
+          <v-btn type="submit">追加</v-btn>
           <v-btn @click="back">キャンセル</v-btn>
         </v-row>
       </v-container>
@@ -65,20 +65,37 @@ export default {
       user: {
         name: "",
         email: "",
-        role: "user",
+        role: "{value:'user', text:'ユーザー'}",
       },
-      roles: ["user", "admin"]
+      password_confirm: "",
+      nameRules: [
+        v => !!v || "名前を入力してください",
+      ],
+      emailRules: [
+        v => !!v || "メールアドレスを入力してください",        
+      ],
+      passwordRules: [
+        v => !!v || "パスワードを入力してください",
+      ],
+      passwordConfirmRules: [
+        v => !!v || "パスワードを入力してください",
+        v => v == this.user.password || "パスワード確認が一致していません",
+      ],
+      roleRules: [
+        v => !!v || "ロールを入力してください",
+      ],
     }
   },
   methods: {
     async add() {
       try {
-        const conf = new Configuration()
-        const api = new DefaultApi(conf, this.$axios.defaults.baseURL, this.$axios)
-        const resp = await api.postUsers(this.user)
-        this.$router.go(-1)
+        if (this.$refs.form.validate()) {
+          const conf = new Configuration()
+          const api = new DefaultApi(conf, this.$axios.defaults.baseURL, this.$axios)
+          const resp = await api.postUsers(this.user)
+          this.$router.go(-1)
+        }
       } catch (err) {
-        console.log(err)
         this.error = "追加に失敗しました"
         this.hasError = true
       }

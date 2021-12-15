@@ -116,7 +116,7 @@ export default {
         }
       ]
       // adminロール限定メニュー
-      if (this.$auth.user.role == "admin") {
+      if (this.$isAdmin()) {
         items.push(
           {
             icon: 'mdi-chart-bubble',

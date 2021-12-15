@@ -5,14 +5,6 @@
       <v-container>
         <v-row>
           <v-col cols="12" sm="2">
-            <label><strong>ID</strong></label>
-          </v-col>
-          <v-col>
-            <label>{{ user.id }}</label>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" sm="2">
             <label><strong>名前</strong></label>
           </v-col>
           <v-col>
@@ -32,7 +24,7 @@
             <label><strong>ロール</strong></label>
           </v-col>
           <v-col>
-            <label>{{ user.role }}</label>
+            <label>{{ $roleLabel(user.role) }}</label>
           </v-col>
         </v-row>
         <v-row>

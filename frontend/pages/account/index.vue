@@ -16,7 +16,7 @@
             <label><strong>名前</strong></label>
           </v-col>
           <v-col>
-            <label>{{ this.user.name }}</label>
+            <label>{{ user.name }}</label>
           </v-col>
         </v-row>
         <v-row>
@@ -24,7 +24,7 @@
             <label><strong>メールアドレス</strong></label>
           </v-col>
           <v-col>
-            <label>{{ this.user.email }}</label>
+            <label>{{ user.email }}</label>
           </v-col>
         </v-row>
         <v-row v-if="$isAdmin()">
@@ -32,7 +32,7 @@
             <label><strong>ロール</strong></label>
           </v-col>
           <v-col>
-            <label>{{ this.user.role }}</label>
+            <label>{{ $roleLabel(user.role) }}</label>
           </v-col>
         </v-row>
         <v-row>
