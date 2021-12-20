@@ -5,46 +5,50 @@
   ></v-breadcrumbs>
 </template>
 
-<script>
-const dictionary = {
-  home: 'ホーム',
-  account: 'アカウント設定',
-  users: 'ユーザー',
-  grades: 'グレード',
-  edit: '編集',
-  add: '追加',
+<script lang="ts">
+interface Dictionary {
+  [key: string]: string;
+}
+const DICTIONARY: Dictionary = {
+  home: "ホーム",
+  account: "アカウント設定",
+  users: "ユーザー",
+  grades: "グレード",
+  edit: "編集",
+  add: "追加",
+}
+type Path = {
+  text: string,
+  disabled: boolean,
+  href: string,
 }
 export default {
-  props: ['path'],
+  props: {
+    path: {
+      type: String,
+      required: true,
+    },
+  },
   computed: {
-    items: function() {
-      // pathの値が文字列であること
-      if (typeof(this.path) != 'string') {
-        throw new TypeError('no string')
-      }
-      // 先頭文字が'/'であること
-      if (this.path[0] != '/') {
-        throw new SyntaxError('First char is not slash')
-      }
+    items: function(): Array<Path> {
       // 末尾のスラッシュ削除
-      const effectivePath = this.path.replace(/\/$/, '')
-      const dirs = effectivePath.split('/')
-      dirs[0] = 'home'
-      let text = ''
-      let href = ''
-      let items = []
+      const effectivePath: string = (this as any).path.replace(/\/$/, "")
+      const dirs:Array<string> = effectivePath.split("/")
+      dirs[0] = "home"
+      let href:string = ""
+      let items:Array<Path> = []
       for(let i = 0; i < dirs.length; i++) {
         // 先頭はホーム
-        text = dictionary[dirs[i]] ? dictionary[dirs[i]] : dirs[i]
+        let text: string = DICTIONARY[dirs[i]] ? DICTIONARY[dirs[i]] : dirs[i]
         if (i == 0) {
-          href += '/'  
+          href += "/"
         } else if (i == 1) {
           href += dirs[i]
         } else {
-          href += '/' + dirs[i]
+          href += "/" + dirs[i]
         }
         // 末尾のリンクは無効
-        const disabled = (i == dirs.length - 1)
+        const disabled: boolean = (i == dirs.length - 1)
         items.push({
           text: text,
           disabled: disabled,

@@ -47,13 +47,13 @@
   </div>
 </template>
 
-<script>
+<script lang="js">
 import { DefaultApi, Configuration } from '../../../api-client'
 export default {
   async asyncData({$axios, params}) {
     const conf = new Configuration()
     const api = new DefaultApi(conf, $axios.defaults.baseURL, $axios)
-    const resp = await api.getUsersMe()
+    const resp = await api.getUserMe()
     return {
       user: resp.data
     }
@@ -91,7 +91,7 @@ export default {
           name: this.user.name,
           password: this.user.password,
         }
-        const resp = await api.patchUsersMe(params)
+        const resp = await api.patchUserMe(params)
         this.$router.push(`/account`)
       } catch (err) {
         this.error = "保存に失敗しました"

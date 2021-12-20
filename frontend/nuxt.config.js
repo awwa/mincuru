@@ -1,6 +1,7 @@
 import colors from 'vuetify/es5/util/colors'
 
 export default {
+  // タイプするか `Ctrl + Space` を押すとオートコンプリートできます
   publicRuntimeConfig: {
     appTitle: "みんクル"
   },
@@ -105,3 +106,4 @@ export default {
   },
 
 }
+

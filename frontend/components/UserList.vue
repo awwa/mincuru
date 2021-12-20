@@ -6,41 +6,45 @@
       label="検索"
       single-line
       hide-details
-    ></v-text-field>
+    />
     <v-data-table
       :headers="headers"
       :items="users"
       :items-per-page="5"
       :search="search"
       @click:row="editItem"
-    >
-    </v-data-table>
+    />
   </div>
 </template>
 
-<script>
+<script lang="js">
 export default {
-  props: ["users"],
+  props: {
+    "users": {
+      type: Array,
+      required: true,
+    }
+  },
   data() {
     return {
-      search: '',
+      search: "",
       headers: [
         {
-          text: 'ID',
-          align: 'start',
-          value: 'id',
+          text: "ID",
+          align: "start",
+          value: "id",
         },
         {
-          text: '名前',
-          value: 'name',
+          text: "名前",
+          value: "name",
         },
         {
-          text: 'メールアドレス',
-          value: 'email',
+          text: "メールアドレス",
+          value: "email",
         },
         {
-          text: 'ロール',
-          value: 'role',
+          text: "ロール",
+          value: "role",
         },
       ],
     }

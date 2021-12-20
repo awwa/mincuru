@@ -49,7 +49,7 @@ export default {
   async asyncData({$axios}) {
     const conf = new Configuration()
     const api = new DefaultApi(conf, $axios.defaults.baseURL, $axios)
-    const resp = await api.getUsersMe()
+    const resp = await api.getUserMe()
     return {
       user: resp.data
     }

@@ -91,10 +91,10 @@
   </v-app>
 </template>
 
-<script>
+<script lang="js">
 export default {
   name: "LauoutDefault",
-  data () {
+  data() {
     return {
       clipped: true,
       drawer: false,

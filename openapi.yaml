@@ -387,10 +387,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-      operationId: get-users-me
+      operationId: get-user-me
+      description: 自アカウントのユーザー情報取得
     patch:
       summary: ''
-      operationId: patch-users-me
+      operationId: patch-user-me
       responses:
         '200':
           description: OK
@@ -421,6 +422,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/PatchUserMeRequest'
+      description: 自アカウントのユーザ情報更新
 components:
   schemas:
     UserResponse:
