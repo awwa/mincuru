@@ -1,7 +1,7 @@
 {
   "name": "mincuru",
   "version": "1.0.0",
-  "description": "https://blog.5thfloor.co.jp/2019/06/26/webapp-development-with-openapi-and-typescript/",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "generate-api-client": "rm -rf api-client;./node_modules/.bin/openapi-generator-cli generate -g typescript-axios -i openapi.yaml -o api-client",

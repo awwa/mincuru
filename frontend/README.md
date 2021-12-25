@@ -3,8 +3,7 @@
 ## Node.js
 
 ```
-$ which npm
-/Users/wataru/.nvm/versions/node/v14.18.2/bin/npm
+node/v14.18.2
 ```
 
 ## Build Setup
