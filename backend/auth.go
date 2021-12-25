@@ -24,7 +24,8 @@ func authMiddleware() (authMiddleware *jwt.GinJWTMiddleware) {
 		PayloadFunc: func(data interface{}) jwt.MapClaims {
 			if v, ok := data.(*UserResp); ok {
 				return jwt.MapClaims{
-					"id": v.Id,
+					"id":   v.Id,
+					"role": v.Role,
 				}
 			}
 			return jwt.MapClaims{}
@@ -45,7 +46,8 @@ func authMiddleware() (authMiddleware *jwt.GinJWTMiddleware) {
 		IdentityHandler: func(c *gin.Context) interface{} {
 			claims := jwt.ExtractClaims(c)
 			return &UserResp{
-				Id: uint(claims[identityKey].(float64)),
+				Id:   uint(claims[identityKey].(float64)),
+				Role: string(claims["role"].(string)),
 			}
 		},
 		Authenticator: func(c *gin.Context) (interface{}, error) {
@@ -70,15 +72,48 @@ func authMiddleware() (authMiddleware *jwt.GinJWTMiddleware) {
 				return nil, jwt.ErrFailedAuthentication
 			}
 			return &UserResp{
-				Id: users[0].Id,
+				Id:   users[0].Id,
+				Role: users[0].Role,
 			}, nil
 		},
-		// Authorizator: func(data interface{}, c *gin.Context) bool {
-		// 	if v, ok := data.(*User); ok && v.UserName == "admin" {
-		// 		return true
-		// 	}
-		// 	return false
-		// },
+		Authorizator: func(data interface{}, c *gin.Context) bool {
+			// IdentityHandlerがClaimから取り出した情報（＝JWTに格納されている情報）を受け取り
+			// API実行の条件を満たしているか判定しtrue/falseで返す
+			path := c.FullPath()
+			method := c.Request.Method
+			v, _ := data.(*UserResp)
+			role := v.Role
+			// 全ユーザー共通
+			switch {
+			case (path == "/users/refresh_token" && method == "GET"):
+				return true
+			case (path == "/users/logout" && method == "POST"):
+				return true
+			}
+			// 管理者の場合、無条件で通過
+			if role == "admin" {
+				return true
+			}
+			// ユーザーの場合のアクセス制限
+			if role == "user" {
+				switch {
+				case (path == "/users/me"):
+					return true
+				}
+			}
+			// ゲストの場合
+			if role == "guest" {
+				switch {
+				case (path == "/users/me"):
+					return true
+				}
+			}
+			return false
+			// 	if v, ok := data.(*User); ok && v.UserName == "admin" {
+			// 		return true
+			// 	}
+			// 	return false
+		},
 		Unauthorized: func(c *gin.Context, code int, message string) {
 			c.IndentedJSON(code, &ErrorResp{Message: message})
 		},
