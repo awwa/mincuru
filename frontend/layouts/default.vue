@@ -38,7 +38,7 @@
         icon
         @click.stop="miniVariant = !miniVariant"
       >
-        <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
+        <v-icon>mdi-{{ `chevron-${miniVariant ? "right" : "left"}` }}</v-icon>
       </v-btn>
       <!-- アプリタイトル -->
       <v-toolbar-title v-text="title" />
@@ -110,18 +110,18 @@ export default {
       // 全ユーザ向けメニュー
       let items = [
         {
-          icon: 'mdi-apps',
-          title: 'ホーム',
-          to: '/'
+          icon: "mdi-apps",
+          title: "ホーム",
+          to: "/"
         }
       ]
       // adminロール限定メニュー
       if (this.$isAdmin()) {
         items.push(
           {
-            icon: 'mdi-chart-bubble',
-            title: 'ユーザー',
-            to: '/users'
+            icon: "mdi-chart-bubble",
+            title: "ユーザー",
+            to: "/users"
           }
         )
       }

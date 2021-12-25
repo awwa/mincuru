@@ -37,7 +37,7 @@
 // 段階的にTypeScript対応の検討を行う。
 // 現段階では、最低限のTypeScript化を行い、基本的な実装スタイルはJavaScript版に沿う形にする
 export default {
-  layout: 'top',
+  layout: "top",
   data() {
     return {
       user: {
@@ -47,10 +47,10 @@ export default {
       error: "",
       hasError: false,
       emailRules: [
-        v => !!v || 'メールアドレスを入力してください',
+        v => !!v || "メールアドレスを入力してください",
       ],
       passwordRules: [
-        v => !!v || 'パスワードを入力してください',
+        v => !!v || "パスワードを入力してください",
       ],
     }
   },

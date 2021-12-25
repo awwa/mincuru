@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import { DefaultApi, Configuration } from '../../../api-client'
+import { DefaultApi, Configuration } from "../../../api-client"
 export default {
   async asyncData({$axios}) {
     const conf = new Configuration()

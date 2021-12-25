@@ -42,7 +42,7 @@
 </template>
 
 <script lang="js">
-import { DefaultApi, Configuration } from '../../../../api-client'
+import { DefaultApi, Configuration } from "../../../../api-client"
 export default {
   async asyncData({$axios, params}) {
     const conf = new Configuration()

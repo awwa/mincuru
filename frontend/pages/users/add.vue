@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import { DefaultApi, Configuration } from '../../../api-client'
+import { DefaultApi, Configuration } from "../../../api-client"
 export default {
   data() {
     return {

@@ -17,7 +17,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="js">
 export default {
   props: {
     "users": {
