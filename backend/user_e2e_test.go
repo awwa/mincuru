@@ -78,7 +78,7 @@ func ServeAndRequest(httpReq *http.Request) (recorder *httptest.ResponseRecorder
 	return
 }
 
-func createTestData() {
+func seedTestUser() {
 	// テスト固有のレコードの準備
 	DB.Exec("TRUNCATE TABLE users")
 	bcCost, err := strconv.Atoi(os.Getenv("BC_COST"))
@@ -121,7 +121,7 @@ func login(role string) string {
 }
 
 func TestGetUsersExistRecordAdmin(t *testing.T) {
-	createTestData()        // テストデータの準備
+	seedTestUser()          // テストデータの準備
 	token := login("admin") // 認証実行
 	// HTTPリクエストの生成
 	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users", nil)
@@ -140,7 +140,7 @@ func TestGetUsersExistRecordAdmin(t *testing.T) {
 }
 
 func TestGetUsersExistRecordUser(t *testing.T) {
-	createTestData()       // テストデータの準備
+	seedTestUser()         // テストデータの準備
 	token := login("user") // 認証実行
 	// HTTPリクエストの生成
 	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users", nil)
@@ -156,7 +156,7 @@ func TestGetUsersExistRecordUser(t *testing.T) {
 }
 
 func TestGetUsersNoLogin(t *testing.T) {
-	createTestData() // テストデータの準備
+	seedTestUser() // テストデータの準備
 	// HTTPリクエストの生成
 	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users", nil)
 	httpReq.Header.Add("Content-Type", "application/json")
@@ -171,7 +171,7 @@ func TestGetUsersNoLogin(t *testing.T) {
 }
 
 func TestGetUsersNoAuthorization(t *testing.T) {
-	createTestData() // テストデータの準備
+	seedTestUser() // テストデータの準備
 	// HTTPリクエストの生成
 	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users", nil)
 	httpReq.Header.Add("Content-Type", "application/json")
@@ -185,7 +185,7 @@ func TestGetUsersNoAuthorization(t *testing.T) {
 }
 
 func TestGetUsersByName(t *testing.T) {
-	createTestData()        // テストデータの準備
+	seedTestUser()          // テストデータの準備
 	token := login("admin") // 認証実行
 	// HTTPリクエストの生成
 	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users?name=hoge taro", nil)
@@ -204,7 +204,7 @@ func TestGetUsersByName(t *testing.T) {
 }
 
 func TestGetUsersByEmail(t *testing.T) {
-	createTestData()        // テストデータの準備
+	seedTestUser()          // テストデータの準備
 	token := login("admin") // 認証実行
 	// HTTPリクエストの生成
 	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users?email=hoge@example.com", nil)
@@ -223,7 +223,7 @@ func TestGetUsersByEmail(t *testing.T) {
 }
 
 func TestGetUsersByRole(t *testing.T) {
-	createTestData()        // テストデータの準備
+	seedTestUser()          // テストデータの準備
 	token := login("admin") // 認証実行
 	// HTTPリクエストの生成
 	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users?role=user", nil)
@@ -242,7 +242,7 @@ func TestGetUsersByRole(t *testing.T) {
 }
 
 func TestGetUsersByNameAndEmail(t *testing.T) {
-	createTestData()        // テストデータの準備
+	seedTestUser()          // テストデータの準備
 	token := login("admin") // 認証実行
 	// HTTPリクエストの生成
 	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users?name=hoge taro&email=hoge@example.com", nil)
@@ -261,7 +261,7 @@ func TestGetUsersByNameAndEmail(t *testing.T) {
 }
 
 func TestGetUsersNoRecord(t *testing.T) {
-	createTestData()        // テストデータの準備
+	seedTestUser()          // テストデータの準備
 	token := login("admin") // 認証実行
 	// HTTPリクエストの生成
 	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users?name=norecord", nil)
@@ -280,7 +280,7 @@ func TestGetUsersNoRecord(t *testing.T) {
 }
 
 func TestGetUserExistRecordAdmin(t *testing.T) {
-	createTestData()        // テストデータの準備
+	seedTestUser()          // テストデータの準備
 	token := login("admin") // 認証実行
 	// HTTPリクエストの生成
 	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users/1", nil)
@@ -296,7 +296,7 @@ func TestGetUserExistRecordAdmin(t *testing.T) {
 }
 
 func TestGetUserExistRecordUser(t *testing.T) {
-	createTestData()       // テストデータの準備
+	seedTestUser()         // テストデータの準備
 	token := login("user") // 認証実行
 	// HTTPリクエストの生成
 	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users/1", nil)
@@ -312,7 +312,7 @@ func TestGetUserExistRecordUser(t *testing.T) {
 }
 
 func TestGetUserNoRecord(t *testing.T) {
-	createTestData()        // テストデータの準備
+	seedTestUser()          // テストデータの準備
 	token := login("admin") // 認証実行
 	// HTTPリクエストの生成
 	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users/123", nil)
@@ -328,7 +328,7 @@ func TestGetUserNoRecord(t *testing.T) {
 }
 
 func TestGetUserNoLogin(t *testing.T) {
-	createTestData() // テストデータの準備
+	seedTestUser() // テストデータの準備
 	// HTTPリクエストの生成
 	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users/1", nil)
 	httpReq.Header.Add("Content-Type", "application/json")
@@ -343,7 +343,7 @@ func TestGetUserNoLogin(t *testing.T) {
 }
 
 func TestGetUserMeSuccessAdmin(t *testing.T) {
-	createTestData()        // テストデータの準備
+	seedTestUser()          // テストデータの準備
 	token := login("admin") // 認証実行
 	// HTTPリクエストの生成
 	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users/me", nil)
@@ -359,7 +359,7 @@ func TestGetUserMeSuccessAdmin(t *testing.T) {
 }
 
 func TestGetUserMeSuccessUser(t *testing.T) {
-	createTestData()       // テストデータの準備
+	seedTestUser()         // テストデータの準備
 	token := login("user") // 認証実行
 	// HTTPリクエストの生成
 	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users/me", nil)
@@ -375,7 +375,7 @@ func TestGetUserMeSuccessUser(t *testing.T) {
 }
 
 func TestGetUserMeNoLogin(t *testing.T) {
-	createTestData() // テストデータの準備
+	seedTestUser() // テストデータの準備
 	// HTTPリクエストの生成
 	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users/me", nil)
 	httpReq.Header.Add("Content-Type", "application/json")
@@ -390,7 +390,7 @@ func TestGetUserMeNoLogin(t *testing.T) {
 }
 
 func TestPostUserSuccessAdmin(t *testing.T) {
-	createTestData()        // テストデータの準備
+	seedTestUser()          // テストデータの準備
 	token := login("admin") // 認証実行
 	// HTTPリクエストの生成
 	body := `{
@@ -412,7 +412,7 @@ func TestPostUserSuccessAdmin(t *testing.T) {
 }
 
 func TestPostUserSuccessUser(t *testing.T) {
-	createTestData()       // テストデータの準備
+	seedTestUser()         // テストデータの準備
 	token := login("user") // 認証実行
 	// HTTPリクエストの生成
 	body := `{
@@ -434,7 +434,7 @@ func TestPostUserSuccessUser(t *testing.T) {
 }
 
 func TestPostUserInvalidRequest(t *testing.T) {
-	createTestData()        // テストデータの準備
+	seedTestUser()          // テストデータの準備
 	token := login("admin") // 認証実行
 	// HTTPリクエストの生成
 	body := `{
@@ -455,7 +455,7 @@ func TestPostUserInvalidRequest(t *testing.T) {
 }
 
 func TestPostUserDupKey(t *testing.T) {
-	createTestData()        // テストデータの準備
+	seedTestUser()          // テストデータの準備
 	token := login("admin") // 認証実行
 	// HTTPリクエストの生成
 	body := `{
@@ -477,7 +477,7 @@ func TestPostUserDupKey(t *testing.T) {
 }
 
 func TestPostUserNoLogin(t *testing.T) {
-	createTestData() // テストデータの準備
+	seedTestUser() // テストデータの準備
 	// HTTPリクエストの生成
 	body := `{
 		"name": "new reocrd",
@@ -498,7 +498,7 @@ func TestPostUserNoLogin(t *testing.T) {
 }
 
 func TestPatchUserSuccessAllColumnAdmin(t *testing.T) {
-	createTestData()        // テストデータの準備
+	seedTestUser()          // テストデータの準備
 	token := login("admin") // 認証実行
 	// HTTPリクエストの生成
 	body := `{
@@ -520,7 +520,7 @@ func TestPatchUserSuccessAllColumnAdmin(t *testing.T) {
 }
 
 func TestPatchUserSuccessAllColumnUser(t *testing.T) {
-	createTestData()       // テストデータの準備
+	seedTestUser()         // テストデータの準備
 	token := login("user") // 認証実行
 	// HTTPリクエストの生成
 	body := `{
@@ -542,7 +542,7 @@ func TestPatchUserSuccessAllColumnUser(t *testing.T) {
 }
 
 func TestPatchUserSuccessNameColumn(t *testing.T) {
-	createTestData()        // テストデータの準備
+	seedTestUser()          // テストデータの準備
 	token := login("admin") // 認証実行
 	// HTTPリクエストの生成
 	body := `{
@@ -561,7 +561,7 @@ func TestPatchUserSuccessNameColumn(t *testing.T) {
 }
 
 func TestPatchUserSuccessEmailColumn(t *testing.T) {
-	createTestData()        // テストデータの準備
+	seedTestUser()          // テストデータの準備
 	token := login("admin") // 認証実行
 	// HTTPリクエストの生成
 	body := `{
@@ -580,7 +580,7 @@ func TestPatchUserSuccessEmailColumn(t *testing.T) {
 }
 
 func TestPatchUserSuccessRoleColumn(t *testing.T) {
-	createTestData()        // テストデータの準備
+	seedTestUser()          // テストデータの準備
 	token := login("admin") // 認証実行
 	// HTTPリクエストの生成
 	body := `{
@@ -599,7 +599,7 @@ func TestPatchUserSuccessRoleColumn(t *testing.T) {
 }
 
 func TestPatchUserSuccessPasswordColumn(t *testing.T) {
-	createTestData()        // テストデータの準備
+	seedTestUser()          // テストデータの準備
 	token := login("admin") // 認証実行
 	// HTTPリクエストの生成
 	body := `{
@@ -618,7 +618,7 @@ func TestPatchUserSuccessPasswordColumn(t *testing.T) {
 }
 
 func TestPatchUserSuccessNoColumn(t *testing.T) {
-	createTestData()        // テストデータの準備
+	seedTestUser()          // テストデータの準備
 	token := login("admin") // 認証実行
 	// HTTPリクエストの生成
 	body := `{}`
@@ -635,7 +635,7 @@ func TestPatchUserSuccessNoColumn(t *testing.T) {
 }
 
 func TestPatchUserNoRecord(t *testing.T) {
-	createTestData()        // テストデータの準備
+	seedTestUser()          // テストデータの準備
 	token := login("admin") // 認証実行
 	// HTTPリクエストの生成
 	body := `{
@@ -657,7 +657,7 @@ func TestPatchUserNoRecord(t *testing.T) {
 }
 
 func TestPatchUserNoLogin(t *testing.T) {
-	createTestData() // テストデータの準備
+	seedTestUser() // テストデータの準備
 	// HTTPリクエストの生成
 	body := `{
 		"name": "hoge taro2",
@@ -678,7 +678,7 @@ func TestPatchUserNoLogin(t *testing.T) {
 }
 
 func TestPatchUserMeSuccessAllColumnAdmin(t *testing.T) {
-	createTestData()        // テストデータの準備
+	seedTestUser()          // テストデータの準備
 	token := login("admin") // 認証実行
 	// HTTPリクエストの生成
 	body := `{
@@ -699,7 +699,7 @@ func TestPatchUserMeSuccessAllColumnAdmin(t *testing.T) {
 }
 
 func TestPatchUserMeSuccessAllColumnUser(t *testing.T) {
-	createTestData()       // テストデータの準備
+	seedTestUser()         // テストデータの準備
 	token := login("user") // 認証実行
 	// HTTPリクエストの生成
 	body := `{
@@ -720,7 +720,7 @@ func TestPatchUserMeSuccessAllColumnUser(t *testing.T) {
 }
 
 func TestPatchUserMeSuccessNameColumn(t *testing.T) {
-	createTestData()        // テストデータの準備
+	seedTestUser()          // テストデータの準備
 	token := login("admin") // 認証実行
 	// HTTPリクエストの生成
 	body := `{
@@ -739,7 +739,7 @@ func TestPatchUserMeSuccessNameColumn(t *testing.T) {
 }
 
 func TestPatchUserMeSuccessEmailColumn(t *testing.T) {
-	createTestData()        // テストデータの準備
+	seedTestUser()          // テストデータの準備
 	token := login("admin") // 認証実行
 	// HTTPリクエストの生成
 	body := `{
@@ -758,7 +758,7 @@ func TestPatchUserMeSuccessEmailColumn(t *testing.T) {
 }
 
 func TestPatchUserMeSuccessPasswordColumn(t *testing.T) {
-	createTestData()        // テストデータの準備
+	seedTestUser()          // テストデータの準備
 	token := login("admin") // 認証実行
 	// HTTPリクエストの生成
 	body := `{
@@ -777,7 +777,7 @@ func TestPatchUserMeSuccessPasswordColumn(t *testing.T) {
 }
 
 func TestPatchUserMeSuccessNoColumn(t *testing.T) {
-	createTestData()        // テストデータの準備
+	seedTestUser()          // テストデータの準備
 	token := login("admin") // 認証実行
 	// HTTPリクエストの生成
 	body := `{}`
@@ -794,7 +794,7 @@ func TestPatchUserMeSuccessNoColumn(t *testing.T) {
 }
 
 func TestPatchUserMeInvalidColumn(t *testing.T) {
-	createTestData()        // テストデータの準備
+	seedTestUser()          // テストデータの準備
 	token := login("admin") // 認証実行
 	// HTTPリクエストの生成
 	body := `{
@@ -813,7 +813,7 @@ func TestPatchUserMeInvalidColumn(t *testing.T) {
 }
 
 func TestPatchUserMeNoLogin(t *testing.T) {
-	createTestData() // テストデータの準備
+	seedTestUser() // テストデータの準備
 	// HTTPリクエストの生成
 	body := `{
 		"name": "updated name",
@@ -833,7 +833,7 @@ func TestPatchUserMeNoLogin(t *testing.T) {
 }
 
 func TestDeleteUserSuccessAdmin(t *testing.T) {
-	createTestData()        // テストデータの準備
+	seedTestUser()          // テストデータの準備
 	token := login("admin") // 認証実行
 	// HTTPリクエストの生成
 	httpReq, err := http.NewRequest(http.MethodDelete, "http://localhost:8080/users/1", nil)
@@ -862,7 +862,7 @@ func TestDeleteUserSuccessAdmin(t *testing.T) {
 }
 
 func TestDeleteUserSuccessUser(t *testing.T) {
-	createTestData()       // テストデータの準備
+	seedTestUser()         // テストデータの準備
 	token := login("user") // 認証実行
 	// HTTPリクエストの生成
 	httpReq, err := http.NewRequest(http.MethodDelete, "http://localhost:8080/users/1", nil)
@@ -888,7 +888,7 @@ func TestDeleteUserSuccessUser(t *testing.T) {
 }
 
 func TestDeleteUserNoRecord(t *testing.T) {
-	createTestData()        // テストデータの準備
+	seedTestUser()          // テストデータの準備
 	token := login("admin") // 認証実行
 	// HTTPリクエストの生成
 	httpReq, err := http.NewRequest(http.MethodDelete, "http://localhost:8080/users/123", nil)
@@ -904,7 +904,7 @@ func TestDeleteUserNoRecord(t *testing.T) {
 }
 
 func TestDeleteUserNoLogin(t *testing.T) {
-	createTestData() // テストデータの準備
+	seedTestUser() // テストデータの準備
 	// HTTPリクエストの生成
 	httpReq, err := http.NewRequest(http.MethodDelete, "http://localhost:8080/users/1", nil)
 	httpReq.Header.Add("Content-Type", "application/json")
@@ -919,7 +919,7 @@ func TestDeleteUserNoLogin(t *testing.T) {
 }
 
 func TestLoginSuccess(t *testing.T) {
-	createTestData() // テストデータの準備
+	seedTestUser() // テストデータの準備
 	// HTTPリクエストの生成
 	body := `{
 		"email": "hoge@example.com",
@@ -937,7 +937,7 @@ func TestLoginSuccess(t *testing.T) {
 }
 
 func TestLoginInvalidPassword(t *testing.T) {
-	createTestData() // テストデータの準備
+	seedTestUser() // テストデータの準備
 	// HTTPリクエストの生成
 	body := `{
 		"email": "hoge@example.com",
@@ -955,7 +955,7 @@ func TestLoginInvalidPassword(t *testing.T) {
 }
 
 func TestLoginInvalidEmail(t *testing.T) {
-	createTestData() // テストデータの準備
+	seedTestUser() // テストデータの準備
 	// HTTPリクエストの生成
 	body := `{
 		"email": "invalid@example.com",
@@ -973,7 +973,7 @@ func TestLoginInvalidEmail(t *testing.T) {
 }
 
 func TestRefreshTokenSuccessAdmin(t *testing.T) {
-	createTestData()        // テストデータの準備
+	seedTestUser()          // テストデータの準備
 	token := login("admin") // 認証実行
 	// HTTPリクエストの生成
 	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users/refresh_token", nil)
@@ -989,7 +989,7 @@ func TestRefreshTokenSuccessAdmin(t *testing.T) {
 }
 
 func TestRefreshTokenSuccessUser(t *testing.T) {
-	createTestData()       // テストデータの準備
+	seedTestUser()         // テストデータの準備
 	token := login("user") // 認証実行
 	// HTTPリクエストの生成
 	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users/refresh_token", nil)
@@ -1005,7 +1005,7 @@ func TestRefreshTokenSuccessUser(t *testing.T) {
 }
 
 func TestRefreshTokenNoLogin(t *testing.T) {
-	createTestData() // テストデータの準備
+	seedTestUser() // テストデータの準備
 	// HTTPリクエストの生成
 	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/users/refresh_token", nil)
 	httpReq.Header.Add("Content-Type", "application/json")
@@ -1020,7 +1020,7 @@ func TestRefreshTokenNoLogin(t *testing.T) {
 }
 
 func TestLogoutSuccessAdmin(t *testing.T) {
-	createTestData()        // テストデータの準備
+	seedTestUser()          // テストデータの準備
 	token := login("admin") // 認証実行
 	// HTTPリクエストの生成
 	httpReq, err := http.NewRequest(http.MethodPost, "http://localhost:8080/users/logout", nil)
@@ -1036,7 +1036,7 @@ func TestLogoutSuccessAdmin(t *testing.T) {
 }
 
 func TestLogoutSuccessUser(t *testing.T) {
-	createTestData()       // テストデータの準備
+	seedTestUser()         // テストデータの準備
 	token := login("user") // 認証実行
 	// HTTPリクエストの生成
 	httpReq, err := http.NewRequest(http.MethodPost, "http://localhost:8080/users/logout", nil)
@@ -1052,7 +1052,7 @@ func TestLogoutSuccessUser(t *testing.T) {
 }
 
 func TestLogoutNoLogin(t *testing.T) {
-	createTestData() // テストデータの準備
+	seedTestUser() // テストデータの準備
 	// HTTPリクエストの生成
 	httpReq, err := http.NewRequest(http.MethodPost, "http://localhost:8080/users/logout", nil)
 	httpReq.Header.Add("Content-Type", "application/json")

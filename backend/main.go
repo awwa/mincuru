@@ -64,10 +64,7 @@ func Router() (router *gin.Engine) {
 	return
 }
 
-// 処理
-//   DB初期化
-// 詳細は https://github.com/go-sql-driver/mysql#dsn-data-source-name を参照
-func initDb() {
+func openDb() {
 	dbPort, err := strconv.Atoi(os.Getenv("DB_PORT"))
 	if err != nil {
 		panic(err)
@@ -84,8 +81,16 @@ func initDb() {
 	if err != nil {
 		panic(err)
 	}
+
+}
+
+// 処理
+//   DB初期化
+// 詳細は https://github.com/go-sql-driver/mysql#dsn-data-source-name を参照
+func initDb() {
+	openDb()
 	// Migrate the schema
-	if err := DB.AutoMigrate(&User{}); err != nil {
+	if err := DB.AutoMigrate(&User{}, &Car{}); err != nil {
 		panic(err)
 	}
 }
