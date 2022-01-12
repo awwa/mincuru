@@ -60,6 +60,8 @@ func Router() (router *gin.Engine) {
 		auth.PATCH("/users/:id", PatchUser)
 		auth.DELETE("/users/:id", DeleteUser)
 		auth.POST("/users", PostUser)
+
+		auth.POST("/cars/search", SearchCars)
 	}
 	return
 }
@@ -77,7 +79,10 @@ func openDb() {
 		dbPort,
 		os.Getenv("DB_NAME"),
 	)
-	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
+		// TODO リリース時にログレベル変更
+		// Logger: logger.Default.LogMode(logger.Info),
+	})
 	if err != nil {
 		panic(err)
 	}

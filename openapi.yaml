@@ -423,6 +423,109 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchUserMeRequest'
       description: 自アカウントのユーザ情報更新
+  /cars/search:
+    parameters: []
+    post:
+      summary: ''
+      operationId: post-cars-search
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                    maker_name:
+                      type: string
+                    model_name:
+                      type: string
+                    grade_name:
+                      type: string
+                    model_code:
+                      type: string
+                    price:
+                      type: integer
+                      nullable: true
+                    url:
+                      type: string
+                      nullable: true
+                    image_url:
+                      type: string
+                      nullable: true
+                    model_change_full:
+                      type: string
+                      format: date-time
+                      nullable: true
+                    model_change_last:
+                      type: string
+                      format: date-time
+                      nullable: true
+                  required:
+                    - id
+                    - maker_name
+                    - model_name
+                    - grade_name
+                    - model_code
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                maker_name:
+                  type: string
+                model_name:
+                  type: string
+                grade_name:
+                  type: string
+                model_code:
+                  type: string
+                price_lower:
+                  type: number
+                price_higher:
+                  type: number
+                model_change_from:
+                  type: string
+                  format: date
+                model_change_to:
+                  type: string
+                  format: date
+                power_train:
+                  type: array
+                  items:
+                    type: string
+                    enum:
+                      - ICE
+                      - StrHV
+                      - MldHV
+                      - SerHV
+                      - PHEV
+                      - BEV
+                      - RexEV
+                      - FCEV
 components:
   schemas:
     UserResponse:

@@ -94,17 +94,22 @@ func authMiddleware() (authMiddleware *jwt.GinJWTMiddleware) {
 			if role == "admin" {
 				return true
 			}
-			// ユーザーの場合のアクセス制限
+			// ユーザーの場合のアクセス許可
 			if role == "user" {
 				switch {
 				case (path == "/users/me"):
 					return true
+				case (path == "/cars/search"):
+					return true
 				}
+
 			}
-			// ゲストの場合
+			// ゲストの場合のアクセス許可
 			if role == "guest" {
 				switch {
 				case (path == "/users/me"):
+					return true
+				case (path == "/cars/search"):
 					return true
 				}
 			}
