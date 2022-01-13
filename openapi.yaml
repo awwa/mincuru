@@ -442,9 +442,9 @@ paths:
                       type: number
                     maker_name:
                       type: string
-                    model_name:
-                      type: string
                     grade_name:
+                      type: string
+                    model_name:
                       type: string
                     model_code:
                       type: string
@@ -468,8 +468,8 @@ paths:
                   required:
                     - id
                     - maker_name
-                    - model_name
                     - grade_name
+                    - model_name
                     - model_code
         '400':
           description: Bad Request
@@ -526,8 +526,176 @@ paths:
                       - BEV
                       - RexEV
                       - FCEV
+  '/cars/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarResponse'
+      operationId: get-cars-id
 components:
   schemas:
+    CarResponse:
+      title: CarResponse
+      type: object
+      properties:
+        id:
+          type: integer
+        is_del:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        maker_name:
+          type: string
+        model_name:
+          type: string
+        grade_name:
+          type: string
+        model_code:
+          type: string
+        price:
+          type: integer
+          nullable: true
+        url:
+          type: string
+          nullable: true
+        image_url:
+          type: string
+          nullable: true
+        model_change_full:
+          type: string
+          format: date
+          nullable: true
+        model_change_last:
+          type: string
+          format: date
+          nullable: true
+        body:
+          $ref: '#/components/schemas/BodyResponse'
+        interior:
+          $ref: '#/components/schemas/InteriorResponse'
+        perf:
+          $ref: '#/components/schemas/PerfResponse'
+      required:
+        - id
+        - is_del
+        - created_at
+        - updated_at
+        - maker_name
+        - model_name
+        - grade_name
+        - model_code
+    BodyResponse:
+      title: Body
+      type: object
+      properties:
+        length:
+          type: integer
+          nullable: true
+        width:
+          type: integer
+          nullable: true
+        height:
+          type: integer
+          nullable: true
+        wheel_base:
+          type: integer
+          nullable: true
+        tread_front:
+          type: integer
+          nullable: true
+        tread_rear:
+          type: integer
+          nullable: true
+        min_road_clearance:
+          type: integer
+          nullable: true
+        body_weight:
+          type: integer
+          nullable: true
+    InteriorResponse:
+      title: InteriorResponse
+      type: object
+      properties:
+        length:
+          type: integer
+          nullable: true
+        width:
+          type: integer
+          nullable: true
+        height:
+          type: integer
+          nullable: true
+        luggage_cap:
+          type: integer
+          nullable: true
+        riding_cap:
+          type: integer
+          nullable: true
+    PerfResponse:
+      title: PerfResponse
+      type: object
+      properties:
+        min_turning_radius:
+          type: number
+          nullable: true
+        fcr_wltc:
+          type: number
+          nullable: true
+        fcr_wltc_l:
+          type: number
+          nullable: true
+        fcr_wltc_m:
+          type: number
+          nullable: true
+        fcr_wltc_h:
+          type: number
+          nullable: true
+        fcr_wltc_exh:
+          type: number
+          nullable: true
+        fcr_jc08:
+          type: number
+          nullable: true
+        mpc_wltc:
+          type: number
+          nullable: true
+        ecr_wltc:
+          type: number
+          nullable: true
+        ecr_wltc_l:
+          type: number
+          nullable: true
+        ecr_wltc_m:
+          type: number
+          nullable: true
+        ecr_wltc_h:
+          type: number
+          nullable: true
+        ecr_wltc_exh:
+          type: number
+          nullable: true
+        ecr_jc08:
+          type: number
+          nullable: true
+        mpc_jc08:
+          type: number
+          nullable: true
     UserResponse:
       type: object
       additionalProperties: false
@@ -618,15 +786,6 @@ components:
         - email
         - password
       description: ''
-    CodeResponse:
-      type: object
-      title: CodeResponse
-      additionalProperties: false
-      properties:
-        code:
-          type: integer
-      required:
-        - code
     PostUserRequest:
       title: PostUserRequest
       type: object
@@ -653,6 +812,15 @@ components:
         - email
         - role
         - password
+    CodeResponse:
+      type: object
+      title: CodeResponse
+      additionalProperties: false
+      properties:
+        code:
+          type: integer
+      required:
+        - code
     PatchUserRequest:
       title: PatchUserRequest
       type: object

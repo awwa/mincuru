@@ -77,33 +77,33 @@ type Car struct {
 	IsDel           soft_delete.DeletedAt `json:"is_del" gorm:"softDelete:flag"`
 	CreatedAt       time.Time             `json:"created_at"`
 	UpdatedAt       time.Time             `json:"updated_at"`
-	MakerName       string                `json:"maker_name" gorm:"not null"`            // メーカー名
-	ModelName       string                `json:"model_name" gorm:"not null"`            // モデル名
-	GradeName       string                `json:"grade_name" gorm:"not null"`            // グレード
-	ModelCode       string                `json:"model_code" gorm:"not null"`            // 型式
-	Price           null.Int              `json:"price"`                                 // 小売価格(税込/円)
-	Url             null.String           `json:"url"`                                   // URL
-	ImageUrl        null.String           `json:"image_url"`                             // イメージURL
-	ModelChangeFull null.Time             `json:"model_change_full" gorm:"type:date"`    // モデルチェンジ時期(フル日本)
-	ModelChangeLast null.Time             `json:"model_change_last" gorm:"type:date"`    // モデルチェンジ時期(最終日本)
-	Body            Body                  `gorm:"embedded;embeddedPrefix:body_"`         // 車体
-	Interior        Interior              `gorm:"embedded;embeddedPrefix:int_"`          // 車内
-	Perf            Perf                  `gorm:"embedded;embeddedPrefix:perf_"`         // 性能
-	PowerTrain      null.String           `json:"power_train"`                           // パワートレイン(ICE/StrHV/MldHV/SerHV/PHEV/BEV/RexEV/FCEV)
-	DriveSystem     null.String           `json:"drive_system"`                          // 駆動方式(FF/FR/RR/MR/AWD)
-	Engine          Engine                `gorm:"embedded;embeddedPrefix:engine_"`       // エンジン
-	MotorX          Motor                 `gorm:"embedded;embeddedPrefix:motor_x_"`      // 電動機1
-	MotorY          Motor                 `gorm:"embedded;embeddedPrefix:motor_y_"`      // 電動機2
-	Battery         Battery               `gorm:"embedded;embeddedPrefix:battery_"`      // バッテリー
-	Steering        null.String           `json:"steering"`                              // ステアリング形式
-	SuspensionFront null.String           `json:"suspension_front"`                      // サスペンション形式前
-	SuspensionRear  null.String           `json:"suspension_rear"`                       // サスペンション形式後
-	BrakeFront      null.String           `json:"brake_front"`                           // ブレーキ形式前
-	BrakeRear       null.String           `json:"brake_rear"`                            // ブレーキ形式後
-	TireFront       Tire                  `gorm:"embedded;embeddedPrefix:tire_front_"`   // タイヤ前
-	TireRear        Tire                  `gorm:"embedded;embeddedPrefix:tire_rear_"`    // タイヤ後
-	Transmission    Transmission          `gorm:"embedded;embeddedPrefix:transmission_"` // トランスミッション
-	FuelEfficiency  null.String           `json:"fuel_efficiency"`                       // 燃費向上対策
+	MakerName       string                `json:"maker_name" gorm:"not null"`                                // メーカー名
+	ModelName       string                `json:"model_name" gorm:"not null"`                                // モデル名
+	GradeName       string                `json:"grade_name" gorm:"not null"`                                // グレード
+	ModelCode       string                `json:"model_code" gorm:"not null"`                                // 型式
+	Price           null.Int              `json:"price"`                                                     // 小売価格(税込/円)
+	Url             null.String           `json:"url"`                                                       // URL
+	ImageUrl        null.String           `json:"image_url"`                                                 // イメージURL
+	ModelChangeFull null.Time             `json:"model_change_full" gorm:"type:date"`                        // モデルチェンジ時期(フル日本)
+	ModelChangeLast null.Time             `json:"model_change_last" gorm:"type:date"`                        // モデルチェンジ時期(最終日本)
+	Body            Body                  `json:"body" gorm:"embedded;embeddedPrefix:body_"`                 // 車体
+	Interior        Interior              `json:"interior" gorm:"embedded;embeddedPrefix:int_"`              // 車内
+	Perf            Perf                  `json:"perf" gorm:"embedded;embeddedPrefix:perf_"`                 // 性能
+	PowerTrain      null.String           `json:"power_train"`                                               // パワートレイン(ICE/StrHV/MldHV/SerHV/PHEV/BEV/RexEV/FCEV)
+	DriveSystem     null.String           `json:"drive_system"`                                              // 駆動方式(FF/FR/RR/MR/AWD)
+	Engine          Engine                `json:"engine" gorm:"embedded;embeddedPrefix:engine_"`             // エンジン
+	MotorX          Motor                 `json:"motor_x" gorm:"embedded;embeddedPrefix:motor_x_"`           // 電動機1
+	MotorY          Motor                 `json:"motor_y" gorm:"embedded;embeddedPrefix:motor_y_"`           // 電動機2
+	Battery         Battery               `json:"battery" gorm:"embedded;embeddedPrefix:battery_"`           // バッテリー
+	Steering        null.String           `json:"steering"`                                                  // ステアリング形式
+	SuspensionFront null.String           `json:"suspension_front"`                                          // サスペンション形式前
+	SuspensionRear  null.String           `json:"suspension_rear"`                                           // サスペンション形式後
+	BrakeFront      null.String           `json:"brake_front"`                                               // ブレーキ形式前
+	BrakeRear       null.String           `json:"brake_rear"`                                                // ブレーキ形式後
+	TireFront       Tire                  `json:"tire_front" gorm:"embedded;embeddedPrefix:tire_front_"`     // タイヤ前
+	TireRear        Tire                  `json:"tire_rear" gorm:"embedded;embeddedPrefix:tire_rear_"`       // タイヤ後
+	Transmission    Transmission          `json:"transmission" gorm:"embedded;embeddedPrefix:transmission_"` // トランスミッション
+	FuelEfficiency  null.String           `json:"fuel_efficiency"`                                           // 燃費向上対策
 }
 
 // 車体
