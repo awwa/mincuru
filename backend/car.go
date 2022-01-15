@@ -70,6 +70,35 @@ const (
 	GENERATOR      = MotorPurpose("発電用")
 )
 
+// type jsonTime struct {
+// 	null.Time
+// }
+
+// func (j jsonTime) format() string {
+// 	fmt.Println("***")
+// 	fmt.Println(j)
+// 	fmt.Println(j.Time.Time.Format("2006-01-02"))
+// 	fmt.Println("***")
+// 	if j.Valid {
+// 		return j.NullTime.Time.Format("2006-01-02")
+// 	} else {
+// 		return "null"
+// 	}
+// 	// return null.NewString(j.NullTime.Time.Format("2006-01-02"), j.Valid)
+// 	// if !j.NullTime.Valid {
+// 	// 	return nil
+// 	// }
+// 	// return j.Time.Time.Format("2006-01-02")
+// }
+
+// func (j jsonTime) MarshalJSON() ([]byte, error) {
+// 	if j.format() == "null" {
+// 		return []byte(j.format()), nil
+// 	} else {
+// 		return []byte(`"` + j.format() + `"`), nil
+// 	}
+// }
+
 // クルマ
 type Car struct {
 	// gorm.Model
@@ -156,7 +185,7 @@ type Engine struct {
 	Displacement       null.Float  `json:"displacement"`          // 総排気量(L)
 	Bore               null.Float  `json:"bore"`                  // ボア(mm)
 	Stroke             null.Float  `json:"stroke"`                // ストローク(mm)
-	CompRatio          null.Float  `json:"compression_ratio"`     // 圧縮比
+	CompRatio          null.Float  `json:"comp_ratio"`            // 圧縮比
 	MaxOutput          null.Float  `json:"max_output"`            // 最高出力(kW)
 	MaxOutputLowerRpm  null.Float  `json:"max_output_lower_rpm"`  // 最高出力回転数(低)(rpm)
 	MaxOutputHigherRpm null.Float  `json:"max_output_higher_rpm"` // 最高出力回転数(高)(rpm)
@@ -269,4 +298,18 @@ func SearchCars(c *gin.Context) {
 	d.Find(&cars)
 	fmt.Printf("%+v", cars)
 	c.IndentedJSON(http.StatusOK, cars)
+}
+
+func GetCar(c *gin.Context) {
+	var car Car
+	result := DB.Table("cars").First(&car, c.Param("id"))
+	if result.RowsAffected != 1 {
+		c.IndentedJSON(
+			http.StatusNotFound,
+			&ErrorResp{Message: result.Error.Error()},
+		)
+		c.Abort()
+		return
+	}
+	c.IndentedJSON(http.StatusOK, car)
 }

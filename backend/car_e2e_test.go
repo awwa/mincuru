@@ -21,6 +21,7 @@ func seedTestCarCx5() {
 		Url:             null.NewString("https://www.mazda.co.jp/cars/cx-5/", true),
 		ImageUrl:        null.NewString("https://upload.wikimedia.org/wikipedia/commons/8/85/2017_Mazda_CX-5_%28KF%29_Maxx_2WD_wagon_%282018-11-02%29_01.jpg", true),
 		ModelChangeFull: null.NewTime(time.Date(2017, time.February, 1, 0, 0, 0, 0, time.Local), true),
+		//ModelChangeFull: null.NewTime(time.Date(2017, time.February, 1, 0, 0, 0, 0, time.Local), false),
 		ModelChangeLast: null.NewTime(time.Date(2018, time.January, 1, 0, 0, 0, 0, time.Local), true),
 		Body: Body{
 			Length:           null.NewInt(4545, true),
@@ -777,4 +778,22 @@ func TestSearchCars(t *testing.T) {
 	recorder := ServeAndRequest(httpReq)
 	// テストケース固有のチェック
 	assert.Equal(t, 200, recorder.Result().StatusCode)
+}
+
+func TestGetCar(t *testing.T) {
+	DB.Exec("TRUNCATE TABLE cars")
+	seedTestCarCx5()
+	token := login("user")
+	// HTTPリクエストの生成
+	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/cars/1", nil)
+	httpReq.Header.Add("Content-Type", "application/json")
+	httpReq.Header.Add("Authorization", fmt.Sprintf("Bearer %s", token))
+	if err != nil {
+		panic(err)
+	}
+	// Test用サーバにリクエストを送信して、レスポンスをOpenAPI仕様に照らし合わせる
+	recorder := ServeAndRequest(httpReq)
+	// テストケース固有のチェック
+	assert.Equal(t, 200, recorder.Result().StatusCode)
+
 }

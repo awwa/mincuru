@@ -48,6 +48,7 @@ func ServeAndRequest(httpReq *http.Request) (recorder *httptest.ResponseRecorder
 	Router().ServeHTTP(recorder, httpReq)
 
 	// Find route
+	fmt.Println(httpReq.URL)
 	route, pathParams, err := router.FindRoute(httpReq)
 	if err != nil {
 		panic(err)

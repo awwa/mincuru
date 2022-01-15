@@ -101,6 +101,8 @@ func authMiddleware() (authMiddleware *jwt.GinJWTMiddleware) {
 					return true
 				case (path == "/cars/search"):
 					return true
+				case (path == "/cars/:id"):
+					return true
 				}
 
 			}
@@ -110,6 +112,8 @@ func authMiddleware() (authMiddleware *jwt.GinJWTMiddleware) {
 				case (path == "/users/me"):
 					return true
 				case (path == "/cars/search"):
+					return true
+				case (path == "/cars/:id"):
 					return true
 				}
 			}
