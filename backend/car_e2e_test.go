@@ -40,7 +40,7 @@ func seedTestCarCx5() {
 			// LuggageCap: null.NewInt(0, false),
 			RidingCap: null.NewInt(5, true),
 		},
-		Perf: Perf{
+		Performance: Performance{
 			MinTurningRadius: null.NewFloat(5.5, true),
 			FcrWltc:          null.NewFloat(13.0, true),
 			FcrWltcL:         null.NewFloat(10.2, true),
@@ -146,7 +146,7 @@ func seedTestCarCorollaTouring() {
 			// LuggageCap: null.NewInt(0, false),
 			RidingCap: null.NewInt(5, true),
 		},
-		Perf: Perf{
+		Performance: Performance{
 			MinTurningRadius: null.NewFloat(5.0, true),
 			FcrWltc:          null.NewFloat(26.8, true),
 			FcrWltcL:         null.NewFloat(25.1, true),
@@ -279,7 +279,7 @@ func seedTestCarNsx() {
 			// LuggageCap: null.NewInt(0, false),
 			RidingCap: null.NewInt(2, true),
 		},
-		Perf: Perf{
+		Performance: Performance{
 			MinTurningRadius: null.NewFloat(5.9, true),
 			FcrWltc:          null.NewFloat(10.6, true),
 			FcrWltcL:         null.NewFloat(7.8, true),
@@ -412,7 +412,7 @@ func seedTestCarHondaE() {
 			// LuggageCap: null.NewInt(0, false),
 			RidingCap: null.NewInt(4, true),
 		},
-		Perf: Perf{
+		Performance: Performance{
 			MinTurningRadius: null.NewFloat(4.3, true),
 			//FcrWltc:          null.NewFloat(26.8, true),
 			//FcrWltcL:         null.NewFloat(25.1, true),
@@ -546,7 +546,7 @@ func seedTestCarNote() {
 			// LuggageCap: null.NewInt(0, false),
 			RidingCap: null.NewInt(5, true),
 		},
-		Perf: Perf{
+		Performance: Performance{
 			MinTurningRadius: null.NewFloat(4.9, true),
 			FcrWltc:          null.NewFloat(23.8, true),
 			FcrWltcL:         null.NewFloat(23.1, true),
@@ -679,7 +679,7 @@ func seedTestCarThree() {
 			LuggageCap: null.NewInt(500, false),
 			RidingCap:  null.NewInt(5, true),
 		},
-		Perf: Perf{
+		Performance: Performance{
 			MinTurningRadius: null.NewFloat(5.7, true),
 			FcrWltc:          null.NewFloat(15.6, true),
 			FcrWltcL:         null.NewFloat(12.6, true),

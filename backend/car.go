@@ -117,7 +117,7 @@ type Car struct {
 	ModelChangeLast null.Time             `json:"model_change_last" gorm:"type:date"`                        // モデルチェンジ時期(最終日本)
 	Body            Body                  `json:"body" gorm:"embedded;embeddedPrefix:body_"`                 // 車体
 	Interior        Interior              `json:"interior" gorm:"embedded;embeddedPrefix:int_"`              // 車内
-	Perf            Perf                  `json:"perf" gorm:"embedded;embeddedPrefix:perf_"`                 // 性能
+	Performance     Performance           `json:"performance" gorm:"embedded;embeddedPrefix:performance_"`   // 性能
 	PowerTrain      null.String           `json:"power_train"`                                               // パワートレイン(ICE/StrHV/MldHV/SerHV/PHEV/BEV/RexEV/FCEV)
 	DriveSystem     null.String           `json:"drive_system"`                                              // 駆動方式(FF/FR/RR/MR/AWD)
 	Engine          Engine                `json:"engine" gorm:"embedded;embeddedPrefix:engine_"`             // エンジン
@@ -157,7 +157,7 @@ type Interior struct {
 }
 
 // 性能
-type Perf struct {
+type Performance struct {
 	MinTurningRadius null.Float `json:"min_turning_radius"` // 最小回転半径(m)
 	FcrWltc          null.Float `json:"fcr_wltc"`           // 燃料消費率WLTCモード(km/L)
 	FcrWltcL         null.Float `json:"fcr_wltc_l"`         // 燃料消費率WLTC市街地モード(km/L)
