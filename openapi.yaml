@@ -20,7 +20,7 @@ servers:
 paths:
   /users/login:
     post:
-      description: ログイン
+      description: ''
       operationId: post-users-login
       requestBody:
         description: 認証情報
@@ -87,35 +87,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-      description: トークン更新
-  /users/logout:
-    post:
-      summary: ''
-      operationId: post-users-logout
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CodeResponse'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      description: ログアウト
-      parameters: []
+      description: ''
   '/users/{id}':
     get:
-      description: 指定したIDの'UserResponse'取得
+      description: ''
       operationId: get-user
       parameters:
         - name: id
@@ -158,7 +133,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
     delete:
-      description: ユーザの削除
+      description: ''
       operationId: delete-user
       parameters:
         - name: id
@@ -178,12 +153,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+              examples: {}
         '401':
           description: Unauthorized
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+              examples: {}
         '404':
           description: Not Found
           content:
@@ -197,7 +174,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
     patch:
-      description: ユーザの更新
+      description: ''
       operationId: patch-user
       parameters:
         - name: id
@@ -221,7 +198,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/IdResponse'
+                $ref: '#/components/schemas/Id'
         '400':
           description: Bad Request
           content:
@@ -283,7 +260,7 @@ paths:
           name: role
           description: ロール
           allowReserved: true
-      description: 条件にマッチしたユーザの一覧取得
+      description: ''
       responses:
         '200':
           description: OK
@@ -329,7 +306,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/IdResponse'
+                $ref: '#/components/schemas/Id'
             application/xml:
               schema:
                 type: object
@@ -356,7 +333,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-      description: ユーザの追加
+      description: ''
       requestBody:
         content:
           application/json:
@@ -364,6 +341,31 @@ paths:
               $ref: '#/components/schemas/PostUserRequest'
             examples: {}
         description: ''
+  /users/logout:
+    post:
+      summary: ''
+      operationId: post-users-logout
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CodeResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      description: ''
+      parameters: []
   /users/me:
     get:
       summary: Your GET endpoint
@@ -388,7 +390,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       operationId: get-user-me
-      description: 自アカウントのユーザー情報取得
+      description: ''
     patch:
       summary: ''
       operationId: patch-user-me
@@ -398,7 +400,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/IdResponse'
+                $ref: '#/components/schemas/Id'
         '400':
           description: Bad Request
           content:
@@ -422,7 +424,8 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/PatchUserMeRequest'
-      description: 自アカウントのユーザ情報更新
+            examples: {}
+      description: ''
   /cars/search:
     parameters: []
     post:
@@ -542,7 +545,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CarResponse'
+                $ref: '#/components/schemas/Car'
         '400':
           description: Bad Request
           content:
@@ -568,11 +571,91 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       operationId: get-cars-id
+    patch:
+      summary: ''
+      operationId: patch-cars-id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Car'
+    delete:
+      summary: ''
+      operationId: delete-cars-id
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /cars:
+    post:
+      summary: ''
+      operationId: post-cars
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Id'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Car'
 components:
   schemas:
-    CarResponse:
-      title: CarResponse
+    Car:
       type: object
+      title: Car
+      additionalProperties: false
       properties:
         id:
           type: integer
@@ -610,11 +693,11 @@ components:
           format: date-time
           nullable: true
         body:
-          $ref: '#/components/schemas/BodyResponse'
+          $ref: '#/components/schemas/Body'
         interior:
-          $ref: '#/components/schemas/InteriorResponse'
-        perf:
-          $ref: '#/components/schemas/PerfResponse'
+          $ref: '#/components/schemas/Interior'
+        performance:
+          $ref: '#/components/schemas/Performance'
         power_train:
           type: string
           nullable: true
@@ -622,13 +705,13 @@ components:
           type: string
           nullable: true
         engine:
-          $ref: '#/components/schemas/EngineResponse'
+          $ref: '#/components/schemas/Engine'
         motor_x:
-          $ref: '#/components/schemas/MotorResponse'
+          $ref: '#/components/schemas/Motor'
         motor_y:
-          $ref: '#/components/schemas/MotorResponse'
+          $ref: '#/components/schemas/Motor'
         battery:
-          $ref: '#/components/schemas/BatteryResponse'
+          $ref: '#/components/schemas/Battery'
         steering:
           type: string
           nullable: true
@@ -645,49 +728,18 @@ components:
           type: string
           nullable: true
         tire_front:
-          $ref: '#/components/schemas/TireResponse'
+          $ref: '#/components/schemas/Tire'
         tire_rear:
-          $ref: '#/components/schemas/TireResponse'
+          $ref: '#/components/schemas/Tire'
         transmission:
-          $ref: '#/components/schemas/TransmissionResponse'
+          $ref: '#/components/schemas/Transmission'
         fuel_efficiency:
           type: string
           nullable: true
-      required:
-        - id
-        - is_del
-        - created_at
-        - updated_at
-        - maker_name
-        - model_name
-        - grade_name
-        - model_code
-        - price
-        - url
-        - image_url
-        - model_change_full
-        - model_change_last
-        - body
-        - interior
-        - perf
-        - power_train
-        - drive_system
-        - engine
-        - motor_x
-        - motor_y
-        - battery
-        - steering
-        - suspension_front
-        - suspension_rear
-        - brake_front
-        - brake_rear
-        - tire_front
-        - tire_rear
-        - transmission
-        - fuel_efficiency
-    BodyResponse:
-      title: Body
+    Body:
       type: object
+      title: Body
+      additionalProperties: false
       properties:
         length:
           type: integer
@@ -713,18 +765,10 @@ components:
         body_weight:
           type: integer
           nullable: true
-      required:
-        - length
-        - width
-        - height
-        - wheel_base
-        - tread_front
-        - tread_rear
-        - min_road_clearance
-        - body_weight
-    InteriorResponse:
-      title: InteriorResponse
+    Interior:
       type: object
+      title: Interior
+      additionalProperties: false
       properties:
         length:
           type: integer
@@ -741,15 +785,10 @@ components:
         riding_cap:
           type: integer
           nullable: true
-      required:
-        - length
-        - width
-        - height
-        - luggage_cap
-        - riding_cap
-    PerfResponse:
-      title: PerfResponse
+    Performance:
       type: object
+      title: Performance
+      additionalProperties: false
       properties:
         min_turning_radius:
           type: number
@@ -796,25 +835,10 @@ components:
         mpc_jc08:
           type: number
           nullable: true
-      required:
-        - min_turning_radius
-        - fcr_wltc
-        - fcr_wltc_l
-        - fcr_wltc_m
-        - fcr_wltc_h
-        - fcr_wltc_exh
-        - fcr_jc08
-        - mpc_wltc
-        - ecr_wltc
-        - ecr_wltc_l
-        - ecr_wltc_m
-        - ecr_wltc_h
-        - ecr_wltc_exh
-        - ecr_jc08
-        - mpc_jc08
-    EngineResponse:
-      title: EngineResponse
+    Engine:
       type: object
+      title: Engine
+      additionalProperties: false
       properties:
         code:
           type: string
@@ -870,28 +894,10 @@ components:
         fuel_tank_cap:
           type: integer
           nullable: true
-      required:
-        - code
-        - type
-        - cylinders
-        - cylinder_layout
-        - valve_system
-        - displacement
-        - bore
-        - stroke
-        - comp_ratio
-        - max_output
-        - max_output_lower_rpm
-        - max_output_higher_rpm
-        - max_torque
-        - max_torque_lower_rpm
-        - max_torque_higher_rpm
-        - fuel_system
-        - fuel_type
-        - fuel_tank_cap
-    MotorResponse:
-      title: MotorResponse
+    Motor:
       type: object
+      title: Motor
+      additionalProperties: false
       properties:
         code:
           type: string
@@ -923,20 +929,10 @@ components:
         max_torque_higher_rpm:
           type: number
           nullable: true
-      required:
-        - code
-        - type
-        - purpose
-        - rated_output
-        - max_output
-        - max_output_lower_rpm
-        - max_output_higher_rpm
-        - max_torque
-        - max_torque_lower_rpm
-        - max_torque_higher_rpm
-    BatteryResponse:
-      title: BatteryResponse
+    Battery:
       type: object
+      title: Battery
+      additionalProperties: false
       properties:
         type:
           type: string
@@ -950,14 +946,10 @@ components:
         capacity:
           type: number
           nullable: true
-      required:
-        - type
-        - quantity
-        - voltage
-        - capacity
-    TireResponse:
-      title: TireResponse
+    Tire:
       type: object
+      title: Tire
+      additionalProperties: false
       properties:
         section_width:
           type: integer
@@ -968,13 +960,10 @@ components:
         wheel_diameter:
           type: integer
           nullable: true
-      required:
-        - section_width
-        - aspect_ratio
-        - wheel_diameter
-    TransmissionResponse:
-      title: TransmissionResponse
+    Transmission:
       type: object
+      title: Transmission
+      additionalProperties: false
       properties:
         type:
           type: string
@@ -1021,22 +1010,6 @@ components:
         reduction_ratio_rear:
           type: number
           nullable: true
-      required:
-        - type
-        - gears
-        - ratio_1
-        - ratio_2
-        - ratio_3
-        - ratio_4
-        - ratio_5
-        - ratio_6
-        - ratio_7
-        - ratio_8
-        - ratio_9
-        - ratio_10
-        - ratio_rear
-        - reduction_ratio_front
-        - reduction_ratio_rear
     UserResponse:
       type: object
       additionalProperties: false
@@ -1086,9 +1059,9 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/UserResponse'
-    IdResponse:
+    Id:
       type: object
-      title: IdResponse
+      title: Id
       additionalProperties: false
       properties:
         id:
@@ -1199,6 +1172,7 @@ components:
           type: string
           format: password
           example: password
+      x-examples: {}
   responses: {}
   securitySchemes: {}
   requestBodies: {}
