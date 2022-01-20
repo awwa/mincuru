@@ -864,7 +864,7 @@ components:
         stroke:
           type: number
           nullable: true
-        comp_ratio:
+        compression_ratio:
           type: number
           nullable: true
         max_output:

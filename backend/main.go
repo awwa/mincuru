@@ -63,6 +63,8 @@ func Router() (router *gin.Engine) {
 
 		auth.POST("/cars/search", SearchCars)
 		auth.GET("/cars/:id", GetCar)
+		auth.PATCH("/cars/:id", PatchCar)
+		auth.DELETE("/cars/:id", DeleteCar)
 	}
 	return
 }

@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -185,7 +186,7 @@ type Engine struct {
 	Displacement       null.Float  `json:"displacement"`          // 総排気量(L)
 	Bore               null.Float  `json:"bore"`                  // ボア(mm)
 	Stroke             null.Float  `json:"stroke"`                // ストローク(mm)
-	CompRatio          null.Float  `json:"comp_ratio"`            // 圧縮比
+	CompressionRatio   null.Float  `json:"compression_ratio"`     // 圧縮比
 	MaxOutput          null.Float  `json:"max_output"`            // 最高出力(kW)
 	MaxOutputLowerRpm  null.Float  `json:"max_output_lower_rpm"`  // 最高出力回転数(低)(rpm)
 	MaxOutputHigherRpm null.Float  `json:"max_output_higher_rpm"` // 最高出力回転数(高)(rpm)
@@ -263,7 +264,7 @@ func SearchCars(c *gin.Context) {
 	c.BindJSON(&query)
 	fmt.Println(query)
 	var cars []Car
-	d := DB.Debug().Table("cars").Where(
+	d := DB.Table("cars").Where(
 		&Car{
 			MakerName: query.MakerName,
 			ModelName: query.ModelName,
@@ -312,4 +313,96 @@ func GetCar(c *gin.Context) {
 		return
 	}
 	c.IndentedJSON(http.StatusOK, car)
+}
+
+func PatchCar(c *gin.Context) {
+	// HTTPリクエストのペイロードを取得
+	var httpPayload Car
+	c.BindJSON(&httpPayload)
+	// 更新対象のIDを取得
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.IndentedJSON(
+			http.StatusBadRequest,
+			&ErrorResp{Message: err.Error()},
+		)
+		c.Abort()
+		return
+	}
+	httpPayload.Id = (uint)(id)
+	// DBのレコードを更新
+	result := DB.Model(&httpPayload).Updates(httpPayload)
+	if err := result.Error; err != nil {
+		c.IndentedJSON(
+			http.StatusBadRequest,
+			&ErrorResp{Message: err.Error()},
+		)
+		c.Abort()
+		return
+	}
+	// 更新されたレコード数が0はエラー
+	if result.RowsAffected == 0 {
+		c.IndentedJSON(
+			http.StatusNotFound,
+			&ErrorResp{Message: "no record for update"},
+		)
+		c.Abort()
+		return
+	}
+	// 成功
+	idResponse := IdResp{Id: httpPayload.Id}
+	c.IndentedJSON(http.StatusOK, &idResponse)
+}
+
+func DeleteCar(c *gin.Context) {
+	// 削除対象のIDを取得
+	var car Car
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.IndentedJSON(
+			http.StatusBadRequest,
+			&ErrorResp{Message: err.Error()},
+		)
+		c.Abort()
+		return
+	}
+	car.Id = (uint)(id)
+	// DBのレコードを削除
+	result := DB.Delete(&car)
+	if err := result.Error; err != nil {
+		c.IndentedJSON(
+			http.StatusBadRequest,
+			&ErrorResp{Message: err.Error()},
+		)
+		c.Abort()
+		return
+	}
+	// 削除されたレコード数が0はエラー
+	if result.RowsAffected == 0 {
+		c.IndentedJSON(
+			http.StatusNotFound,
+			&ErrorResp{Message: "no record for delete"},
+		)
+		c.Abort()
+		return
+	}
+	// 成功
+	c.IndentedJSON(http.StatusNoContent, nil)
+}
+
+func PostCar(c *gin.Context) {
+	// HTTPリクエストのペイロードを取得
+	var httpPayload Car
+	c.BindJSON(&httpPayload)
+	// DBにレコード追加
+	if err := DB.Create(&httpPayload).Error; err != nil {
+		c.IndentedJSON(
+			http.StatusBadRequest,
+			&ErrorResp{Message: err.Error()},
+		)
+		c.Abort()
+		return
+	}
+	idResponse := IdResp{Id: httpPayload.Id}
+	c.IndentedJSON(http.StatusCreated, &idResponse)
 }
