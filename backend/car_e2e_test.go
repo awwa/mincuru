@@ -1079,7 +1079,296 @@ func TestDeleteCarNoLogin(t *testing.T) {
 	assert.Equal(t, 401, recorder.Result().StatusCode)
 }
 
-// TODO
-// func TestPostCar(t *testing.T) {
-// 	assert.Equal(t, false, true)
-// }
+func TestPostCarSuccessUser(t *testing.T) {
+	DB.Exec("TRUNCATE TABLE cars")
+	seedTestUser()         // テストデータの準備
+	token := login("user") // 認証実行
+	// HTTPリクエストの生成
+	body := `{
+		"maker_name": "マツダ",
+		"model_name": "CX-5",
+		"grade_name": "25S Proactive",
+		"model_code": "6BA-KF5P",
+		"price": 3140500,
+		"url": "https://www.mazda.co.jp/cars/cx-5/",
+		"image_url": "https://upload.wikimedia.org/wikipedia/commons/8/85/2017_Mazda_CX-5_%28KF%29_Maxx_2WD_wagon_%282018-11-02%29_01.jpg",
+		"model_change_full": "2017-02-01T00:00:00+09:00",
+		"model_change_last": "2018-01-01T00:00:00+09:00",
+		"body": {
+			"length": 4545,
+			"width": 1840,
+			"height": 1690,
+			"wheel_base": 2700,
+			"tread_front": 1595,
+			"tread_rear": 1595,
+			"min_road_clearance": 210,
+			"body_weight": 1620
+		},
+		"interior": {
+			"length": 1890,
+			"width": 1540,
+			"height": 1265,
+			"luggage_cap": null,
+			"riding_cap": 5
+		},
+		"performance": {
+			"min_turning_radius": 5.5,
+			"fcr_wltc": 13,
+			"fcr_wltc_l": 10.2,
+			"fcr_wltc_m": 13.4,
+			"fcr_wltc_h": 14.7,
+			"fcr_wltc_exh": null,
+			"fcr_jc08": 14.2,
+			"mpc_wltc": null,
+			"ecr_wltc": null,
+			"ecr_wltc_l": null,
+			"ecr_wltc_m": null,
+			"ecr_wltc_h": null,
+			"ecr_wltc_exh": null,
+			"ecr_jc08": null,
+			"mpc_jc08": null
+		},
+		"power_train": "ICE",
+		"drive_system": "AWD",
+		"engine": {
+			"code": "PY-RPS",
+			"type": "水冷直列4気筒DOHC16バルブ",
+			"cylinders": 4,
+			"cylinder_layout": "I",
+			"valve_system": "DOHC",
+			"displacement": 2.488,
+			"bore": 89,
+			"stroke": 100,
+			"compression_ratio": 13,
+			"max_output": 138,
+			"max_output_lower_rpm": 6000,
+			"max_output_higher_rpm": 6000,
+			"max_torque": 250,
+			"max_torque_lower_rpm": 4000,
+			"max_torque_higher_rpm": 4000,
+			"fuel_system": "DI",
+			"fuel_type": "無鉛レギュラーガソリン",
+			"fuel_tank_cap": 58
+		},
+		"motor_x": {
+			"code": null,
+			"type": null,
+			"purpose": null,
+			"rated_output": null,
+			"max_output": null,
+			"max_output_lower_rpm": null,
+			"max_output_higher_rpm": null,
+			"max_torque": null,
+			"max_torque_lower_rpm": null,
+			"max_torque_higher_rpm": null
+		},
+		"motor_y": {
+			"code": null,
+			"type": null,
+			"purpose": null,
+			"rated_output": null,
+			"max_output": null,
+			"max_output_lower_rpm": null,
+			"max_output_higher_rpm": null,
+			"max_torque": null,
+			"max_torque_lower_rpm": null,
+			"max_torque_higher_rpm": null
+		},
+		"battery": {
+			"type": null,
+			"quantity": null,
+			"voltage": null,
+			"capacity": null
+		},
+		"steering": "ラック&ピニオン式",
+		"suspension_front": "マクファーソンストラット式",
+		"suspension_rear": "マルチリンク式",
+		"brake_front": "ベンチレーテッドディスク",
+		"brake_rear": "ディスク",
+		"tire_front": {
+			"section_width": 225,
+			"aspect_ratio": 55,
+			"wheel_diameter": 19
+		},
+		"tire_rear": {
+			"section_width": 225,
+			"aspect_ratio": 55,
+			"wheel_diameter": 19
+		},
+		"transmission": {
+			"type": "AT",
+			"gears": 6,
+			"ratio_1": 3.552,
+			"ratio_2": 2.022,
+			"ratio_3": 1.452,
+			"ratio_4": 1,
+			"ratio_5": 0.708,
+			"ratio_6": 0.599,
+			"ratio_7": null,
+			"ratio_8": null,
+			"ratio_9": null,
+			"ratio_10": null,
+			"ratio_rear": 3.893,
+			"reduction_ratio_front": 4.624,
+			"reduction_ratio_rear": 2.928
+		},
+		"fuel_efficiency": "ミラーサイクルエンジン アイドリングストップ機構 筒内直接噴射 可変バルブタイミング 気筒休止 充電制御 ロックアップ機構付トルクコンバーター 電動パワーステアリング"
+	}`
+	httpReq, err := http.NewRequest(http.MethodPost, "http://localhost:8080/cars", strings.NewReader(body))
+	httpReq.Header.Add("Content-Type", "application/json")
+	httpReq.Header.Add("Authorization", fmt.Sprintf("Bearer %s", token))
+	if err != nil {
+		panic(err)
+	}
+	// Test用サーバにリクエストを送信して、レスポンスをOpenAPI仕様に照らし合わせる
+	recorder := ServeAndRequest(httpReq)
+	// テストケース固有のチェック
+	assert.Equal(t, 201, recorder.Result().StatusCode)
+}
+
+func TestPostCarSuccessAdmin(t *testing.T) {
+	DB.Exec("TRUNCATE TABLE cars")
+	seedTestUser()          // テストデータの準備
+	token := login("admin") // 認証実行
+	// HTTPリクエストの生成
+	body := `{
+		"maker_name": "マツダ",
+		"model_name": "CX-5",
+		"grade_name": "25S Proactive",
+		"model_code": "6BA-KF5P",
+		"price": 3140500,
+		"url": "https://www.mazda.co.jp/cars/cx-5/",
+		"image_url": "https://upload.wikimedia.org/wikipedia/commons/8/85/2017_Mazda_CX-5_%28KF%29_Maxx_2WD_wagon_%282018-11-02%29_01.jpg",
+		"model_change_full": "2017-02-01T00:00:00+09:00",
+		"model_change_last": "2018-01-01T00:00:00+09:00",
+		"body": {
+			"length": 4545,
+			"width": 1840,
+			"height": 1690,
+			"wheel_base": 2700,
+			"tread_front": 1595,
+			"tread_rear": 1595,
+			"min_road_clearance": 210,
+			"body_weight": 1620
+		},
+		"interior": {
+			"length": 1890,
+			"width": 1540,
+			"height": 1265,
+			"luggage_cap": null,
+			"riding_cap": 5
+		},
+		"performance": {
+			"min_turning_radius": 5.5,
+			"fcr_wltc": 13,
+			"fcr_wltc_l": 10.2,
+			"fcr_wltc_m": 13.4,
+			"fcr_wltc_h": 14.7,
+			"fcr_wltc_exh": null,
+			"fcr_jc08": 14.2,
+			"mpc_wltc": null,
+			"ecr_wltc": null,
+			"ecr_wltc_l": null,
+			"ecr_wltc_m": null,
+			"ecr_wltc_h": null,
+			"ecr_wltc_exh": null,
+			"ecr_jc08": null,
+			"mpc_jc08": null
+		},
+		"power_train": "ICE",
+		"drive_system": "AWD",
+		"engine": {
+			"code": "PY-RPS",
+			"type": "水冷直列4気筒DOHC16バルブ",
+			"cylinders": 4,
+			"cylinder_layout": "I",
+			"valve_system": "DOHC",
+			"displacement": 2.488,
+			"bore": 89,
+			"stroke": 100,
+			"compression_ratio": 13,
+			"max_output": 138,
+			"max_output_lower_rpm": 6000,
+			"max_output_higher_rpm": 6000,
+			"max_torque": 250,
+			"max_torque_lower_rpm": 4000,
+			"max_torque_higher_rpm": 4000,
+			"fuel_system": "DI",
+			"fuel_type": "無鉛レギュラーガソリン",
+			"fuel_tank_cap": 58
+		},
+		"motor_x": {
+			"code": null,
+			"type": null,
+			"purpose": null,
+			"rated_output": null,
+			"max_output": null,
+			"max_output_lower_rpm": null,
+			"max_output_higher_rpm": null,
+			"max_torque": null,
+			"max_torque_lower_rpm": null,
+			"max_torque_higher_rpm": null
+		},
+		"motor_y": {
+			"code": null,
+			"type": null,
+			"purpose": null,
+			"rated_output": null,
+			"max_output": null,
+			"max_output_lower_rpm": null,
+			"max_output_higher_rpm": null,
+			"max_torque": null,
+			"max_torque_lower_rpm": null,
+			"max_torque_higher_rpm": null
+		},
+		"battery": {
+			"type": null,
+			"quantity": null,
+			"voltage": null,
+			"capacity": null
+		},
+		"steering": "ラック&ピニオン式",
+		"suspension_front": "マクファーソンストラット式",
+		"suspension_rear": "マルチリンク式",
+		"brake_front": "ベンチレーテッドディスク",
+		"brake_rear": "ディスク",
+		"tire_front": {
+			"section_width": 225,
+			"aspect_ratio": 55,
+			"wheel_diameter": 19
+		},
+		"tire_rear": {
+			"section_width": 225,
+			"aspect_ratio": 55,
+			"wheel_diameter": 19
+		},
+		"transmission": {
+			"type": "AT",
+			"gears": 6,
+			"ratio_1": 3.552,
+			"ratio_2": 2.022,
+			"ratio_3": 1.452,
+			"ratio_4": 1,
+			"ratio_5": 0.708,
+			"ratio_6": 0.599,
+			"ratio_7": null,
+			"ratio_8": null,
+			"ratio_9": null,
+			"ratio_10": null,
+			"ratio_rear": 3.893,
+			"reduction_ratio_front": 4.624,
+			"reduction_ratio_rear": 2.928
+		},
+		"fuel_efficiency": "ミラーサイクルエンジン アイドリングストップ機構 筒内直接噴射 可変バルブタイミング 気筒休止 充電制御 ロックアップ機構付トルクコンバーター 電動パワーステアリング"
+	}`
+	httpReq, err := http.NewRequest(http.MethodPost, "http://localhost:8080/cars", strings.NewReader(body))
+	httpReq.Header.Add("Content-Type", "application/json")
+	httpReq.Header.Add("Authorization", fmt.Sprintf("Bearer %s", token))
+	if err != nil {
+		panic(err)
+	}
+	// Test用サーバにリクエストを送信して、レスポンスをOpenAPI仕様に照らし合わせる
+	recorder := ServeAndRequest(httpReq)
+	// テストケース固有のチェック
+	assert.Equal(t, 201, recorder.Result().StatusCode)
+}
