@@ -24,6 +24,7 @@ func seedTestCarCx5() {
 		//ModelChangeFull: null.NewTime(time.Date(2017, time.February, 1, 0, 0, 0, 0, time.Local), false),
 		ModelChangeLast: null.NewTime(time.Date(2018, time.January, 1, 0, 0, 0, 0, time.Local), true),
 		Body: Body{
+			Type:             null.NewString((string)(SUV), true),
 			Length:           null.NewInt(4545, true),
 			Width:            null.NewInt(1840, true),
 			Height:           null.NewInt(1690, true),
@@ -32,6 +33,7 @@ func seedTestCarCx5() {
 			TreadRear:        null.NewInt(1595, true),
 			MinRoadClearance: null.NewInt(210, true),
 			Weight:           null.NewInt(1620, true),
+			Doors:            null.NewInt(4, true),
 		},
 		Interior: Interior{
 			Length: null.NewInt(1890, true),
@@ -130,6 +132,7 @@ func seedTestCarCorollaTouring() {
 		ModelChangeFull: null.NewTime(time.Date(2019, time.September, 17, 0, 0, 0, 0, time.Local), true),
 		ModelChangeLast: null.NewTime(time.Date(2021, time.November, 15, 0, 0, 0, 0, time.Local), true),
 		Body: Body{
+			Type:             null.NewString((string)(STATION_WAGON), true),
 			Length:           null.NewInt(4495, true),
 			Width:            null.NewInt(1745, true),
 			Height:           null.NewInt(1460, true),
@@ -138,6 +141,7 @@ func seedTestCarCorollaTouring() {
 			TreadRear:        null.NewInt(1540, true),
 			MinRoadClearance: null.NewInt(130, true),
 			Weight:           null.NewInt(1410, true),
+			Doors:            null.NewInt(4, true),
 		},
 		Interior: Interior{
 			Length: null.NewInt(1790, true),
@@ -263,6 +267,7 @@ func seedTestCarNsx() {
 		ModelChangeFull: null.NewTime(time.Date(2017, time.February, 27, 0, 0, 0, 0, time.Local), true),
 		ModelChangeLast: null.NewTime(time.Date(2021, time.August, 30, 0, 0, 0, 0, time.Local), true),
 		Body: Body{
+			Type:             null.NewString((string)(COUPE), true),
 			Length:           null.NewInt(4535, true),
 			Width:            null.NewInt(1940, true),
 			Height:           null.NewInt(1215, true),
@@ -271,6 +276,7 @@ func seedTestCarNsx() {
 			TreadRear:        null.NewInt(1635, true),
 			MinRoadClearance: null.NewInt(110, true),
 			Weight:           null.NewInt(1790, true),
+			Doors:            null.NewInt(2, true),
 		},
 		Interior: Interior{
 			// Length: null.NewInt(1790, true),
@@ -396,6 +402,7 @@ func seedTestCarHondaE() {
 		ModelChangeFull: null.NewTime(time.Date(2020, time.August, 27, 0, 0, 0, 0, time.Local), true),
 		ModelChangeLast: null.NewTime(time.Date(2020, time.August, 27, 0, 0, 0, 0, time.Local), true),
 		Body: Body{
+			Type:             null.NewString((string)(HATCHBACK), true),
 			Length:           null.NewInt(3895, true),
 			Width:            null.NewInt(1750, true),
 			Height:           null.NewInt(1510, true),
@@ -404,6 +411,7 @@ func seedTestCarHondaE() {
 			TreadRear:        null.NewInt(1505, true),
 			MinRoadClearance: null.NewInt(145, true),
 			Weight:           null.NewInt(1540, true),
+			Doors:            null.NewInt(4, true),
 		},
 		Interior: Interior{
 			Length: null.NewInt(1845, true),
@@ -530,6 +538,7 @@ func seedTestCarNote() {
 		ModelChangeFull: null.NewTime(time.Date(2020, time.November, 24, 0, 0, 0, 0, time.Local), true),
 		ModelChangeLast: null.NewTime(time.Date(2021, time.November, 4, 0, 0, 0, 0, time.Local), true),
 		Body: Body{
+			Type:             null.NewString((string)(HATCHBACK), true),
 			Length:           null.NewInt(4045, true),
 			Width:            null.NewInt(1695, true),
 			Height:           null.NewInt(1520, true),
@@ -538,6 +547,7 @@ func seedTestCarNote() {
 			TreadRear:        null.NewInt(1490, true),
 			MinRoadClearance: null.NewInt(125, true),
 			Weight:           null.NewInt(1340, true),
+			Doors:            null.NewInt(4, true),
 		},
 		Interior: Interior{
 			Length: null.NewInt(2030, true),
@@ -663,6 +673,7 @@ func seedTestCarThree() {
 		ModelChangeFull: null.NewTime(time.Date(2019, time.September, 26, 0, 0, 0, 0, time.Local), true),
 		ModelChangeLast: null.NewTime(time.Date(2019, time.September, 26, 0, 0, 0, 0, time.Local), true),
 		Body: Body{
+			Type:             null.NewString((string)(STATION_WAGON), true),
 			Length:           null.NewInt(4715, true),
 			Width:            null.NewInt(1825, true),
 			Height:           null.NewInt(1475, true),
@@ -671,6 +682,7 @@ func seedTestCarThree() {
 			TreadRear:        null.NewInt(1590, true),
 			MinRoadClearance: null.NewInt(135, true),
 			Weight:           null.NewInt(1730, true),
+			Doors:            null.NewInt(4, true),
 		},
 		Interior: Interior{
 			// Length: null.NewInt(1890, true),
@@ -812,6 +824,7 @@ func TestPatchCarSuccessAllColumnUser(t *testing.T) {
 		"model_change_full": "2017-02-01T00:00:00+09:00",
 		"model_change_last": "2018-01-01T00:00:00+09:00",
 		"body": {
+			"type": "SUV",
 			"length": 4545,
 			"width": 1840,
 			"height": 1690,
@@ -819,7 +832,8 @@ func TestPatchCarSuccessAllColumnUser(t *testing.T) {
 			"tread_front": 1595,
 			"tread_rear": 1595,
 			"min_road_clearance": 210,
-			"body_weight": 1620
+			"body_weight": 1620,
+			"doors": 4
 		},
 		"interior": {
 			"length": 1890,
@@ -1095,6 +1109,7 @@ func TestPostCarSuccessUser(t *testing.T) {
 		"model_change_full": "2017-02-01T00:00:00+09:00",
 		"model_change_last": "2018-01-01T00:00:00+09:00",
 		"body": {
+			"type": "SUV",
 			"length": 4545,
 			"width": 1840,
 			"height": 1690,
@@ -1102,7 +1117,8 @@ func TestPostCarSuccessUser(t *testing.T) {
 			"tread_front": 1595,
 			"tread_rear": 1595,
 			"min_road_clearance": 210,
-			"body_weight": 1620
+			"body_weight": 1620,
+			"doors": 4
 		},
 		"interior": {
 			"length": 1890,
@@ -1242,6 +1258,7 @@ func TestPostCarSuccessAdmin(t *testing.T) {
 		"model_change_full": "2017-02-01T00:00:00+09:00",
 		"model_change_last": "2018-01-01T00:00:00+09:00",
 		"body": {
+			"type": "SUV",
 			"length": 4545,
 			"width": 1840,
 			"height": 1690,
@@ -1249,7 +1266,8 @@ func TestPostCarSuccessAdmin(t *testing.T) {
 			"tread_front": 1595,
 			"tread_rear": 1595,
 			"min_road_clearance": 210,
-			"body_weight": 1620
+			"body_weight": 1620,
+			"doors": 4
 		},
 		"interior": {
 			"length": 1890,

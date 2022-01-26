@@ -71,34 +71,28 @@ const (
 	GENERATOR      = MotorPurpose("発電用")
 )
 
-// type jsonTime struct {
-// 	null.Time
-// }
+type BodyType string
 
-// func (j jsonTime) format() string {
-// 	fmt.Println("***")
-// 	fmt.Println(j)
-// 	fmt.Println(j.Time.Time.Format("2006-01-02"))
-// 	fmt.Println("***")
-// 	if j.Valid {
-// 		return j.NullTime.Time.Format("2006-01-02")
-// 	} else {
-// 		return "null"
-// 	}
-// 	// return null.NewString(j.NullTime.Time.Format("2006-01-02"), j.Valid)
-// 	// if !j.NullTime.Valid {
-// 	// 	return nil
-// 	// }
-// 	// return j.Time.Time.Format("2006-01-02")
-// }
-
-// func (j jsonTime) MarshalJSON() ([]byte, error) {
-// 	if j.format() == "null" {
-// 		return []byte(j.format()), nil
-// 	} else {
-// 		return []byte(`"` + j.format() + `"`), nil
-// 	}
-// }
+// https://221616.com/guide/type/
+const (
+	SEDAN          = BodyType("セダン")
+	HATCHBACK      = BodyType("ハッチバック")
+	CROSS_COUNTRY  = BodyType("クロスカントリー")
+	MINI_VAN       = BodyType("ミニバン")
+	ONEBOX_WAGON   = BodyType("ワンボックスワゴン")
+	K              = BodyType("軽自動車")
+	COUPE          = BodyType("クーペ")
+	STATION_WAGON  = BodyType("ステーションワゴン")
+	SUV            = BodyType("SUV")
+	ONEBOX_VAN     = BodyType("ワンボックスバン")
+	K_OPEN         = BodyType("軽オープン")
+	K_ONEBOX_WAGON = BodyType("軽ワンボックスワゴン")
+	OPEN           = BodyType("オープン")
+	VAN            = BodyType("バン")
+	K_VAN          = BodyType("軽バン")
+	K_ONEBOX_VAN   = BodyType("軽ワンボックスバン")
+	PICKUP_TRUCK   = BodyType("ピックアップトラック")
+)
 
 // クルマ
 type Car struct {
@@ -138,14 +132,16 @@ type Car struct {
 
 // 車体
 type Body struct {
-	Length           null.Int `json:"length"`             // 全長(mm)
-	Width            null.Int `json:"width"`              // 全幅(mm)
-	Height           null.Int `json:"height"`             // 全高(mm)
-	WheelBase        null.Int `json:"wheel_base"`         // ホイールベース(mm)
-	TreadFront       null.Int `json:"tread_front"`        // トレッド前(mm)
-	TreadRear        null.Int `json:"tread_rear"`         // トレッド後(mm)
-	MinRoadClearance null.Int `json:"min_road_clearance"` // 最低地上高(mm)
-	Weight           null.Int `json:"body_weight"`        // 車両重量(kg)
+	Type             null.String `json:"type"`               // ボディタイプ
+	Length           null.Int    `json:"length"`             // 全長(mm)
+	Width            null.Int    `json:"width"`              // 全幅(mm)
+	Height           null.Int    `json:"height"`             // 全高(mm)
+	WheelBase        null.Int    `json:"wheel_base"`         // ホイールベース(mm)
+	TreadFront       null.Int    `json:"tread_front"`        // トレッド前(mm)
+	TreadRear        null.Int    `json:"tread_rear"`         // トレッド後(mm)
+	MinRoadClearance null.Int    `json:"min_road_clearance"` // 最低地上高(mm)
+	Weight           null.Int    `json:"body_weight"`        // 車両重量(kg)
+	Doors            null.Int    `json:"doors"`              // ドア数
 }
 
 // 車内

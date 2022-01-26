@@ -741,6 +741,9 @@ components:
       title: Body
       additionalProperties: false
       properties:
+        type:
+          type: string
+          nullable: true
         length:
           type: integer
           nullable: true
@@ -763,6 +766,9 @@ components:
           type: integer
           nullable: true
         body_weight:
+          type: integer
+          nullable: true
+        doors:
           type: integer
           nullable: true
     Interior:
