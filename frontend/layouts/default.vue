@@ -77,7 +77,7 @@
     <!-- メインコンテンツ -->
     <v-main>
       <Breadcrumbs :path="this.$route.path" />
-      <v-container>
+      <v-container fluid>
         <Nuxt />
       </v-container>
     </v-main>
@@ -125,6 +125,13 @@ export default {
           }
         )
       }
+      items.push(
+        {
+          icon: "mdi-car",
+          title: "クルマ",
+          to: "/cars"
+        }
+      )
       return items
     }
   },

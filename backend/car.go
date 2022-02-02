@@ -74,6 +74,7 @@ const (
 type BodyType string
 
 // https://221616.com/guide/type/
+// https://support.yahoo-net.jp/PccCarview/s/article/H000008184
 const (
 	SEDAN          = BodyType("セダン")
 	HATCHBACK      = BodyType("ハッチバック")

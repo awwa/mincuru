@@ -20,7 +20,7 @@ func seedTestCarCx5() {
 		Price:           null.NewInt(3140500, true),
 		Url:             null.NewString("https://www.mazda.co.jp/cars/cx-5/", true),
 		ImageUrl:        null.NewString("https://upload.wikimedia.org/wikipedia/commons/8/85/2017_Mazda_CX-5_%28KF%29_Maxx_2WD_wagon_%282018-11-02%29_01.jpg", true),
-		ModelChangeFull: null.NewTime(time.Date(2017, time.February, 1, 0, 0, 0, 0, time.Local), true),
+		ModelChangeFull: null.NewTime(time.Date(2016, time.December, 15, 0, 0, 0, 0, time.Local), true),
 		//ModelChangeFull: null.NewTime(time.Date(2017, time.February, 1, 0, 0, 0, 0, time.Local), false),
 		ModelChangeLast: null.NewTime(time.Date(2018, time.January, 1, 0, 0, 0, 0, time.Local), true),
 		Body: Body{
@@ -821,7 +821,7 @@ func TestPatchCarSuccessAllColumnUser(t *testing.T) {
 		"price": 3140500,
 		"url": "https://www.mazda.co.jp/cars/cx-5/",
 		"image_url": "https://upload.wikimedia.org/wikipedia/commons/8/85/2017_Mazda_CX-5_%28KF%29_Maxx_2WD_wagon_%282018-11-02%29_01.jpg",
-		"model_change_full": "2017-02-01T00:00:00+09:00",
+		"model_change_full": "2016-12-01T00:00:00+09:00",
 		"model_change_last": "2018-01-01T00:00:00+09:00",
 		"body": {
 			"type": "SUV",
@@ -1106,7 +1106,7 @@ func TestPostCarSuccessUser(t *testing.T) {
 		"price": 3140500,
 		"url": "https://www.mazda.co.jp/cars/cx-5/",
 		"image_url": "https://upload.wikimedia.org/wikipedia/commons/8/85/2017_Mazda_CX-5_%28KF%29_Maxx_2WD_wagon_%282018-11-02%29_01.jpg",
-		"model_change_full": "2017-02-01T00:00:00+09:00",
+		"model_change_full": "2016-12-01T00:00:00+09:00",
 		"model_change_last": "2018-01-01T00:00:00+09:00",
 		"body": {
 			"type": "SUV",
@@ -1255,7 +1255,7 @@ func TestPostCarSuccessAdmin(t *testing.T) {
 		"price": 3140500,
 		"url": "https://www.mazda.co.jp/cars/cx-5/",
 		"image_url": "https://upload.wikimedia.org/wikipedia/commons/8/85/2017_Mazda_CX-5_%28KF%29_Maxx_2WD_wagon_%282018-11-02%29_01.jpg",
-		"model_change_full": "2017-02-01T00:00:00+09:00",
+		"model_change_full": "2016-12-01T00:00:00+09:00",
 		"model_change_last": "2018-01-01T00:00:00+09:00",
 		"body": {
 			"type": "SUV",

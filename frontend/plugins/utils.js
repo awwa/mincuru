@@ -19,8 +19,38 @@ const roleLabel = function(role) {
     return roles.find(e => e.value == role).label;
 }
 
-export default ({}, inject) => {
+//
+// Dateオブジェクトを年月日フォーマット
+//
+const formatDate = function(text) {
+    const d = new Date(text)
+    return `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`
+}
+
+// Dateオブジェクトを年月フォーマット
+const formatMonth = function(text) {
+    const d = new Date(text)
+    return `${d.getFullYear()}年${d.getMonth()+1}月`
+}
+
+// 数値を通貨フォーマット
+const formatCurrencyJP = function(value) {
+    return new Intl.NumberFormat('ja-JP', { style: 'currency', currency: 'JPY' }).format(value)
+}
+
+
+// // テスト向けのexport
+// export const plugin = {
+//     install(Vue) {
+//         Vue.prototype.$formatDate = formatDate
+//     }
+// };
+
+export default ({app}, inject) => {
     inject('isAdmin', isAdmin)
     inject("roles", roles)
     inject("roleLabel", roleLabel)
+    inject("formatDate", formatDate)
+    inject("formatMonth", formatMonth)
+    inject("formatCurrencyJP", formatCurrencyJP)
 }

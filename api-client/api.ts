@@ -24,6 +24,297 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 /**
  * 
  * @export
+ * @interface Battery
+ */
+export interface Battery {
+    /**
+     * 
+     * @type {string}
+     * @memberof Battery
+     */
+    'type'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Battery
+     */
+    'quantity'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Battery
+     */
+    'voltage'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Battery
+     */
+    'capacity'?: number | null;
+}
+/**
+ * 
+ * @export
+ * @interface Body
+ */
+export interface Body {
+    /**
+     * 
+     * @type {string}
+     * @memberof Body
+     */
+    'type'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Body
+     */
+    'length'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Body
+     */
+    'width'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Body
+     */
+    'height'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Body
+     */
+    'wheel_base'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Body
+     */
+    'tread_front'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Body
+     */
+    'tread_rear'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Body
+     */
+    'min_road_clearance'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Body
+     */
+    'body_weight'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Body
+     */
+    'doors'?: number | null;
+}
+/**
+ * 
+ * @export
+ * @interface Car
+ */
+export interface Car {
+    /**
+     * 
+     * @type {number}
+     * @memberof Car
+     */
+    'id'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Car
+     */
+    'is_del'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof Car
+     */
+    'created_at'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Car
+     */
+    'updated_at'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Car
+     */
+    'maker_name'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Car
+     */
+    'model_name'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Car
+     */
+    'grade_name'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Car
+     */
+    'model_code'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Car
+     */
+    'price'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Car
+     */
+    'url'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Car
+     */
+    'image_url'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Car
+     */
+    'model_change_full'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Car
+     */
+    'model_change_last'?: string | null;
+    /**
+     * 
+     * @type {Body}
+     * @memberof Car
+     */
+    'body'?: Body;
+    /**
+     * 
+     * @type {Interior}
+     * @memberof Car
+     */
+    'interior'?: Interior;
+    /**
+     * 
+     * @type {Performance}
+     * @memberof Car
+     */
+    'performance'?: Performance;
+    /**
+     * 
+     * @type {string}
+     * @memberof Car
+     */
+    'power_train'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Car
+     */
+    'drive_system'?: string | null;
+    /**
+     * 
+     * @type {Engine}
+     * @memberof Car
+     */
+    'engine'?: Engine;
+    /**
+     * 
+     * @type {Motor}
+     * @memberof Car
+     */
+    'motor_x'?: Motor;
+    /**
+     * 
+     * @type {Motor}
+     * @memberof Car
+     */
+    'motor_y'?: Motor;
+    /**
+     * 
+     * @type {Battery}
+     * @memberof Car
+     */
+    'battery'?: Battery;
+    /**
+     * 
+     * @type {string}
+     * @memberof Car
+     */
+    'steering'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Car
+     */
+    'suspension_front'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Car
+     */
+    'suspension_rear'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Car
+     */
+    'brake_front'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Car
+     */
+    'brake_rear'?: string | null;
+    /**
+     * 
+     * @type {Tire}
+     * @memberof Car
+     */
+    'tire_front'?: Tire;
+    /**
+     * 
+     * @type {Tire}
+     * @memberof Car
+     */
+    'tire_rear'?: Tire;
+    /**
+     * 
+     * @type {Transmission}
+     * @memberof Car
+     */
+    'transmission'?: Transmission;
+    /**
+     * 
+     * @type {string}
+     * @memberof Car
+     */
+    'fuel_efficiency'?: string | null;
+}
+/**
+ * 
+ * @export
  * @interface CodeResponse
  */
 export interface CodeResponse {
@@ -33,6 +324,121 @@ export interface CodeResponse {
      * @memberof CodeResponse
      */
     'code': number;
+}
+/**
+ * 
+ * @export
+ * @interface Engine
+ */
+export interface Engine {
+    /**
+     * 
+     * @type {string}
+     * @memberof Engine
+     */
+    'code'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Engine
+     */
+    'type'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Engine
+     */
+    'cylinders'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Engine
+     */
+    'cylinder_layout'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Engine
+     */
+    'valve_system'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Engine
+     */
+    'displacement'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Engine
+     */
+    'bore'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Engine
+     */
+    'stroke'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Engine
+     */
+    'compression_ratio'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Engine
+     */
+    'max_output'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Engine
+     */
+    'max_output_lower_rpm'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Engine
+     */
+    'max_output_higher_rpm'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Engine
+     */
+    'max_torque'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Engine
+     */
+    'max_torque_lower_rpm'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Engine
+     */
+    'max_torque_higher_rpm'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Engine
+     */
+    'fuel_system'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Engine
+     */
+    'fuel_type'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Engine
+     */
+    'fuel_tank_cap'?: number | null;
 }
 /**
  * 
@@ -50,15 +456,196 @@ export interface ErrorResponse {
 /**
  * 
  * @export
- * @interface IdResponse
+ * @interface Id
  */
-export interface IdResponse {
+export interface Id {
     /**
      * 
      * @type {number}
-     * @memberof IdResponse
+     * @memberof Id
      */
     'id': number;
+}
+/**
+ * 
+ * @export
+ * @interface InlineObject
+ */
+export interface InlineObject {
+    /**
+     * 
+     * @type {string}
+     * @memberof InlineObject
+     */
+    'maker_name'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof InlineObject
+     */
+    'model_name'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof InlineObject
+     */
+    'grade_name'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof InlineObject
+     */
+    'model_code'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof InlineObject
+     */
+    'price_lower'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof InlineObject
+     */
+    'price_higher'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof InlineObject
+     */
+    'model_change_from'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof InlineObject
+     */
+    'model_change_to'?: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof InlineObject
+     */
+    'power_train'?: Array<InlineObjectPowerTrainEnum>;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum InlineObjectPowerTrainEnum {
+    Ice = 'ICE',
+    StrHv = 'StrHV',
+    MldHv = 'MldHV',
+    SerHv = 'SerHV',
+    Phev = 'PHEV',
+    Bev = 'BEV',
+    RexEv = 'RexEV',
+    Fcev = 'FCEV'
+}
+
+/**
+ * 
+ * @export
+ * @interface InlineResponse200
+ */
+export interface InlineResponse200 {
+    /**
+     * 
+     * @type {number}
+     * @memberof InlineResponse200
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof InlineResponse200
+     */
+    'maker_name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof InlineResponse200
+     */
+    'grade_name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof InlineResponse200
+     */
+    'model_name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof InlineResponse200
+     */
+    'model_code': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof InlineResponse200
+     */
+    'price'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof InlineResponse200
+     */
+    'url'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof InlineResponse200
+     */
+    'image_url'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof InlineResponse200
+     */
+    'model_change_full'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof InlineResponse200
+     */
+    'model_change_last'?: string | null;
+}
+/**
+ * 
+ * @export
+ * @interface Interior
+ */
+export interface Interior {
+    /**
+     * 
+     * @type {number}
+     * @memberof Interior
+     */
+    'length'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Interior
+     */
+    'width'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Interior
+     */
+    'height'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Interior
+     */
+    'luggage_cap'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Interior
+     */
+    'riding_cap'?: number | null;
 }
 /**
  * 
@@ -78,6 +665,73 @@ export interface LoginRequest {
      * @memberof LoginRequest
      */
     'password': string;
+}
+/**
+ * 
+ * @export
+ * @interface Motor
+ */
+export interface Motor {
+    /**
+     * 
+     * @type {string}
+     * @memberof Motor
+     */
+    'code'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Motor
+     */
+    'type'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Motor
+     */
+    'purpose'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Motor
+     */
+    'rated_output'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Motor
+     */
+    'max_output'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Motor
+     */
+    'max_output_lower_rpm'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Motor
+     */
+    'max_output_higher_rpm'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Motor
+     */
+    'max_torque'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Motor
+     */
+    'max_torque_lower_rpm'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Motor
+     */
+    'max_torque_higher_rpm'?: number | null;
 }
 /**
  * 
@@ -148,6 +802,103 @@ export enum PatchUserRequestRoleEnum {
 /**
  * 
  * @export
+ * @interface Performance
+ */
+export interface Performance {
+    /**
+     * 
+     * @type {number}
+     * @memberof Performance
+     */
+    'min_turning_radius'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Performance
+     */
+    'fcr_wltc'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Performance
+     */
+    'fcr_wltc_l'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Performance
+     */
+    'fcr_wltc_m'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Performance
+     */
+    'fcr_wltc_h'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Performance
+     */
+    'fcr_wltc_exh'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Performance
+     */
+    'fcr_jc08'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Performance
+     */
+    'mpc_wltc'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Performance
+     */
+    'ecr_wltc'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Performance
+     */
+    'ecr_wltc_l'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Performance
+     */
+    'ecr_wltc_m'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Performance
+     */
+    'ecr_wltc_h'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Performance
+     */
+    'ecr_wltc_exh'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Performance
+     */
+    'ecr_jc08'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Performance
+     */
+    'mpc_jc08'?: number | null;
+}
+/**
+ * 
+ * @export
  * @interface PostUserRequest
  */
 export interface PostUserRequest {
@@ -189,6 +940,31 @@ export enum PostUserRequestRoleEnum {
 /**
  * 
  * @export
+ * @interface Tire
+ */
+export interface Tire {
+    /**
+     * 
+     * @type {number}
+     * @memberof Tire
+     */
+    'section_width'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Tire
+     */
+    'aspect_ratio'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Tire
+     */
+    'wheel_diameter'?: number | null;
+}
+/**
+ * 
+ * @export
  * @interface TokenResponse
  */
 export interface TokenResponse {
@@ -210,6 +986,103 @@ export interface TokenResponse {
      * @memberof TokenResponse
      */
     'token': string;
+}
+/**
+ * 
+ * @export
+ * @interface Transmission
+ */
+export interface Transmission {
+    /**
+     * 
+     * @type {string}
+     * @memberof Transmission
+     */
+    'type'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Transmission
+     */
+    'gears'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Transmission
+     */
+    'ratio_1'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Transmission
+     */
+    'ratio_2'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Transmission
+     */
+    'ratio_3'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Transmission
+     */
+    'ratio_4'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Transmission
+     */
+    'ratio_5'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Transmission
+     */
+    'ratio_6'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Transmission
+     */
+    'ratio_7'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Transmission
+     */
+    'ratio_8'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Transmission
+     */
+    'ratio_9'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Transmission
+     */
+    'ratio_10'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Transmission
+     */
+    'ratio_rear'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Transmission
+     */
+    'reduction_ratio_front'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Transmission
+     */
+    'reduction_ratio_rear'?: number | null;
 }
 /**
  * 
@@ -278,7 +1151,40 @@ export enum UserResponseRoleEnum {
 export const DefaultApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * ユーザの削除
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteCarsId: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('deleteCarsId', 'id', id)
+            const localVarPath = `/cars/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {number} id 対象AdminのID
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -311,7 +1217,41 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 指定したIDの\'UserResponse\'取得
+         * 
+         * @summary Your GET endpoint
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCarsId: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('getCarsId', 'id', id)
+            const localVarPath = `/cars/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {number} id 対象AdminのID
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -344,7 +1284,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 自アカウントのユーザー情報取得
+         * 
          * @summary Your GET endpoint
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -374,7 +1314,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 条件にマッチしたユーザの一覧取得
+         * 
          * @param {string} [email] メールアドレス
          * @param {string} [name] 名前
          * @param {'user' | 'admin'} [role] ロール
@@ -418,7 +1358,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * トークン更新
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -447,7 +1387,44 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * ユーザの更新
+         * 
+         * @param {string} id 
+         * @param {Car} [car] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        patchCarsId: async (id: string, car?: Car, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('patchCarsId', 'id', id)
+            const localVarPath = `/cars/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(car, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {number} id 対象AdminのID
          * @param {PatchUserRequest} [patchUserRequest] 更新するAdmin情報
          * @param {*} [options] Override http request option.
@@ -484,7 +1461,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 自アカウントのユーザ情報更新
+         * 
          * @param {PatchUserMeRequest} [patchUserMeRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -517,7 +1494,73 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * ユーザの追加
+         * 
+         * @param {Car} [car] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postCars: async (car?: Car, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/cars`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(car, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {InlineObject} [inlineObject] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postCarsSearch: async (inlineObject?: InlineObject, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/cars/search`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(inlineObject, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {PostUserRequest} [postUserRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -550,7 +1593,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * ログイン
+         * 
          * @param {LoginRequest} [loginRequest] 認証情報
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -583,7 +1626,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * ログアウト
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -622,7 +1665,17 @@ export const DefaultApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = DefaultApiAxiosParamCreator(configuration)
     return {
         /**
-         * ユーザの削除
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteCarsId(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteCarsId(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {number} id 対象AdminのID
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -632,7 +1685,18 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * 指定したIDの\'UserResponse\'取得
+         * 
+         * @summary Your GET endpoint
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getCarsId(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Car>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCarsId(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {number} id 対象AdminのID
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -642,7 +1706,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * 自アカウントのユーザー情報取得
+         * 
          * @summary Your GET endpoint
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -652,7 +1716,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * 条件にマッチしたユーザの一覧取得
+         * 
          * @param {string} [email] メールアドレス
          * @param {string} [name] 名前
          * @param {'user' | 'admin'} [role] ロール
@@ -664,7 +1728,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * トークン更新
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -673,38 +1737,69 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * ユーザの更新
+         * 
+         * @param {string} id 
+         * @param {Car} [car] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async patchCarsId(id: string, car?: Car, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Id>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.patchCarsId(id, car, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {number} id 対象AdminのID
          * @param {PatchUserRequest} [patchUserRequest] 更新するAdmin情報
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async patchUser(id: number, patchUserRequest?: PatchUserRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<IdResponse>> {
+        async patchUser(id: number, patchUserRequest?: PatchUserRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Id>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.patchUser(id, patchUserRequest, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * 自アカウントのユーザ情報更新
+         * 
          * @param {PatchUserMeRequest} [patchUserMeRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async patchUserMe(patchUserMeRequest?: PatchUserMeRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<IdResponse>> {
+        async patchUserMe(patchUserMeRequest?: PatchUserMeRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Id>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.patchUserMe(patchUserMeRequest, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * ユーザの追加
+         * 
+         * @param {Car} [car] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async postCars(car?: Car, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Id>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.postCars(car, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {InlineObject} [inlineObject] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async postCarsSearch(inlineObject?: InlineObject, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<InlineResponse200>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.postCarsSearch(inlineObject, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {PostUserRequest} [postUserRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async postUsers(postUserRequest?: PostUserRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<IdResponse>> {
+        async postUsers(postUserRequest?: PostUserRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Id>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.postUsers(postUserRequest, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * ログイン
+         * 
          * @param {LoginRequest} [loginRequest] 認証情報
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -714,7 +1809,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * ログアウト
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -733,7 +1828,16 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
     const localVarFp = DefaultApiFp(configuration)
     return {
         /**
-         * ユーザの削除
+         * 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteCarsId(id: string, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteCarsId(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {number} id 対象AdminのID
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -742,7 +1846,17 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.deleteUser(id, options).then((request) => request(axios, basePath));
         },
         /**
-         * 指定したIDの\'UserResponse\'取得
+         * 
+         * @summary Your GET endpoint
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCarsId(id: string, options?: any): AxiosPromise<Car> {
+            return localVarFp.getCarsId(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {number} id 対象AdminのID
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -751,7 +1865,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.getUser(id, options).then((request) => request(axios, basePath));
         },
         /**
-         * 自アカウントのユーザー情報取得
+         * 
          * @summary Your GET endpoint
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -760,7 +1874,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.getUserMe(options).then((request) => request(axios, basePath));
         },
         /**
-         * 条件にマッチしたユーザの一覧取得
+         * 
          * @param {string} [email] メールアドレス
          * @param {string} [name] 名前
          * @param {'user' | 'admin'} [role] ロール
@@ -771,7 +1885,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.getUsers(email, name, role, options).then((request) => request(axios, basePath));
         },
         /**
-         * トークン更新
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -779,35 +1893,63 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.getUsersRefreshToken(options).then((request) => request(axios, basePath));
         },
         /**
-         * ユーザの更新
+         * 
+         * @param {string} id 
+         * @param {Car} [car] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        patchCarsId(id: string, car?: Car, options?: any): AxiosPromise<Id> {
+            return localVarFp.patchCarsId(id, car, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {number} id 対象AdminのID
          * @param {PatchUserRequest} [patchUserRequest] 更新するAdmin情報
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        patchUser(id: number, patchUserRequest?: PatchUserRequest, options?: any): AxiosPromise<IdResponse> {
+        patchUser(id: number, patchUserRequest?: PatchUserRequest, options?: any): AxiosPromise<Id> {
             return localVarFp.patchUser(id, patchUserRequest, options).then((request) => request(axios, basePath));
         },
         /**
-         * 自アカウントのユーザ情報更新
+         * 
          * @param {PatchUserMeRequest} [patchUserMeRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        patchUserMe(patchUserMeRequest?: PatchUserMeRequest, options?: any): AxiosPromise<IdResponse> {
+        patchUserMe(patchUserMeRequest?: PatchUserMeRequest, options?: any): AxiosPromise<Id> {
             return localVarFp.patchUserMe(patchUserMeRequest, options).then((request) => request(axios, basePath));
         },
         /**
-         * ユーザの追加
+         * 
+         * @param {Car} [car] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postCars(car?: Car, options?: any): AxiosPromise<Id> {
+            return localVarFp.postCars(car, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {InlineObject} [inlineObject] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postCarsSearch(inlineObject?: InlineObject, options?: any): AxiosPromise<Array<InlineResponse200>> {
+            return localVarFp.postCarsSearch(inlineObject, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {PostUserRequest} [postUserRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postUsers(postUserRequest?: PostUserRequest, options?: any): AxiosPromise<IdResponse> {
+        postUsers(postUserRequest?: PostUserRequest, options?: any): AxiosPromise<Id> {
             return localVarFp.postUsers(postUserRequest, options).then((request) => request(axios, basePath));
         },
         /**
-         * ログイン
+         * 
          * @param {LoginRequest} [loginRequest] 認証情報
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -816,7 +1958,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.postUsersLogin(loginRequest, options).then((request) => request(axios, basePath));
         },
         /**
-         * ログアウト
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -834,7 +1976,18 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
  */
 export class DefaultApi extends BaseAPI {
     /**
-     * ユーザの削除
+     * 
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public deleteCarsId(id: string, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).deleteCarsId(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @param {number} id 対象AdminのID
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -845,7 +1998,19 @@ export class DefaultApi extends BaseAPI {
     }
 
     /**
-     * 指定したIDの\'UserResponse\'取得
+     * 
+     * @summary Your GET endpoint
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public getCarsId(id: string, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).getCarsId(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @param {number} id 対象AdminのID
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -856,7 +2021,7 @@ export class DefaultApi extends BaseAPI {
     }
 
     /**
-     * 自アカウントのユーザー情報取得
+     * 
      * @summary Your GET endpoint
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -867,7 +2032,7 @@ export class DefaultApi extends BaseAPI {
     }
 
     /**
-     * 条件にマッチしたユーザの一覧取得
+     * 
      * @param {string} [email] メールアドレス
      * @param {string} [name] 名前
      * @param {'user' | 'admin'} [role] ロール
@@ -880,7 +2045,7 @@ export class DefaultApi extends BaseAPI {
     }
 
     /**
-     * トークン更新
+     * 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
@@ -890,7 +2055,19 @@ export class DefaultApi extends BaseAPI {
     }
 
     /**
-     * ユーザの更新
+     * 
+     * @param {string} id 
+     * @param {Car} [car] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public patchCarsId(id: string, car?: Car, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).patchCarsId(id, car, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @param {number} id 対象AdminのID
      * @param {PatchUserRequest} [patchUserRequest] 更新するAdmin情報
      * @param {*} [options] Override http request option.
@@ -902,7 +2079,7 @@ export class DefaultApi extends BaseAPI {
     }
 
     /**
-     * 自アカウントのユーザ情報更新
+     * 
      * @param {PatchUserMeRequest} [patchUserMeRequest] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -913,7 +2090,29 @@ export class DefaultApi extends BaseAPI {
     }
 
     /**
-     * ユーザの追加
+     * 
+     * @param {Car} [car] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public postCars(car?: Car, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).postCars(car, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {InlineObject} [inlineObject] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public postCarsSearch(inlineObject?: InlineObject, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).postCarsSearch(inlineObject, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @param {PostUserRequest} [postUserRequest] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -924,7 +2123,7 @@ export class DefaultApi extends BaseAPI {
     }
 
     /**
-     * ログイン
+     * 
      * @param {LoginRequest} [loginRequest] 認証情報
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -935,7 +2134,7 @@ export class DefaultApi extends BaseAPI {
     }
 
     /**
-     * ログアウト
+     * 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi

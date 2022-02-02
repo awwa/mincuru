@@ -1,10 +1,10 @@
 <template>
   <div>
     <h1>ユーザー</h1>
-    <v-row>
+    <v-layout wrap>
       <v-spacer />
       <v-btn @click="add">追加</v-btn>
-    </v-row>
+    </v-layout>
     <UserList :users="users" />
   </div>
 </template>
