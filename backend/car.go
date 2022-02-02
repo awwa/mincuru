@@ -294,7 +294,7 @@ func SearchCars(c *gin.Context) {
 		)
 	}
 	d.Find(&cars)
-	fmt.Printf("%+v", cars)
+	// fmt.Printf("%+v", cars)
 	c.IndentedJSON(http.StatusOK, cars)
 }
 
@@ -402,4 +402,10 @@ func PostCar(c *gin.Context) {
 	}
 	idResponse := IdResp{Id: httpPayload.Id}
 	c.IndentedJSON(http.StatusCreated, &idResponse)
+}
+
+func GetCarsMakers(c *gin.Context) {
+	var makers []string
+	DB.Table("cars").Distinct("maker_name").Find(&makers)
+	c.IndentedJSON(http.StatusOK, makers)
 }

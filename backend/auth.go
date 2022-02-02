@@ -105,6 +105,8 @@ func authMiddleware() (authMiddleware *jwt.GinJWTMiddleware) {
 					return true
 				case (path == "/cars"):
 					return true
+				case (path == "/cars/makers"):
+					return true
 				}
 			}
 			// ゲストの場合のアクセス許可
