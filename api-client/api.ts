@@ -1252,6 +1252,71 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Your GET endpoint
+         * @param {string} [makerName] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCarsMakersModels: async (makerName?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/cars/makers/models`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (makerName !== undefined) {
+                localVarQueryParameter['maker_name'] = makerName;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Your GET endpoint
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMakers: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/cars/makers`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {number} id 対象AdminのID
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1697,6 +1762,27 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Your GET endpoint
+         * @param {string} [makerName] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getCarsMakersModels(makerName?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<string>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCarsMakersModels(makerName, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Your GET endpoint
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getMakers(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<string>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMakers(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {number} id 対象AdminのID
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1857,6 +1943,25 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Your GET endpoint
+         * @param {string} [makerName] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCarsMakersModels(makerName?: string, options?: any): AxiosPromise<Array<string>> {
+            return localVarFp.getCarsMakersModels(makerName, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Your GET endpoint
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMakers(options?: any): AxiosPromise<Array<string>> {
+            return localVarFp.getMakers(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {number} id 対象AdminのID
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2007,6 +2112,29 @@ export class DefaultApi extends BaseAPI {
      */
     public getCarsId(id: string, options?: AxiosRequestConfig) {
         return DefaultApiFp(this.configuration).getCarsId(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Your GET endpoint
+     * @param {string} [makerName] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public getCarsMakersModels(makerName?: string, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).getCarsMakersModels(makerName, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Your GET endpoint
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public getMakers(options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).getMakers(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

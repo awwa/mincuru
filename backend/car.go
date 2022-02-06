@@ -409,3 +409,10 @@ func GetCarsMakers(c *gin.Context) {
 	DB.Table("cars").Distinct("maker_name").Find(&makers)
 	c.IndentedJSON(http.StatusOK, makers)
 }
+
+func GetCarsMakersModels(c *gin.Context) {
+	makerName := c.Query("maker_name")
+	var models []string
+	DB.Table("cars").Distinct("model_name").Where(&Car{MakerName: makerName}).Find(&models)
+	c.IndentedJSON(http.StatusOK, models)
+}

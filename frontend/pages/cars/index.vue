@@ -8,11 +8,13 @@
     <v-layout wrap>
       <v-select 
         label="メーカー"
-        :items="$makers"
+        :items="makers"
+        @change="selectMaker"
         item-text="value"
         item-value="value" />
       <v-select
-        label="モデル" />
+        label="モデル"
+        :items="models" />
       <v-select
         label="グレード" />
       <v-text-field
@@ -41,20 +43,30 @@ export default {
         model_change_from: "1974-01-01",
         model_change_to: "2022-12-31",
         power_train: ["ICE"],
-      }
+      },
+      makers: [],
     }
   },
   async asyncData({$axios}) {
     const conf = new Configuration()
     const api = new DefaultApi(conf, $axios.defaults.baseURL, $axios)
-    const resp = await api.postCarsSearch(/*this.query*/)
+    const resp = await api.getMakers()
     return {
-      cars: resp.data
+      makers: resp.data,
+      cars: [],
+      models: [],
     }
   },
   methods: {
     add() {
       this.$router.push("/cars/add")
+    },
+    async selectMaker(e) {
+      console.log(e)
+      const conf = new Configuration()
+      const api = new DefaultApi(conf, this.$axios.defaults.baseURL, this.$axios)
+      const resp = await api.getCarsMakersModels(e)
+      this.models = resp.data
     }
   }
 }
