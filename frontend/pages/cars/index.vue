@@ -10,8 +10,7 @@
         label="メーカー"
         :items="makers"
         @change="selectMaker"
-        item-text="value"
-        item-value="value" />
+        v-model="query.maker_name" />
       <v-select
         label="モデル"
         :items="models" />
@@ -23,6 +22,10 @@
     <v-layout wrap>
       <p>時期</p>
     </v-layout>
+    <v-layout wrap>
+      <v-spacer />
+      <v-btn @click="search">検索</v-btn>
+    </v-layout>
 
     <CarList :cars="cars" />
   </div>
@@ -30,6 +33,7 @@
 
 <script>
 import { DefaultApi, Configuration } from "../../../api-client"
+const conf = new Configuration()
 export default {
   data() {
     return {
@@ -48,11 +52,12 @@ export default {
     }
   },
   async asyncData({$axios}) {
+    // メーカーリスト取得
     const conf = new Configuration()
     const api = new DefaultApi(conf, $axios.defaults.baseURL, $axios)
     const resp = await api.getMakers()
     return {
-      makers: resp.data,
+      makers: resp.data.map(item => {return {"value": item, "text": item}}),
       cars: [],
       models: [],
     }
@@ -61,12 +66,15 @@ export default {
     add() {
       this.$router.push("/cars/add")
     },
+    async search() {
+      const api = new DefaultApi(conf, this.$axios.defaults.baseURL, this.$axios)
+      const resp = await api.postCarsSearch(this.query)
+      this.cars = resp.data
+    },
     async selectMaker(e) {
-      console.log(e)
-      const conf = new Configuration()
       const api = new DefaultApi(conf, this.$axios.defaults.baseURL, this.$axios)
       const resp = await api.getCarsMakersModels(e)
-      this.models = resp.data
+      this.models = resp.data.map(item => {return {"value": item, "text": item}})
     }
   }
 }
