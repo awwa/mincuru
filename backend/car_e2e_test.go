@@ -1739,3 +1739,28 @@ func TestGetCarsMakersModelsNothing(t *testing.T) {
 	json.Unmarshal(recorder.Body.Bytes(), &models)
 	assert.Equal(t, 0, len(models))
 }
+
+func TestGetCarsBodyTypes(t *testing.T) {
+	DB.Exec("TRUNCATE TABLE cars")
+	seedTestCarCx5()
+	seedTestCarCorollaTouring()
+	seedTestCarHondaE()
+	seedTestCarNote()
+	seedTestCarThree()
+	seedTestCarNsx()
+	token := login("user")
+	// HTTPリクエストの生成
+	httpReq, err := http.NewRequest(http.MethodGet, "http://localhost:8080/cars/body_types", nil)
+	httpReq.Header.Add("Content-Type", "application/json")
+	httpReq.Header.Add("Authorization", fmt.Sprintf("Bearer %s", token))
+	if err != nil {
+		panic(err)
+	}
+	// Test用サーバにリクエストを送信して、レスポンスをOpenAPI仕様に照らし合わせる
+	recorder := ServeAndRequest(httpReq)
+	// テストケース固有のチェック
+	assert.Equal(t, 200, recorder.Result().StatusCode)
+	var makers []string
+	json.Unmarshal(recorder.Body.Bytes(), &makers)
+	assert.Equal(t, 4, len(makers))
+}

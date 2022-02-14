@@ -68,6 +68,7 @@ func Router() (router *gin.Engine) {
 		auth.POST("/cars", PostCar)
 		auth.GET("/cars/makers", GetCarsMakers)
 		auth.GET("/cars/makers/models", GetCarsMakersModels)
+		auth.GET("/cars/body_types", GetCarsBodyTypes)
 	}
 	return
 }
