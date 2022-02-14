@@ -508,7 +508,7 @@ paths:
                   type: string
                 price_lower:
                   type: number
-                price_higher:
+                price_upper:
                   type: number
                 model_change_from:
                   type: string
@@ -529,6 +529,10 @@ paths:
                       - BEV
                       - RexEV
                       - FCEV
+                body_type:
+                  type: array
+                  items:
+                    type: string
   '/cars/{id}':
     parameters:
       - schema:
@@ -937,7 +941,7 @@ components:
         max_output_lower_rpm:
           type: number
           nullable: true
-        max_output_higher_rpm:
+        max_output_upper_rpm:
           type: number
           nullable: true
         max_torque:
@@ -946,7 +950,7 @@ components:
         max_torque_lower_rpm:
           type: number
           nullable: true
-        max_torque_higher_rpm:
+        max_torque_upper_rpm:
           type: number
           nullable: true
         fuel_system:
@@ -981,7 +985,7 @@ components:
         max_output_lower_rpm:
           type: number
           nullable: true
-        max_output_higher_rpm:
+        max_output_upper_rpm:
           type: number
           nullable: true
         max_torque:
@@ -990,7 +994,7 @@ components:
         max_torque_lower_rpm:
           type: number
           nullable: true
-        max_torque_higher_rpm:
+        max_torque_upper_rpm:
           type: number
           nullable: true
     Battery:

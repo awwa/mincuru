@@ -12,7 +12,11 @@ import (
 	"gopkg.in/guregu/null.v4"
 )
 
+const FORMAT = "2006-Jan-02"
+
 func seedTestCarCx5() {
+	modelChangeFull, _ := time.Parse(FORMAT, "2016-Dec-15")
+	modelChangeLast, _ := time.Parse(FORMAT, "2018-Jan-01")
 	DB.Create(&Car{
 		MakerName:       "マツダ",
 		ModelName:       "CX-5",
@@ -21,9 +25,8 @@ func seedTestCarCx5() {
 		Price:           null.NewInt(3140500, true),
 		Url:             null.NewString("https://www.mazda.co.jp/cars/cx-5/", true),
 		ImageUrl:        null.NewString("https://upload.wikimedia.org/wikipedia/commons/8/85/2017_Mazda_CX-5_%28KF%29_Maxx_2WD_wagon_%282018-11-02%29_01.jpg", true),
-		ModelChangeFull: null.NewTime(time.Date(2016, time.December, 15, 0, 0, 0, 0, time.Local), true),
-		//ModelChangeFull: null.NewTime(time.Date(2017, time.February, 1, 0, 0, 0, 0, time.Local), false),
-		ModelChangeLast: null.NewTime(time.Date(2018, time.January, 1, 0, 0, 0, 0, time.Local), true),
+		ModelChangeFull: null.NewTime(modelChangeFull, true),
+		ModelChangeLast: null.NewTime(modelChangeLast, true),
 		Body: Body{
 			Type:             null.NewString((string)(SUV), true),
 			Length:           null.NewInt(4545, true),
@@ -63,24 +66,24 @@ func seedTestCarCx5() {
 		PowerTrain:  null.NewString((string)(ICE), true),
 		DriveSystem: null.NewString((string)(AWD), true),
 		Engine: Engine{
-			Code:               null.NewString("PY-RPS", true),
-			Type:               null.NewString("水冷直列4気筒DOHC16バルブ", true),
-			Cylinders:          null.NewInt(4, true),
-			CylinderLayout:     null.NewString((string)(I), true),
-			ValveSystem:        null.NewString((string)(DOHC), true),
-			Displacement:       null.NewFloat(2.488, true),
-			Bore:               null.NewFloat(89.0, true),
-			Stroke:             null.NewFloat(100.0, true),
-			CompressionRatio:   null.NewFloat(13.0, true),
-			MaxOutput:          null.NewFloat(138, true),
-			MaxOutputLowerRpm:  null.NewFloat(6000, true),
-			MaxOutputHigherRpm: null.NewFloat(6000, true),
-			MaxTorque:          null.NewFloat(250, true),
-			MaxTorqueLowerRpm:  null.NewFloat(4000, true),
-			MaxTorqueHigherRpm: null.NewFloat(4000, true),
-			FuelSystem:         null.NewString("DI", true),
-			FuelType:           null.NewString("無鉛レギュラーガソリン", true),
-			FuelTankCap:        null.NewInt(58, true),
+			Code:              null.NewString("PY-RPS", true),
+			Type:              null.NewString("水冷直列4気筒DOHC16バルブ", true),
+			Cylinders:         null.NewInt(4, true),
+			CylinderLayout:    null.NewString((string)(I), true),
+			ValveSystem:       null.NewString((string)(DOHC), true),
+			Displacement:      null.NewFloat(2.488, true),
+			Bore:              null.NewFloat(89.0, true),
+			Stroke:            null.NewFloat(100.0, true),
+			CompressionRatio:  null.NewFloat(13.0, true),
+			MaxOutput:         null.NewFloat(138, true),
+			MaxOutputLowerRpm: null.NewFloat(6000, true),
+			MaxOutputUpperRpm: null.NewFloat(6000, true),
+			MaxTorque:         null.NewFloat(250, true),
+			MaxTorqueLowerRpm: null.NewFloat(4000, true),
+			MaxTorqueUpperRpm: null.NewFloat(4000, true),
+			FuelSystem:        null.NewString("DI", true),
+			FuelType:          null.NewString("無鉛レギュラーガソリン", true),
+			FuelTankCap:       null.NewInt(58, true),
 		},
 		// MotorX: Motor{},
 		// MotorY: Motor{},
@@ -122,6 +125,8 @@ func seedTestCarCx5() {
 }
 
 func seedTestCarCorollaTouring() {
+	modelChangeFull, _ := time.Parse(FORMAT, "2019-Sep-17")
+	modelChangeLast, _ := time.Parse(FORMAT, "2021-Nov-15")
 	DB.Create(&Car{
 		MakerName:       "トヨタ",
 		ModelName:       "カローラツーリング",
@@ -130,8 +135,8 @@ func seedTestCarCorollaTouring() {
 		Price:           null.NewInt(2678500, true),
 		Url:             null.NewString("https://toyota.jp/corollatouring/", true),
 		ImageUrl:        null.NewString("https://upload.wikimedia.org/wikipedia/commons/8/8a/Toyota_COROLLA_TOURING_HYBRID_W%C3%97B_2WD_%286AA-ZWE211W-AWXSB%29_front.jpg", true),
-		ModelChangeFull: null.NewTime(time.Date(2019, time.September, 17, 0, 0, 0, 0, time.Local), true),
-		ModelChangeLast: null.NewTime(time.Date(2021, time.November, 15, 0, 0, 0, 0, time.Local), true),
+		ModelChangeFull: null.NewTime(modelChangeFull, true),
+		ModelChangeLast: null.NewTime(modelChangeLast, true),
 		Body: Body{
 			Type:             null.NewString((string)(STATION_WAGON), true),
 			Length:           null.NewInt(4495, true),
@@ -180,15 +185,15 @@ func seedTestCarCorollaTouring() {
 			Bore:           null.NewFloat(80.5, true),
 			Stroke:         null.NewFloat(88.3, true),
 			//CompRatio:          null.NewFloat(0, false),
-			MaxOutput:          null.NewFloat(72, true),
-			MaxOutputLowerRpm:  null.NewFloat(5200, true),
-			MaxOutputHigherRpm: null.NewFloat(5200, true),
-			MaxTorque:          null.NewFloat(142, true),
-			MaxTorqueLowerRpm:  null.NewFloat(3600, true),
-			MaxTorqueHigherRpm: null.NewFloat(3600, true),
-			FuelSystem:         null.NewString("電子制御式燃料噴射装置(EFI)", true),
-			FuelType:           null.NewString("無鉛レギュラーガソリン", true),
-			FuelTankCap:        null.NewInt(43, true),
+			MaxOutput:         null.NewFloat(72, true),
+			MaxOutputLowerRpm: null.NewFloat(5200, true),
+			MaxOutputUpperRpm: null.NewFloat(5200, true),
+			MaxTorque:         null.NewFloat(142, true),
+			MaxTorqueLowerRpm: null.NewFloat(3600, true),
+			MaxTorqueUpperRpm: null.NewFloat(3600, true),
+			FuelSystem:        null.NewString("電子制御式燃料噴射装置(EFI)", true),
+			FuelType:          null.NewString("無鉛レギュラーガソリン", true),
+			FuelTankCap:       null.NewInt(43, true),
 		},
 		MotorX: Motor{
 			Code:    null.NewString("1NM", true),
@@ -197,10 +202,10 @@ func seedTestCarCorollaTouring() {
 			//RatedOutput: ,
 			MaxOutput: null.NewFloat(53, true),
 			//MaxOutputLowerRpm: ,
-			//MaxOutputHigherRpm: ,
+			//MaxOutputUpperRpm: ,
 			MaxTorque: null.NewFloat(163, true),
 			//MaxTorqueLowerRpm: ,
-			//MaxTorqueHigherRpm: ,
+			//MaxTorqueUpperRpm: ,
 		},
 		MotorY: Motor{
 			Code:    null.NewString("1MM", true),
@@ -209,10 +214,10 @@ func seedTestCarCorollaTouring() {
 			//RatedOutput: ,
 			MaxOutput: null.NewFloat(5.3, true),
 			//MaxOutputLowerRpm: ,
-			//MaxOutputHigherRpm: ,
+			//MaxOutputUpperRpm: ,
 			MaxTorque: null.NewFloat(55, true),
 			//MaxTorqueLowerRpm: ,
-			//MaxTorqueHigherRpm: ,
+			//MaxTorqueUpperRpm: ,
 		},
 		Battery: Battery{
 			Type: null.NewString("ニッケル水素電池", true),
@@ -257,6 +262,8 @@ func seedTestCarCorollaTouring() {
 }
 
 func seedTestCarNsx() {
+	modelChangeFull, _ := time.Parse(FORMAT, "2017-Feb-27")
+	modelChangeLast, _ := time.Parse(FORMAT, "2021-Aug-30")
 	DB.Create(&Car{
 		MakerName:       "ホンダ",
 		ModelName:       "NSX",
@@ -265,8 +272,8 @@ func seedTestCarNsx() {
 		Price:           null.NewInt(27940000, true),
 		Url:             null.NewString("https://www.honda.co.jp/NSX/types/", true),
 		ImageUrl:        null.NewString("https://upload.wikimedia.org/wikipedia/commons/e/ea/2019_Honda_NSX_3.5_CAA-NC1_%2820190722%29_01.jpg", true),
-		ModelChangeFull: null.NewTime(time.Date(2017, time.February, 27, 0, 0, 0, 0, time.Local), true),
-		ModelChangeLast: null.NewTime(time.Date(2021, time.August, 30, 0, 0, 0, 0, time.Local), true),
+		ModelChangeFull: null.NewTime(modelChangeFull, true),
+		ModelChangeLast: null.NewTime(modelChangeLast, true),
 		Body: Body{
 			Type:             null.NewString((string)(COUPE), true),
 			Length:           null.NewInt(4535, true),
@@ -306,48 +313,48 @@ func seedTestCarNsx() {
 		PowerTrain:  null.NewString((string)(MldHV), true),
 		DriveSystem: null.NewString((string)(AWD), true),
 		Engine: Engine{
-			Code:               null.NewString("JNC", true),
-			Type:               null.NewString("水冷V型6気筒縦置", true),
-			Cylinders:          null.NewInt(6, true),
-			CylinderLayout:     null.NewString((string)(V), true),
-			ValveSystem:        null.NewString((string)(DOHC), true),
-			Displacement:       null.NewFloat(3.492, true),
-			Bore:               null.NewFloat(91.0, true),
-			Stroke:             null.NewFloat(89.5, true),
-			CompressionRatio:   null.NewFloat(10.0, false),
-			MaxOutput:          null.NewFloat(389, true),
-			MaxOutputLowerRpm:  null.NewFloat(6500, true),
-			MaxOutputHigherRpm: null.NewFloat(6850, true),
-			MaxTorque:          null.NewFloat(600, true),
-			MaxTorqueLowerRpm:  null.NewFloat(2300, true),
-			MaxTorqueHigherRpm: null.NewFloat(6000, true),
-			FuelSystem:         null.NewString("電子制御燃料噴射式(ホンダ PGM-FI)", true),
-			FuelType:           null.NewString("無鉛プレミアムガソリン", true),
-			FuelTankCap:        null.NewInt(59, true),
+			Code:              null.NewString("JNC", true),
+			Type:              null.NewString("水冷V型6気筒縦置", true),
+			Cylinders:         null.NewInt(6, true),
+			CylinderLayout:    null.NewString((string)(V), true),
+			ValveSystem:       null.NewString((string)(DOHC), true),
+			Displacement:      null.NewFloat(3.492, true),
+			Bore:              null.NewFloat(91.0, true),
+			Stroke:            null.NewFloat(89.5, true),
+			CompressionRatio:  null.NewFloat(10.0, false),
+			MaxOutput:         null.NewFloat(389, true),
+			MaxOutputLowerRpm: null.NewFloat(6500, true),
+			MaxOutputUpperRpm: null.NewFloat(6850, true),
+			MaxTorque:         null.NewFloat(600, true),
+			MaxTorqueLowerRpm: null.NewFloat(2300, true),
+			MaxTorqueUpperRpm: null.NewFloat(6000, true),
+			FuelSystem:        null.NewString("電子制御燃料噴射式(ホンダ PGM-FI)", true),
+			FuelType:          null.NewString("無鉛プレミアムガソリン", true),
+			FuelTankCap:       null.NewInt(59, true),
 		},
 		MotorX: Motor{
 			Code:    null.NewString("H3", true),
 			Type:    null.NewString("交流同期電動機", true),
 			Purpose: null.NewString((string)(TRACTION_FRONT), true),
 			//RatedOutput: ,
-			MaxOutput:          null.NewFloat(27, true),
-			MaxOutputLowerRpm:  null.NewFloat(4000, true),
-			MaxOutputHigherRpm: null.NewFloat(4000, true),
-			MaxTorque:          null.NewFloat(73, true),
-			MaxTorqueLowerRpm:  null.NewFloat(0, true),
-			MaxTorqueHigherRpm: null.NewFloat(2000, true),
+			MaxOutput:         null.NewFloat(27, true),
+			MaxOutputLowerRpm: null.NewFloat(4000, true),
+			MaxOutputUpperRpm: null.NewFloat(4000, true),
+			MaxTorque:         null.NewFloat(73, true),
+			MaxTorqueLowerRpm: null.NewFloat(0, true),
+			MaxTorqueUpperRpm: null.NewFloat(2000, true),
 		},
 		MotorY: Motor{
 			Code:    null.NewString("H2", true),
 			Type:    null.NewString("交流同期電動機", true),
 			Purpose: null.NewString((string)(TRACTION_REAR), true),
 			//RatedOutput: ,
-			MaxOutput:          null.NewFloat(35, true),
-			MaxOutputLowerRpm:  null.NewFloat(3000, true),
-			MaxOutputHigherRpm: null.NewFloat(3000, true),
-			MaxTorque:          null.NewFloat(148, true),
-			MaxTorqueLowerRpm:  null.NewFloat(500, true),
-			MaxTorqueHigherRpm: null.NewFloat(2000, true),
+			MaxOutput:         null.NewFloat(35, true),
+			MaxOutputLowerRpm: null.NewFloat(3000, true),
+			MaxOutputUpperRpm: null.NewFloat(3000, true),
+			MaxTorque:         null.NewFloat(148, true),
+			MaxTorqueLowerRpm: null.NewFloat(500, true),
+			MaxTorqueUpperRpm: null.NewFloat(2000, true),
 		},
 		Battery: Battery{
 			Type:     null.NewString("ニッケル水素電池", true),
@@ -392,6 +399,8 @@ func seedTestCarNsx() {
 }
 
 func seedTestCarHondaE() {
+	modelChangeFull, _ := time.Parse(FORMAT, "2020-Aug-27")
+	modelChangeLast, _ := time.Parse(FORMAT, "2020-Aug-27")
 	DB.Create(&Car{
 		MakerName:       "ホンダ",
 		ModelName:       "Honda e",
@@ -400,8 +409,8 @@ func seedTestCarHondaE() {
 		Price:           null.NewInt(4950000, true),
 		Url:             null.NewString("https://www.honda.co.jp/honda-e/", true),
 		ImageUrl:        null.NewString("https://upload.wikimedia.org/wikipedia/commons/9/9e/Honda_e_Advance_%28ZAA-ZC7%29_front.jpg", true),
-		ModelChangeFull: null.NewTime(time.Date(2020, time.August, 27, 0, 0, 0, 0, time.Local), true),
-		ModelChangeLast: null.NewTime(time.Date(2020, time.August, 27, 0, 0, 0, 0, time.Local), true),
+		ModelChangeFull: null.NewTime(modelChangeFull, true),
+		ModelChangeLast: null.NewTime(modelChangeLast, true),
 		Body: Body{
 			Type:             null.NewString((string)(HATCHBACK), true),
 			Length:           null.NewInt(3895, true),
@@ -452,25 +461,25 @@ func seedTestCarHondaE() {
 		// 	CompRatio:          null.NewFloat(0, false),
 		// 	MaxOutput:          null.NewFloat(72, true),
 		// 	MaxOutputLowerRpm:  null.NewFloat(5200, true),
-		// 	MaxOutputHigherRpm: null.NewFloat(5200, true),
+		// 	MaxOutputUpperRpm: null.NewFloat(5200, true),
 		// 	MaxTorque:          null.NewFloat(142, true),
 		// 	MaxTorqueLowerRpm:  null.NewFloat(3600, true),
-		// 	MaxTorqueHigherRpm: null.NewFloat(3600, true),
+		// 	MaxTorqueUpperRpm: null.NewFloat(3600, true),
 		// 	FuelSystem:         null.NewString( "電子制御式燃料噴射装置(EFI)", true),
 		// 	FuelType:           null.NewString( "無鉛レギュラーガソリン", true),
 		// 	FuelTankCap:        null.NewInt(43, true),
 		// },
 		MotorX: Motor{
-			Code:               null.NewString("MCF5", true),
-			Type:               null.NewString("交流同期電動機", true),
-			Purpose:            null.NewString((string)(TRACTION_REAR), true),
-			RatedOutput:        null.NewFloat(60, true),
-			MaxOutput:          null.NewFloat(113, true),
-			MaxOutputLowerRpm:  null.NewFloat(3497, true),
-			MaxOutputHigherRpm: null.NewFloat(10000, true),
-			MaxTorque:          null.NewFloat(315, true),
-			MaxTorqueLowerRpm:  null.NewFloat(0, true),
-			MaxTorqueHigherRpm: null.NewFloat(2000, true),
+			Code:              null.NewString("MCF5", true),
+			Type:              null.NewString("交流同期電動機", true),
+			Purpose:           null.NewString((string)(TRACTION_REAR), true),
+			RatedOutput:       null.NewFloat(60, true),
+			MaxOutput:         null.NewFloat(113, true),
+			MaxOutputLowerRpm: null.NewFloat(3497, true),
+			MaxOutputUpperRpm: null.NewFloat(10000, true),
+			MaxTorque:         null.NewFloat(315, true),
+			MaxTorqueLowerRpm: null.NewFloat(0, true),
+			MaxTorqueUpperRpm: null.NewFloat(2000, true),
 		},
 		// MotorY: Motor{
 		// 	Code:    null.NewString( "1MM", true),
@@ -479,10 +488,10 @@ func seedTestCarHondaE() {
 		// 	RatedOutput: ,
 		// 	MaxOutput: null.NewFloat(5.3, true),
 		// 	MaxOutputLowerRpm: ,
-		// 	MaxOutputHigherRpm: ,
+		// 	MaxOutputUpperRpm: ,
 		// 	MaxTorque: null.NewFloat(55, true),
 		// 	MaxTorqueLowerRpm: ,
-		// 	MaxTorqueHigherRpm: ,
+		// 	MaxTorqueUpperRpm: ,
 		// },
 		Battery: Battery{
 			Type:     null.NewString("リチウムイオン電池", true),
@@ -528,6 +537,8 @@ func seedTestCarHondaE() {
 }
 
 func seedTestCarNote() {
+	modelChangeFull, _ := time.Parse(FORMAT, "2020-Nov-24")
+	modelChangeLast, _ := time.Parse(FORMAT, "2021-Nov-04")
 	DB.Create(&Car{
 		MakerName:       "日産",
 		ModelName:       "ノート",
@@ -536,8 +547,8 @@ func seedTestCarNote() {
 		Price:           null.NewInt(2445300, true),
 		Url:             null.NewString("https://www3.nissan.co.jp/vehicles/new/note.html", true),
 		ImageUrl:        null.NewString("https://upload.wikimedia.org/wikipedia/commons/0/0a/Nissan_Note_e-POWER_%28E13%29%2C_2021%2C_front-left.jpg", true),
-		ModelChangeFull: null.NewTime(time.Date(2020, time.November, 24, 0, 0, 0, 0, time.Local), true),
-		ModelChangeLast: null.NewTime(time.Date(2021, time.November, 4, 0, 0, 0, 0, time.Local), true),
+		ModelChangeFull: null.NewTime(modelChangeFull, true),
+		ModelChangeLast: null.NewTime(modelChangeLast, true),
 		Body: Body{
 			Type:             null.NewString((string)(HATCHBACK), true),
 			Length:           null.NewInt(4045, true),
@@ -577,48 +588,48 @@ func seedTestCarNote() {
 		PowerTrain:  null.NewString((string)(SerHV), true),
 		DriveSystem: null.NewString((string)(AWD), true),
 		Engine: Engine{
-			Code:               null.NewString("HR12DE", true),
-			Type:               null.NewString("DOHC水冷直列3気筒", true),
-			Cylinders:          null.NewInt(3, true),
-			CylinderLayout:     null.NewString((string)(I), true),
-			ValveSystem:        null.NewString((string)(DOHC), true),
-			Displacement:       null.NewFloat(1.198, true),
-			Bore:               null.NewFloat(78.0, true),
-			Stroke:             null.NewFloat(83.6, true),
-			CompressionRatio:   null.NewFloat(12.0, false),
-			MaxOutput:          null.NewFloat(60, true),
-			MaxOutputLowerRpm:  null.NewFloat(6000, true),
-			MaxOutputHigherRpm: null.NewFloat(6000, true),
-			MaxTorque:          null.NewFloat(103, true),
-			MaxTorqueLowerRpm:  null.NewFloat(4800, true),
-			MaxTorqueHigherRpm: null.NewFloat(4800, true),
-			FuelSystem:         null.NewString("ニッサンEGI(ECCS)電子制御燃料噴射装置", true),
-			FuelType:           null.NewString("無鉛レギュラーガソリン", true),
-			FuelTankCap:        null.NewInt(36, true),
+			Code:              null.NewString("HR12DE", true),
+			Type:              null.NewString("DOHC水冷直列3気筒", true),
+			Cylinders:         null.NewInt(3, true),
+			CylinderLayout:    null.NewString((string)(I), true),
+			ValveSystem:       null.NewString((string)(DOHC), true),
+			Displacement:      null.NewFloat(1.198, true),
+			Bore:              null.NewFloat(78.0, true),
+			Stroke:            null.NewFloat(83.6, true),
+			CompressionRatio:  null.NewFloat(12.0, false),
+			MaxOutput:         null.NewFloat(60, true),
+			MaxOutputLowerRpm: null.NewFloat(6000, true),
+			MaxOutputUpperRpm: null.NewFloat(6000, true),
+			MaxTorque:         null.NewFloat(103, true),
+			MaxTorqueLowerRpm: null.NewFloat(4800, true),
+			MaxTorqueUpperRpm: null.NewFloat(4800, true),
+			FuelSystem:        null.NewString("ニッサンEGI(ECCS)電子制御燃料噴射装置", true),
+			FuelType:          null.NewString("無鉛レギュラーガソリン", true),
+			FuelTankCap:       null.NewInt(36, true),
 		},
 		MotorX: Motor{
 			Code:    null.NewString("EM47", true),
 			Type:    null.NewString("交流同期電動機", true),
 			Purpose: null.NewString((string)(GENERATOR), true),
 			//RatedOutput: ,
-			MaxOutput:          null.NewFloat(85, true),
-			MaxOutputLowerRpm:  null.NewFloat(2900, true),
-			MaxOutputHigherRpm: null.NewFloat(10341, true),
-			MaxTorque:          null.NewFloat(280, true),
-			MaxTorqueLowerRpm:  null.NewFloat(0, true),
-			MaxTorqueHigherRpm: null.NewFloat(2900, true),
+			MaxOutput:         null.NewFloat(85, true),
+			MaxOutputLowerRpm: null.NewFloat(2900, true),
+			MaxOutputUpperRpm: null.NewFloat(10341, true),
+			MaxTorque:         null.NewFloat(280, true),
+			MaxTorqueLowerRpm: null.NewFloat(0, true),
+			MaxTorqueUpperRpm: null.NewFloat(2900, true),
 		},
 		MotorY: Motor{
 			Code:    null.NewString("MM48", true),
 			Type:    null.NewString("交流同期電動機", true),
 			Purpose: null.NewString((string)(TRACTION_REAR), true),
 			// RatedOutput: ,
-			MaxOutput:          null.NewFloat(50, true),
-			MaxOutputLowerRpm:  null.NewFloat(4775, true),
-			MaxOutputHigherRpm: null.NewFloat(10024, true),
-			MaxTorque:          null.NewFloat(100, true),
-			MaxTorqueLowerRpm:  null.NewFloat(0, true),
-			MaxTorqueHigherRpm: null.NewFloat(4775, true),
+			MaxOutput:         null.NewFloat(50, true),
+			MaxOutputLowerRpm: null.NewFloat(4775, true),
+			MaxOutputUpperRpm: null.NewFloat(10024, true),
+			MaxTorque:         null.NewFloat(100, true),
+			MaxTorqueLowerRpm: null.NewFloat(0, true),
+			MaxTorqueUpperRpm: null.NewFloat(4775, true),
 		},
 		Battery: Battery{
 			Type: null.NewString("リチウムイオン電池", true),
@@ -663,6 +674,8 @@ func seedTestCarNote() {
 }
 
 func seedTestCarThree() {
+	modelChangeFull, _ := time.Parse(FORMAT, "2019-Sep-26")
+	modelChangeLast, _ := time.Parse(FORMAT, "2019-Sep-26")
 	DB.Create(&Car{
 		MakerName: "BMW",
 		ModelName: "3シリーズツーリング",
@@ -671,8 +684,8 @@ func seedTestCarThree() {
 		Price:     null.NewInt(6340000, true),
 		Url:       null.NewString("https://www.bmw.co.jp/ja/all-models/3-series/touring/2019/bmw-3-series-touring-inspire.html", true),
 		// ImageUrl:        null.NewString( "", true),
-		ModelChangeFull: null.NewTime(time.Date(2019, time.September, 26, 0, 0, 0, 0, time.Local), true),
-		ModelChangeLast: null.NewTime(time.Date(2019, time.September, 26, 0, 0, 0, 0, time.Local), true),
+		ModelChangeFull: null.NewTime(modelChangeFull, true),
+		ModelChangeLast: null.NewTime(modelChangeLast, true),
 		Body: Body{
 			Type:             null.NewString((string)(STATION_WAGON), true),
 			Length:           null.NewInt(4715, true),
@@ -721,15 +734,15 @@ func seedTestCarThree() {
 			// Bore:               null.NewFloat(140, true),
 			// Stroke:             null.NewFloat(100.0, true),
 			// CompRatio:          null.NewFloat(13.0, true),
-			MaxOutput:          null.NewFloat(140, true),
-			MaxOutputLowerRpm:  null.NewFloat(4000, true),
-			MaxOutputHigherRpm: null.NewFloat(4000, true),
-			MaxTorque:          null.NewFloat(400, true),
-			MaxTorqueLowerRpm:  null.NewFloat(1750, true),
-			MaxTorqueHigherRpm: null.NewFloat(2500, true),
-			FuelSystem:         null.NewString("デジタル・ディーゼル・エレクトロニクス(DDE/電子燃料噴射装置)", true),
-			FuelType:           null.NewString("軽油", true),
-			FuelTankCap:        null.NewInt(59, true),
+			MaxOutput:         null.NewFloat(140, true),
+			MaxOutputLowerRpm: null.NewFloat(4000, true),
+			MaxOutputUpperRpm: null.NewFloat(4000, true),
+			MaxTorque:         null.NewFloat(400, true),
+			MaxTorqueLowerRpm: null.NewFloat(1750, true),
+			MaxTorqueUpperRpm: null.NewFloat(2500, true),
+			FuelSystem:        null.NewString("デジタル・ディーゼル・エレクトロニクス(DDE/電子燃料噴射装置)", true),
+			FuelType:          null.NewString("軽油", true),
+			FuelTankCap:       null.NewInt(59, true),
 		},
 		// MotorX: Motor{},
 		// MotorY: Motor{},
@@ -770,7 +783,7 @@ func seedTestCarThree() {
 	})
 }
 
-func TestSearchCars(t *testing.T) {
+func TestSearchCarsQueryEmpty(t *testing.T) {
 	DB.Exec("TRUNCATE TABLE cars")
 	seedTestCarCx5()
 	seedTestCarCorollaTouring()
@@ -791,6 +804,266 @@ func TestSearchCars(t *testing.T) {
 	recorder := ServeAndRequest(httpReq)
 	// テストケース固有のチェック
 	assert.Equal(t, 200, recorder.Result().StatusCode)
+}
+
+func TestSearchCarsQueryMakerName(t *testing.T) {
+	DB.Exec("TRUNCATE TABLE cars")
+	seedTestCarCx5()
+	seedTestCarCorollaTouring()
+	seedTestCarHondaE()
+	seedTestCarNote()
+	seedTestCarThree()
+	seedTestCarNsx()
+	token := login("user")
+	// HTTPリクエストの生成
+	body := `{"maker_name": "マツダ"}`
+	httpReq, err := http.NewRequest(http.MethodPost, "http://localhost:8080/cars/search", strings.NewReader(body))
+	httpReq.Header.Add("Content-Type", "application/json")
+	httpReq.Header.Add("Authorization", fmt.Sprintf("Bearer %s", token))
+	if err != nil {
+		panic(err)
+	}
+	// Test用サーバにリクエストを送信して、レスポンスをOpenAPI仕様に照らし合わせる
+	recorder := ServeAndRequest(httpReq)
+	// テストケース固有のチェック
+	assert.Equal(t, 200, recorder.Result().StatusCode)
+	var cars []Car
+	json.Unmarshal(recorder.Body.Bytes(), &cars)
+	assert.Equal(t, 1, len(cars))
+}
+
+func TestSearchCarsQueryModelName(t *testing.T) {
+	DB.Exec("TRUNCATE TABLE cars")
+	seedTestCarCx5()
+	seedTestCarCorollaTouring()
+	seedTestCarHondaE()
+	seedTestCarNote()
+	seedTestCarThree()
+	seedTestCarNsx()
+	token := login("user")
+	// HTTPリクエストの生成
+	body := `{"model_name": "CX-5"}`
+	httpReq, err := http.NewRequest(http.MethodPost, "http://localhost:8080/cars/search", strings.NewReader(body))
+	httpReq.Header.Add("Content-Type", "application/json")
+	httpReq.Header.Add("Authorization", fmt.Sprintf("Bearer %s", token))
+	if err != nil {
+		panic(err)
+	}
+	// Test用サーバにリクエストを送信して、レスポンスをOpenAPI仕様に照らし合わせる
+	recorder := ServeAndRequest(httpReq)
+	// テストケース固有のチェック
+	assert.Equal(t, 200, recorder.Result().StatusCode)
+	var cars []Car
+	json.Unmarshal(recorder.Body.Bytes(), &cars)
+	assert.Equal(t, 1, len(cars))
+}
+
+func TestSearchCarsQueryGradeName(t *testing.T) {
+	DB.Exec("TRUNCATE TABLE cars")
+	seedTestCarCx5()
+	seedTestCarCorollaTouring()
+	seedTestCarHondaE()
+	seedTestCarNote()
+	seedTestCarThree()
+	seedTestCarNsx()
+	token := login("user")
+	// HTTPリクエストの生成
+	body := `{"grade_name": "25S Proactive"}`
+	httpReq, err := http.NewRequest(http.MethodPost, "http://localhost:8080/cars/search", strings.NewReader(body))
+	httpReq.Header.Add("Content-Type", "application/json")
+	httpReq.Header.Add("Authorization", fmt.Sprintf("Bearer %s", token))
+	if err != nil {
+		panic(err)
+	}
+	// Test用サーバにリクエストを送信して、レスポンスをOpenAPI仕様に照らし合わせる
+	recorder := ServeAndRequest(httpReq)
+	// テストケース固有のチェック
+	assert.Equal(t, 200, recorder.Result().StatusCode)
+	var cars []Car
+	json.Unmarshal(recorder.Body.Bytes(), &cars)
+	assert.Equal(t, 1, len(cars))
+}
+
+func TestSearchCarsQueryModelCode(t *testing.T) {
+	DB.Exec("TRUNCATE TABLE cars")
+	seedTestCarCx5()
+	seedTestCarCorollaTouring()
+	seedTestCarHondaE()
+	seedTestCarNote()
+	seedTestCarThree()
+	seedTestCarNsx()
+	token := login("user")
+	// HTTPリクエストの生成
+	body := `{"model_code": "6BA-KF5P"}`
+	httpReq, err := http.NewRequest(http.MethodPost, "http://localhost:8080/cars/search", strings.NewReader(body))
+	httpReq.Header.Add("Content-Type", "application/json")
+	httpReq.Header.Add("Authorization", fmt.Sprintf("Bearer %s", token))
+	if err != nil {
+		panic(err)
+	}
+	// Test用サーバにリクエストを送信して、レスポンスをOpenAPI仕様に照らし合わせる
+	recorder := ServeAndRequest(httpReq)
+	// テストケース固有のチェック
+	assert.Equal(t, 200, recorder.Result().StatusCode)
+	var cars []Car
+	json.Unmarshal(recorder.Body.Bytes(), &cars)
+	assert.Equal(t, 1, len(cars))
+}
+
+func TestSearchCarsQueryPriceLower(t *testing.T) {
+	DB.Exec("TRUNCATE TABLE cars")
+	seedTestCarCx5()
+	seedTestCarCorollaTouring()
+	seedTestCarHondaE()
+	seedTestCarNote()
+	seedTestCarThree()
+	seedTestCarNsx()
+	token := login("user")
+	// HTTPリクエストの生成
+	body := `{"price_lower": 10000000}`
+	httpReq, err := http.NewRequest(http.MethodPost, "http://localhost:8080/cars/search", strings.NewReader(body))
+	httpReq.Header.Add("Content-Type", "application/json")
+	httpReq.Header.Add("Authorization", fmt.Sprintf("Bearer %s", token))
+	if err != nil {
+		panic(err)
+	}
+	// Test用サーバにリクエストを送信して、レスポンスをOpenAPI仕様に照らし合わせる
+	recorder := ServeAndRequest(httpReq)
+	// テストケース固有のチェック
+	assert.Equal(t, 200, recorder.Result().StatusCode)
+	var cars []Car
+	json.Unmarshal(recorder.Body.Bytes(), &cars)
+	assert.Equal(t, 1, len(cars))
+}
+
+func TestSearchCarsQueryPriceUpper(t *testing.T) {
+	DB.Exec("TRUNCATE TABLE cars")
+	seedTestCarCx5()
+	seedTestCarCorollaTouring()
+	seedTestCarHondaE()
+	seedTestCarNote()
+	seedTestCarThree()
+	seedTestCarNsx()
+	token := login("user")
+	// HTTPリクエストの生成
+	body := `{"price_upper": 2500000}`
+	httpReq, err := http.NewRequest(http.MethodPost, "http://localhost:8080/cars/search", strings.NewReader(body))
+	httpReq.Header.Add("Content-Type", "application/json")
+	httpReq.Header.Add("Authorization", fmt.Sprintf("Bearer %s", token))
+	if err != nil {
+		panic(err)
+	}
+	// Test用サーバにリクエストを送信して、レスポンスをOpenAPI仕様に照らし合わせる
+	recorder := ServeAndRequest(httpReq)
+	// テストケース固有のチェック
+	assert.Equal(t, 200, recorder.Result().StatusCode)
+	var cars []Car
+	json.Unmarshal(recorder.Body.Bytes(), &cars)
+	assert.Equal(t, 1, len(cars))
+}
+
+func TestSearchCarsQueryModelChangeFrom(t *testing.T) {
+	DB.Exec("TRUNCATE TABLE cars")
+	seedTestCarCx5()
+	seedTestCarCorollaTouring()
+	seedTestCarHondaE()
+	seedTestCarNote()
+	seedTestCarThree()
+	seedTestCarNsx()
+	token := login("user")
+	// HTTPリクエストの生成
+	body := `{"model_change_from": "2021-11-14"}`
+	httpReq, err := http.NewRequest(http.MethodPost, "http://localhost:8080/cars/search", strings.NewReader(body))
+	httpReq.Header.Add("Content-Type", "application/json")
+	httpReq.Header.Add("Authorization", fmt.Sprintf("Bearer %s", token))
+	if err != nil {
+		panic(err)
+	}
+	// Test用サーバにリクエストを送信して、レスポンスをOpenAPI仕様に照らし合わせる
+	recorder := ServeAndRequest(httpReq)
+	// テストケース固有のチェック
+	assert.Equal(t, 200, recorder.Result().StatusCode)
+	var cars []Car
+	json.Unmarshal(recorder.Body.Bytes(), &cars)
+	assert.Equal(t, 1, len(cars))
+}
+
+func TestSearchCarsQueryModelChangeTo(t *testing.T) {
+	DB.Exec("TRUNCATE TABLE cars")
+	seedTestCarCx5()
+	seedTestCarCorollaTouring()
+	seedTestCarHondaE()
+	seedTestCarNote()
+	seedTestCarThree()
+	seedTestCarNsx()
+	token := login("user")
+	// HTTPリクエストの生成
+	body := `{"model_change_to": "2016-12-16"}`
+	httpReq, err := http.NewRequest(http.MethodPost, "http://localhost:8080/cars/search", strings.NewReader(body))
+	httpReq.Header.Add("Content-Type", "application/json")
+	httpReq.Header.Add("Authorization", fmt.Sprintf("Bearer %s", token))
+	if err != nil {
+		panic(err)
+	}
+	// Test用サーバにリクエストを送信して、レスポンスをOpenAPI仕様に照らし合わせる
+	recorder := ServeAndRequest(httpReq)
+	// テストケース固有のチェック
+	assert.Equal(t, 200, recorder.Result().StatusCode)
+	var cars []Car
+	json.Unmarshal(recorder.Body.Bytes(), &cars)
+	assert.Equal(t, 1, len(cars))
+}
+
+func TestSearchCarsQueryPowerTrain(t *testing.T) {
+	DB.Exec("TRUNCATE TABLE cars")
+	seedTestCarCx5()
+	seedTestCarCorollaTouring()
+	seedTestCarHondaE()
+	seedTestCarNote()
+	seedTestCarThree()
+	seedTestCarNsx()
+	token := login("user")
+	// HTTPリクエストの生成
+	body := `{"power_train": ["BEV"]}`
+	httpReq, err := http.NewRequest(http.MethodPost, "http://localhost:8080/cars/search", strings.NewReader(body))
+	httpReq.Header.Add("Content-Type", "application/json")
+	httpReq.Header.Add("Authorization", fmt.Sprintf("Bearer %s", token))
+	if err != nil {
+		panic(err)
+	}
+	// Test用サーバにリクエストを送信して、レスポンスをOpenAPI仕様に照らし合わせる
+	recorder := ServeAndRequest(httpReq)
+	// テストケース固有のチェック
+	assert.Equal(t, 200, recorder.Result().StatusCode)
+	var cars []Car
+	json.Unmarshal(recorder.Body.Bytes(), &cars)
+	assert.Equal(t, 1, len(cars))
+}
+
+func TestSearchCarsQueryBodyType(t *testing.T) {
+	DB.Exec("TRUNCATE TABLE cars")
+	seedTestCarCx5()
+	seedTestCarCorollaTouring()
+	seedTestCarHondaE()
+	seedTestCarNote()
+	seedTestCarThree()
+	seedTestCarNsx()
+	token := login("user")
+	// HTTPリクエストの生成
+	body := `{"body_type": ["SUV"]}`
+	httpReq, err := http.NewRequest(http.MethodPost, "http://localhost:8080/cars/search", strings.NewReader(body))
+	httpReq.Header.Add("Content-Type", "application/json")
+	httpReq.Header.Add("Authorization", fmt.Sprintf("Bearer %s", token))
+	if err != nil {
+		panic(err)
+	}
+	// Test用サーバにリクエストを送信して、レスポンスをOpenAPI仕様に照らし合わせる
+	recorder := ServeAndRequest(httpReq)
+	// テストケース固有のチェック
+	assert.Equal(t, 200, recorder.Result().StatusCode)
+	var cars []Car
+	json.Unmarshal(recorder.Body.Bytes(), &cars)
+	assert.Equal(t, 1, len(cars))
 }
 
 func TestGetCar(t *testing.T) {
@@ -874,10 +1147,10 @@ func TestPatchCarSuccessAllColumnUser(t *testing.T) {
 			"compression_ratio": 13,
 			"max_output": 138,
 			"max_output_lower_rpm": 6000,
-			"max_output_higher_rpm": 6000,
+			"max_output_upper_rpm": 6000,
 			"max_torque": 250,
 			"max_torque_lower_rpm": 4000,
-			"max_torque_higher_rpm": 4000,
+			"max_torque_upper_rpm": 4000,
 			"fuel_system": "DI",
 			"fuel_type": "無鉛レギュラーガソリン",
 			"fuel_tank_cap": 58
@@ -889,10 +1162,10 @@ func TestPatchCarSuccessAllColumnUser(t *testing.T) {
 			"rated_output": null,
 			"max_output": null,
 			"max_output_lower_rpm": null,
-			"max_output_higher_rpm": null,
+			"max_output_upper_rpm": null,
 			"max_torque": null,
 			"max_torque_lower_rpm": null,
-			"max_torque_higher_rpm": null
+			"max_torque_upper_rpm": null
 		},
 		"motor_y": {
 			"code": null,
@@ -901,10 +1174,10 @@ func TestPatchCarSuccessAllColumnUser(t *testing.T) {
 			"rated_output": null,
 			"max_output": null,
 			"max_output_lower_rpm": null,
-			"max_output_higher_rpm": null,
+			"max_output_upper_rpm": null,
 			"max_torque": null,
 			"max_torque_lower_rpm": null,
-			"max_torque_higher_rpm": null
+			"max_torque_upper_rpm": null
 		},
 		"battery": {
 			"type": null,
@@ -1159,10 +1432,10 @@ func TestPostCarSuccessUser(t *testing.T) {
 			"compression_ratio": 13,
 			"max_output": 138,
 			"max_output_lower_rpm": 6000,
-			"max_output_higher_rpm": 6000,
+			"max_output_upper_rpm": 6000,
 			"max_torque": 250,
 			"max_torque_lower_rpm": 4000,
-			"max_torque_higher_rpm": 4000,
+			"max_torque_upper_rpm": 4000,
 			"fuel_system": "DI",
 			"fuel_type": "無鉛レギュラーガソリン",
 			"fuel_tank_cap": 58
@@ -1174,10 +1447,10 @@ func TestPostCarSuccessUser(t *testing.T) {
 			"rated_output": null,
 			"max_output": null,
 			"max_output_lower_rpm": null,
-			"max_output_higher_rpm": null,
+			"max_output_upper_rpm": null,
 			"max_torque": null,
 			"max_torque_lower_rpm": null,
-			"max_torque_higher_rpm": null
+			"max_torque_upper_rpm": null
 		},
 		"motor_y": {
 			"code": null,
@@ -1186,10 +1459,10 @@ func TestPostCarSuccessUser(t *testing.T) {
 			"rated_output": null,
 			"max_output": null,
 			"max_output_lower_rpm": null,
-			"max_output_higher_rpm": null,
+			"max_output_upper_rpm": null,
 			"max_torque": null,
 			"max_torque_lower_rpm": null,
-			"max_torque_higher_rpm": null
+			"max_torque_upper_rpm": null
 		},
 		"battery": {
 			"type": null,
@@ -1308,10 +1581,10 @@ func TestPostCarSuccessAdmin(t *testing.T) {
 			"compression_ratio": 13,
 			"max_output": 138,
 			"max_output_lower_rpm": 6000,
-			"max_output_higher_rpm": 6000,
+			"max_output_upper_rpm": 6000,
 			"max_torque": 250,
 			"max_torque_lower_rpm": 4000,
-			"max_torque_higher_rpm": 4000,
+			"max_torque_upper_rpm": 4000,
 			"fuel_system": "DI",
 			"fuel_type": "無鉛レギュラーガソリン",
 			"fuel_tank_cap": 58
@@ -1323,10 +1596,10 @@ func TestPostCarSuccessAdmin(t *testing.T) {
 			"rated_output": null,
 			"max_output": null,
 			"max_output_lower_rpm": null,
-			"max_output_higher_rpm": null,
+			"max_output_upper_rpm": null,
 			"max_torque": null,
 			"max_torque_lower_rpm": null,
-			"max_torque_higher_rpm": null
+			"max_torque_upper_rpm": null
 		},
 		"motor_y": {
 			"code": null,
@@ -1335,10 +1608,10 @@ func TestPostCarSuccessAdmin(t *testing.T) {
 			"rated_output": null,
 			"max_output": null,
 			"max_output_lower_rpm": null,
-			"max_output_higher_rpm": null,
+			"max_output_upper_rpm": null,
 			"max_torque": null,
 			"max_torque_lower_rpm": null,
-			"max_torque_higher_rpm": null
+			"max_torque_upper_rpm": null
 		},
 		"battery": {
 			"type": null,

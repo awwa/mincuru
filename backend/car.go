@@ -175,38 +175,38 @@ type Performance struct {
 
 // エンジン
 type Engine struct {
-	Code               null.String `json:"code"`                  // 型式
-	Type               null.String `json:"type"`                  // 種類
-	Cylinders          null.Int    `json:"cylinders"`             // 気筒数
-	CylinderLayout     null.String `json:"cylinder_layout"`       // シリンダーレイアウト(I/V/B/W)
-	ValveSystem        null.String `json:"valve_system"`          // バルブ構造(SV/OHV/SOHC/DOHC)
-	Displacement       null.Float  `json:"displacement"`          // 総排気量(L)
-	Bore               null.Float  `json:"bore"`                  // ボア(mm)
-	Stroke             null.Float  `json:"stroke"`                // ストローク(mm)
-	CompressionRatio   null.Float  `json:"compression_ratio"`     // 圧縮比
-	MaxOutput          null.Float  `json:"max_output"`            // 最高出力(kW)
-	MaxOutputLowerRpm  null.Float  `json:"max_output_lower_rpm"`  // 最高出力回転数(低)(rpm)
-	MaxOutputHigherRpm null.Float  `json:"max_output_higher_rpm"` // 最高出力回転数(高)(rpm)
-	MaxTorque          null.Float  `json:"max_torque"`            // 最大トルク(Nm)
-	MaxTorqueLowerRpm  null.Float  `json:"max_torque_lower_rpm"`  // 最大トルク回転数(低)(rpm)
-	MaxTorqueHigherRpm null.Float  `json:"max_torque_higher_rpm"` // 最大トルク回転数(高)(rpm)
-	FuelSystem         null.String `json:"fuel_system"`           // 燃料供給装置
-	FuelType           null.String `json:"fuel_type"`             // 使用燃料種類(軽油/無鉛レギュラーガソリン/無鉛プレミアムガソリン)
-	FuelTankCap        null.Int    `json:"fuel_tank_cap"`         // 燃料タンク容量(L)
+	Code              null.String `json:"code"`                 // 型式
+	Type              null.String `json:"type"`                 // 種類
+	Cylinders         null.Int    `json:"cylinders"`            // 気筒数
+	CylinderLayout    null.String `json:"cylinder_layout"`      // シリンダーレイアウト(I/V/B/W)
+	ValveSystem       null.String `json:"valve_system"`         // バルブ構造(SV/OHV/SOHC/DOHC)
+	Displacement      null.Float  `json:"displacement"`         // 総排気量(L)
+	Bore              null.Float  `json:"bore"`                 // ボア(mm)
+	Stroke            null.Float  `json:"stroke"`               // ストローク(mm)
+	CompressionRatio  null.Float  `json:"compression_ratio"`    // 圧縮比
+	MaxOutput         null.Float  `json:"max_output"`           // 最高出力(kW)
+	MaxOutputLowerRpm null.Float  `json:"max_output_lower_rpm"` // 最高出力回転数(低)(rpm)
+	MaxOutputUpperRpm null.Float  `json:"max_output_upper_rpm"` // 最高出力回転数(高)(rpm)
+	MaxTorque         null.Float  `json:"max_torque"`           // 最大トルク(Nm)
+	MaxTorqueLowerRpm null.Float  `json:"max_torque_lower_rpm"` // 最大トルク回転数(低)(rpm)
+	MaxTorqueUpperRpm null.Float  `json:"max_torque_upper_rpm"` // 最大トルク回転数(高)(rpm)
+	FuelSystem        null.String `json:"fuel_system"`          // 燃料供給装置
+	FuelType          null.String `json:"fuel_type"`            // 使用燃料種類(軽油/無鉛レギュラーガソリン/無鉛プレミアムガソリン)
+	FuelTankCap       null.Int    `json:"fuel_tank_cap"`        // 燃料タンク容量(L)
 }
 
 // 電動機
 type Motor struct {
-	Code               null.String `json:"code"`                  // 型式
-	Type               null.String `json:"type"`                  // 種類
-	Purpose            null.String `json:"purpose"`               // 用途(動力前用/動力後用/発電用)
-	RatedOutput        null.Float  `json:"rated_output"`          // 定格出力(kW)
-	MaxOutput          null.Float  `json:"max_output"`            // 最高出力(kW)
-	MaxOutputLowerRpm  null.Float  `json:"max_output_lower_rpm"`  // 最高出力回転数(低)(rpm)
-	MaxOutputHigherRpm null.Float  `json:"max_output_higher_rpm"` // 最高出力回転数(高)(rpm)
-	MaxTorque          null.Float  `json:"max_torque"`            // 最大トルク(Nm)
-	MaxTorqueLowerRpm  null.Float  `json:"max_torque_lower_rpm"`  // 最大トルク回転数(低)(rpm)
-	MaxTorqueHigherRpm null.Float  `json:"max_torque_higher_rpm"` // 最大トルク回転数(高)(rpm)
+	Code              null.String `json:"code"`                 // 型式
+	Type              null.String `json:"type"`                 // 種類
+	Purpose           null.String `json:"purpose"`              // 用途(動力前用/動力後用/発電用)
+	RatedOutput       null.Float  `json:"rated_output"`         // 定格出力(kW)
+	MaxOutput         null.Float  `json:"max_output"`           // 最高出力(kW)
+	MaxOutputLowerRpm null.Float  `json:"max_output_lower_rpm"` // 最高出力回転数(低)(rpm)
+	MaxOutputUpperRpm null.Float  `json:"max_output_upper_rpm"` // 最高出力回転数(高)(rpm)
+	MaxTorque         null.Float  `json:"max_torque"`           // 最大トルク(Nm)
+	MaxTorqueLowerRpm null.Float  `json:"max_torque_lower_rpm"` // 最大トルク回転数(低)(rpm)
+	MaxTorqueUpperRpm null.Float  `json:"max_torque_upper_rpm"` // 最大トルク回転数(高)(rpm)
 }
 
 // バッテリー
@@ -249,10 +249,11 @@ type CarsQuery struct {
 	GradeName       string   `json:"grade_name"`        //null.String
 	ModelCode       string   `json:"model_code"`        //null.String
 	PriceLower      int      `json:"price_lower"`       //null.Int
-	PriceHigher     int      `json:"price_higher"`      //null.Int
+	PriceUpper      int      `json:"price_upper"`       //null.Int
 	ModelChangeFrom string   `json:"model_change_from"` //sql.NullTime
 	ModelChangeTo   string   `json:"model_change_to"`   //sql.NullTime
 	PowerTrain      []string `json:"power_train"`
+	BodyType        []string `json:"body_type"`
 }
 
 func SearchCars(c *gin.Context) {
@@ -261,7 +262,7 @@ func SearchCars(c *gin.Context) {
 	c.BindJSON(&query)
 	fmt.Println(query)
 	var cars []Car
-	d := DB.Table("cars").Where(
+	d := DB.Debug().Table("cars").Where(
 		&Car{
 			MakerName: query.MakerName,
 			ModelName: query.ModelName,
@@ -274,9 +275,9 @@ func SearchCars(c *gin.Context) {
 			"price > ?", query.PriceLower,
 		)
 	}
-	if query.PriceHigher != 0 {
+	if query.PriceUpper != 0 {
 		d.Where(
-			"price < ?", query.PriceHigher,
+			"price < ?", query.PriceUpper,
 		)
 	}
 	if query.ModelChangeFrom != "" {
@@ -292,6 +293,12 @@ func SearchCars(c *gin.Context) {
 			query.ModelChangeTo,
 			query.ModelChangeTo,
 		)
+	}
+	if len(query.PowerTrain) != 0 {
+		d.Where("power_train IN ?", query.PowerTrain)
+	}
+	if len(query.BodyType) != 0 {
+		d.Where("body_type IN ?", query.BodyType)
 	}
 	d.Find(&cars)
 	// fmt.Printf("%+v", cars)

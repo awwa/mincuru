@@ -43,6 +43,12 @@ task build
 task dbrecreate
 ```
 
+- 起動
+
+```
+task dbup
+```
+
 - 削除
 
 ```

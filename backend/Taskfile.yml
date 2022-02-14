@@ -16,6 +16,9 @@ tasks:
   dbrecreate:
     cmds:
       - docker-compose up -d --force-recreate --build
+  dbup:
+    cmds:
+      - docker-compose up -d
   dbdown:
     cmds:
       - docker-compose down
