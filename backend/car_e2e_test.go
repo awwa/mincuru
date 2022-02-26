@@ -1050,7 +1050,7 @@ func TestSearchCarsQueryBodyType(t *testing.T) {
 	seedTestCarNsx()
 	token := login("user")
 	// HTTPリクエストの生成
-	body := `{"body_type": ["SUV"]}`
+	body := `{"body_types": ["SUV"]}`
 	httpReq, err := http.NewRequest(http.MethodPost, "http://localhost:8080/cars/search", strings.NewReader(body))
 	httpReq.Header.Add("Content-Type", "application/json")
 	httpReq.Header.Add("Authorization", fmt.Sprintf("Bearer %s", token))
@@ -1064,6 +1064,32 @@ func TestSearchCarsQueryBodyType(t *testing.T) {
 	var cars []Car
 	json.Unmarshal(recorder.Body.Bytes(), &cars)
 	assert.Equal(t, 1, len(cars))
+}
+
+func TestSearchCarsQueryMakerNames(t *testing.T) {
+	DB.Exec("TRUNCATE TABLE cars")
+	seedTestCarCx5()
+	seedTestCarCorollaTouring()
+	seedTestCarHondaE()
+	seedTestCarNote()
+	seedTestCarThree()
+	seedTestCarNsx()
+	token := login("user")
+	// HTTPリクエストの生成
+	body := `{"maker_names": ["トヨタ", "日産"]}`
+	httpReq, err := http.NewRequest(http.MethodPost, "http://localhost:8080/cars/search", strings.NewReader(body))
+	httpReq.Header.Add("Content-Type", "application/json")
+	httpReq.Header.Add("Authorization", fmt.Sprintf("Bearer %s", token))
+	if err != nil {
+		panic(err)
+	}
+	// Test用サーバにリクエストを送信して、レスポンスをOpenAPI仕様に照らし合わせる
+	recorder := ServeAndRequest(httpReq)
+	// テストケース固有のチェック
+	assert.Equal(t, 200, recorder.Result().StatusCode)
+	var cars []Car
+	json.Unmarshal(recorder.Body.Bytes(), &cars)
+	assert.Equal(t, 2, len(cars))
 }
 
 func TestGetCar(t *testing.T) {
@@ -1760,7 +1786,7 @@ func TestGetCarsBodyTypes(t *testing.T) {
 	recorder := ServeAndRequest(httpReq)
 	// テストケース固有のチェック
 	assert.Equal(t, 200, recorder.Result().StatusCode)
-	var makers []string
-	json.Unmarshal(recorder.Body.Bytes(), &makers)
-	assert.Equal(t, 4, len(makers))
+	var body_types []string
+	json.Unmarshal(recorder.Body.Bytes(), &body_types)
+	assert.Equal(t, 4, len(body_types))
 }

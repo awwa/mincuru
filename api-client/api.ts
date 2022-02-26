@@ -402,7 +402,7 @@ export interface Engine {
      * @type {number}
      * @memberof Engine
      */
-    'max_output_higher_rpm'?: number | null;
+    'max_output_upper_rpm'?: number | null;
     /**
      * 
      * @type {number}
@@ -420,7 +420,7 @@ export interface Engine {
      * @type {number}
      * @memberof Engine
      */
-    'max_torque_higher_rpm'?: number | null;
+    'max_torque_upper_rpm'?: number | null;
     /**
      * 
      * @type {string}
@@ -507,7 +507,7 @@ export interface InlineObject {
      * @type {number}
      * @memberof InlineObject
      */
-    'price_higher'?: number;
+    'price_upper'?: number;
     /**
      * 
      * @type {string}
@@ -526,6 +526,18 @@ export interface InlineObject {
      * @memberof InlineObject
      */
     'power_train'?: Array<InlineObjectPowerTrainEnum>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof InlineObject
+     */
+    'body_types'?: Array<string>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof InlineObject
+     */
+    'maker_names'?: Array<string>;
 }
 
 /**
@@ -713,7 +725,7 @@ export interface Motor {
      * @type {number}
      * @memberof Motor
      */
-    'max_output_higher_rpm'?: number | null;
+    'max_output_upper_rpm'?: number | null;
     /**
      * 
      * @type {number}
@@ -731,7 +743,7 @@ export interface Motor {
      * @type {number}
      * @memberof Motor
      */
-    'max_torque_higher_rpm'?: number | null;
+    'max_torque_upper_rpm'?: number | null;
 }
 /**
  * 
@@ -1202,6 +1214,36 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             }
 
             const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Your GET endpoint
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCarsBodyTypes: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/cars/body_types`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -1752,6 +1794,16 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Your GET endpoint
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getCarsBodyTypes(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<string>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCarsBodyTypes(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Your GET endpoint
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1934,6 +1986,15 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         /**
          * 
          * @summary Your GET endpoint
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCarsBodyTypes(options?: any): AxiosPromise<Array<string>> {
+            return localVarFp.getCarsBodyTypes(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Your GET endpoint
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2100,6 +2161,17 @@ export class DefaultApi extends BaseAPI {
      */
     public deleteUser(id: number, options?: AxiosRequestConfig) {
         return DefaultApiFp(this.configuration).deleteUser(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Your GET endpoint
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public getCarsBodyTypes(options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).getCarsBodyTypes(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

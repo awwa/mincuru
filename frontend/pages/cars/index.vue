@@ -10,14 +10,22 @@
         label="メーカー"
         :items="makers"
         @change="selectMaker"
-        v-model="query.maker_name" />
+        v-model="query.maker_names"
+        multiple />
+      <v-select
+        label="タイプ"
+        :items="body_types"
+        v-model="query.body_types"
+        multiple />
       <v-select
         label="モデル"
         :items="models" />
+      <!--
       <v-select
         label="グレード" />
       <v-text-field
         label="型式" />
+      -->
     </v-layout>
     <v-layout wrap>
       <p>時期</p>
@@ -38,6 +46,8 @@ export default {
   data() {
     return {
       query: {
+        body_types: [],
+        maker_names: [],
         maker_name: "",
         model_name: "",
         grade_name: "",
@@ -46,20 +56,24 @@ export default {
         price_higher: 10000000,
         model_change_from: "1974-01-01",
         model_change_to: "2022-12-31",
-        power_train: ["ICE"],
+        power_train: [],
       },
       makers: [],
+      body_types: [],
     }
   },
   async asyncData({$axios}) {
-    // メーカーリスト取得
     const conf = new Configuration()
     const api = new DefaultApi(conf, $axios.defaults.baseURL, $axios)
-    const resp = await api.getMakers()
+    // メーカーリスト取得
+    const respMakers = await api.getMakers()
+    // ボディタイプリスト取得
+    const respBodyTypes = await api.getCarsBodyTypes()
     return {
-      makers: resp.data.map(item => {return {"value": item, "text": item}}),
+      makers: respMakers.data.map(item => {return {"value": item, "text": item}}),
       cars: [],
       models: [],
+      body_types: respBodyTypes.data.map(item => {return {"value": item, "text": item}}),
     }
   },
   methods: {
@@ -67,6 +81,7 @@ export default {
       this.$router.push("/cars/add")
     },
     async search() {
+      console.log(this.query)
       const api = new DefaultApi(conf, this.$axios.defaults.baseURL, this.$axios)
       const resp = await api.postCarsSearch(this.query)
       this.cars = resp.data
@@ -75,7 +90,7 @@ export default {
       const api = new DefaultApi(conf, this.$axios.defaults.baseURL, this.$axios)
       const resp = await api.getCarsMakersModels(e)
       this.models = resp.data.map(item => {return {"value": item, "text": item}})
-    }
+    },
   }
 }
 </script>

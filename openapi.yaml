@@ -529,7 +529,11 @@ paths:
                       - BEV
                       - RexEV
                       - FCEV
-                body_type:
+                body_types:
+                  type: array
+                  items:
+                    type: string
+                maker_names:
                   type: array
                   items:
                     type: string

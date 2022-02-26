@@ -253,7 +253,8 @@ type CarsQuery struct {
 	ModelChangeFrom string   `json:"model_change_from"` //sql.NullTime
 	ModelChangeTo   string   `json:"model_change_to"`   //sql.NullTime
 	PowerTrain      []string `json:"power_train"`
-	BodyType        []string `json:"body_type"`
+	MakerNames      []string `json:"maker_names"`
+	BodyTypes       []string `json:"body_types"`
 }
 
 func SearchCars(c *gin.Context) {
@@ -294,11 +295,14 @@ func SearchCars(c *gin.Context) {
 			query.ModelChangeTo,
 		)
 	}
+	if len(query.MakerNames) != 0 {
+		d.Where("maker_name IN ?", query.MakerNames)
+	}
 	if len(query.PowerTrain) != 0 {
 		d.Where("power_train IN ?", query.PowerTrain)
 	}
-	if len(query.BodyType) != 0 {
-		d.Where("body_type IN ?", query.BodyType)
+	if len(query.BodyTypes) != 0 {
+		d.Where("body_type IN ?", query.BodyTypes)
 	}
 	d.Find(&cars)
 	// fmt.Printf("%+v", cars)
